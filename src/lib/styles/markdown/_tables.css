@@ -1,0 +1,143 @@
+html {
+	/* Dark theme */
+	--color-canvas-default-dark: hsl(var(--gray-12-hsl));
+	--color-canvas-subtle-dark: hsl(var(--gray-10-hsl));
+	--color-border-default-dark: hsl(var(--gray-8-hsl));
+	--color-border-muted-dark: hsl(var(--gray-8-hsl));
+	--color-canvas-header-dark: hsl(var(--gray-9-hsl));
+	--color-canvas-text-body-dark: hsl(var(--gray-4-hsl));
+
+	/* Light theme */
+	--color-canvas-default-light: hsl(var(--gray-0-hsl));
+	--color-canvas-subtle-light: hsl(var(--gray-1-hsl));
+	--color-border-default-light: hsl(var(--gray-2-hsl));
+	--color-border-muted-light: hsl(var(--gray-3-hsl));
+	--color-canvas-header-light: hsl(var(--gray-4-hsl));
+	--color-canvas-text-body-light: hsl(var(--gray-12-hsl));
+}
+
+/* Dark theme */
+:root {
+	--color-canvas-default: var(--color-canvas-default-dark);
+	--color-canvas-subtle: var(--color-canvas-subtle-dark);
+	--color-border-default: var(--color-border-default-dark);
+	--color-border-muted: var(--color-border-muted-dark);
+	--color-canvas-header: var(--color-canvas-header-dark);
+	--color-canvas-text-body: var(--color-canvas-text-body-dark);
+}
+
+/* Light theme. */
+@media (prefers-color-scheme: light) {
+	:root {
+		--color-canvas-default: var(--color-canvas-default-light);
+		--color-canvas-subtle: var(--color-canvas-subtle-light);
+		--color-border-default: var(--color-border-default-light);
+		--color-border-muted: var(--color-border-muted-light);
+		--color-canvas-header: var(--color-canvas-header-light);
+		--color-canvas-text-body: var(--color-canvas-text-body-light);
+	}
+}
+
+/*
+* Dark Theme Overrides
+*/
+
+[color-scheme='dark'] {
+	--color-canvas-default: var(--color-canvas-default-dark);
+	--color-canvas-subtle: var(--color-canvas-subtle-dark);
+	--color-border-default: var(--color-border-default-dark);
+	--color-border-muted: var(--color-border-muted-dark);
+	--color-canvas-header: var(--color-canvas-header-dark);
+	--color-canvas-text-body: var(--color-canvas-text-body-dark);
+}
+
+/*
+* Light Theme Overrides
+*/
+
+[color-scheme='light'] {
+	--color-canvas-default: var(--color-canvas-default-light);
+	--color-canvas-subtle: var(--color-canvas-subtle-light);
+	--color-border-default: var(--color-border-default-light);
+	--color-border-muted: var(--color-border-muted-light);
+	--color-canvas-header: var(--color-canvas-header-light);
+	--color-canvas-text-body: var(--color-canvas-text-body-light);
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: separate;
+
+	margin-block: var(--size-6);
+
+	width: max-content;
+	max-width: 100%;
+	overflow: auto;
+
+	background-color: var(--color-canvas-default);
+
+	box-shadow: var(--shadow-4);
+}
+
+table * {
+	background-color: var(--color-canvas-default);
+}
+
+thead {
+	background-color: var(--color-canvas-default);
+	width: 100%;
+}
+
+thead > tr {
+	background-color: var(--color-canvas-default);
+}
+
+tbody {
+	color: var(--color-canvas-text-body);
+}
+
+tr {
+	background-color: var(--color-canvas-default);
+	border-top: 1px solid var(--color-border-muted);
+}
+
+tr:nth-child(2n) {
+	background-color: var(--color-canvas-subtle);
+}
+
+td:nth-child(2n) {
+	text-align: left;
+	/* padding-left: var(--size-9); */
+}
+
+td,
+th {
+	padding: 6px 13px;
+	/* border: 1px solid var(--color-border-default); */
+	border: 1px solid transparent;
+	position: relative;
+}
+
+td:is(:not(:nth-child(2n))):after {
+	content: '';
+
+	position: absolute;
+	display: block;
+
+	top: 15%;
+	right: 0;
+
+	width: 2px;
+	height: 1rem;
+
+	background-color: var(--brand);
+}
+
+th {
+	background-color: var(--color-canvas-header);
+	font-weight: var(--font-weight-8);
+}
+
+table img {
+	background-color: transparent;
+}

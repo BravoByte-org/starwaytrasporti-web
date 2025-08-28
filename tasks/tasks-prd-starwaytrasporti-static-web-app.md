@@ -1,0 +1,102 @@
+## Relevant Files
+
+- `src/routes/+page.svelte` - Homepage route for parallax hero and initial content.
+- `src/lib/components/Header/Header.svelte` - Sticky, responsive navigation component.
+- `src/lib/components/Locale/Locale.svelte` - Language switcher and locale UI.
+- `src/lib/layouts` - Page templates (article, form, homepage) to structure content.
+- `src/lib/pages` - Page playgrounds (for Storybook and testing prior to routes).
+- `src/lib/pages/Page/__STORIES__/Page.stories.svelte` - Storybook stories for page templates.
+- `src/lib/pages/Page/__TESTS__/page.spec.ts` - Playwright tests for page flows.
+- `src/lib/server/auth.js` - CMS auth using Drizzle ORM + PostgreSQL.
+- `src/lib/paraglide/messages` - Localization message files (IT/EN).
+- `src/lib/utils` - Utility functions for animations, consent, and helpers.
+- `sanity/` - Sanity CMS configuration.
+- `static/` - Static assets (favicon, images).
+- `svelte.config.js` - SvelteKit configuration.
+- `vite.config.js` - Vite build configuration.
+- `playwright.config.js` - E2E testing configuration.
+- `README.md` - Project overview and setup notes.
+
+### Notes
+
+- Component tests and stories should live alongside components (use `__STORIES__` and `__TESTS__`).
+- E2E tests for pages live under `src/lib/pages` per PRD guidance.
+
+## Tasks
+
+- [x] 1.0 Establish project scaffolding and configuration (SvelteKit, Tailwind, Vercel)
+  - [x] 1.1 Verify dependencies (SvelteKit, Tailwind, adapter-vercel) and install missing
+  - [x] 1.2 Configure Tailwind base styles and fonts and wire into `src/app.html`
+  - [x] 1.3 Configure SvelteKit adapter-vercel, prerender/static settings
+  - [x] 1.4 Add `.env.example` and load env via `$env/*` for runtime/build
+  - [x] 1.5 Wire global layout and base CSS; run dev server smoke test
+- [x] 2.0 Implement i18n with Paraglide-js (IT default, EN support) and language switcher
+  - [x] 2.1 Configure Paraglide registry and message bundles for IT and EN
+  - [x] 2.2 Implement locale detection (Accept-Language, path, cookie) with IT fallback
+  - [x] 2.3 Add `Locale.svelte` switcher and persist preference
+  - [x] 2.4 Replace hard-coded copy with `t()` across header/footer/homepage
+  - [x] 2.5 E2E: verify language switch updates UI and persists across navigation
+- [ ] 3.0 Build homepage with multi-level parallax and animated sections
+  - [x] 3.1 Implement parallax hero in `src/routes/+page.svelte` with accessible heading
+  - [x] 3.2 Add sections for services, stats/testimonials, and primary CTA
+  - [x] 3.3 Add fade/fly-in animations with `prefers-reduced-motion` handling
+  - [x] 3.4 Storybook: hero and section variants
+  - [ ] 3.5 E2E: homepage renders, hero visible; reduced-motion disables animations
+- [ ] 4.0 Create sticky, responsive navigation and site footer
+  - [ ] 4.1 Implement sticky `Header.svelte` with hamburger menu and keyboard support
+  - [ ] 4.2 Add focus trap and ARIA attributes for mobile menu
+  - [ ] 4.3 Implement `Footer.svelte` with About, Privacy, Contact, and locale switch
+  - [ ] 4.4 E2E: nav open/close, skip link to main content, footer links work
+- [ ] 5.0 Integrate Sanity CMS (schemas, content fetching, caching, drafts/scheduling)
+  - [ ] 5.1 Configure `sanity/` workspace or connect to existing project
+  - [ ] 5.2 Define schemas: Page, Section, MediaAsset, Testimonial, Location, NavigationItem
+  - [ ] 5.3 Implement content fetching (Sanity client/GROQ) with caching strategy
+  - [ ] 5.4 Wire homepage and locations page to CMS content
+  - [ ] 5.5 Enable drafts/scheduled publishing and preview mode
+- [ ] 6.0 Implement CMS authentication with Drizzle ORM + PostgreSQL and /dashboard guard
+  - [ ] 6.1 Model Users and Roles in Drizzle; create and run migrations
+  - [ ] 6.2 Implement password hashing, login/logout endpoints, and session storage
+  - [ ] 6.3 Issue HTTP-only cookies; add server hooks to read/validate sessions
+  - [ ] 6.4 Protect `/dashboard` and CMS routes based on role
+  - [ ] 6.5 Add basic rate limiting/audit logging for admin actions
+- [ ] 7.0 Implement locations module (collapsible lists, optional map) and contact CTAs
+  - [ ] 7.1 Create `routes/locations/+page.svelte` grouped by region/country
+  - [ ] 7.2 Choose map approach (interactive vs static) and implement progressive loading
+  - [ ] 7.3 Define Location schema in Sanity and connect data
+  - [ ] 7.4 Implement contact CTAs (tel, mailto, WhatsApp); optional contact form
+  - [ ] 7.5 Validate form inputs client-side; add server handler if form is included
+- [ ] 8.0 Add cookie consent, privacy handling, and analytics gating
+  - [ ] 8.1 Build consent banner/modal with categories (necessary/analytics/ads)
+  - [ ] 8.2 Persist consent and allow revisiting preferences
+  - [ ] 8.3 Gate analytics/ads scripts on consent
+  - [ ] 8.4 Add Privacy and Cookie Policy routes and link from footer/banner
+- [ ] 9.0 SEO setup (metadata, OG/Twitter, sitemap, robots, structured data)
+  - [ ] 9.1 Add per-route metadata, canonical URLs, OG/Twitter cards
+  - [ ] 9.2 Generate `sitemap.xml` and `robots.txt`
+  - [ ] 9.3 Add Organization JSON-LD structured data
+  - [ ] 9.4 Run Lighthouse SEO checks and remediate issues
+- [ ] 10.0 Testing: Storybook stories, a11y checks, Playwright E2E for core flows
+  - [ ] 10.1 Configure Storybook with a11y and Vitest addons
+  - [ ] 10.2 Write stories for Header, Locale switcher, Hero, Timeline (if built)
+  - [ ] 10.3 Playwright E2E: home, nav, cookie consent, language switch, locations, contact
+  - [ ] 10.4 Vitest: unit tests for i18n utilities and consent logic
+  - [ ] 10.5 Add CI script to run tests on PRs
+- [ ] 11.0 Performance pass: budgets, image optimization, lazy loading, reduced motion
+  - [ ] 11.1 Define budgets (LCP, CLS) and measure baseline
+  - [ ] 11.2 Optimize images (format/size), lazy load non-critical media
+  - [ ] 11.3 Reduce JS (tree-shake, code-split), defer non-critical scripts
+  - [ ] 11.4 Validate `prefers-reduced-motion` and eliminate layout shifts
+  - [ ] 11.5 Re-test Core Web Vitals and refine
+- [ ] 12.0 Deployment: environments, secrets, preview/prod, domain config
+  - [ ] 12.1 Configure Vercel project, environments, and secrets
+  - [ ] 12.2 Set custom domain, redirects, and security headers
+  - [ ] 12.3 Integrate privacy-aware analytics behind consent
+  - [ ] 12.4 Document deployment checklist and ops handoff
+- [ ] 13.0 Enhance parallax with actual image layers (Future Enhancement)
+  - [ ] 13.1 Source/create transportation-themed landscape images (mountains, roads, infrastructure)
+  - [ ] 13.2 Optimize images for web (WebP/AVIF, multiple sizes, lazy loading)
+  - [ ] 13.3 Replace CSS gradient backgrounds with actual image layers
+  - [ ] 13.4 Add proper depth field with foreground vehicles/trucks
+  - [ ] 13.5 Test performance impact and optimize parallax smoothness
+
+

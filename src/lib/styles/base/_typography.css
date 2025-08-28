@@ -1,0 +1,63 @@
+/* Path: src/lib/styles/base/typography.css */
+
+@import '@fontsource-variable/arimo';
+@import '@fontsource-variable/pixelify-sans';
+@import '@fontsource/tinos';
+@import '@fontsource/courier-prime';
+
+html {
+	--font-sans: 'Arimo', sans-serif;
+	--font-serif: 'Tinos', serif;
+	--font-mono: 'Courier Prime', monospace;
+	--font-pixel: 'Pixelify Sans', display;
+
+	/* Dark Theme */
+	--text-1-dark: hsl(var(--gray-3-hsl));
+	--text-2-dark: hsl(var(--gray-5-hsl));
+	--text-tag-dark: hsl(var(--cyan-7-hsl));
+	--text-date-dark: var(--subway-line--lgt-gray-dark);
+
+	/* Light Theme */
+	--text-1-light: hsl(var(--gray-8-hsl));
+	--text-2-light: hsl(var(--gray-6-hsl));
+	--text-tag-light: hsl(var(--cyan-4-hsl));
+	--text-date-light: var(--subway-line--lgt-gray-light);
+}
+
+:root {
+	--text-1: var(--text-1-dark);
+	--text-2: var(--text-2-dark);
+	--text-tag: var(--text-tag-dark);
+	--text-date: var(--text-date-dark);
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--text-1: var(--text-1-light);
+		--text-2: var(--text-2-light);
+		--text-tag: var(--text-tag-light);
+		--text-date: var(--text-date-light);
+	}
+}
+
+/*
+* Dark Theme Overrides
+*/
+
+[color-scheme='dark'] {
+	--text-1: var(--text-1-dark);
+	--text-2: var(--text-2-dark);
+	--text-tag: var(--text-tag-dark);
+	--text-date: var(--text-date-dark);
+}
+
+/*
+* Light Theme Overrides
+*/
+
+[color-scheme='light'] {
+	--text-1: var(--text-1-light);
+	--text-2: var(--text-2-light);
+	--text-tag: var(--text-tag-light);
+	--text-date: var(--text-date-light);
+}

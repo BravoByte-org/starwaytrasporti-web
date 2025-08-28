@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+/* Import base styles */
+@import './lib/styles/base/base.css';
+@import './lib/styles/global/layout.css';
+@import './lib/styles/global/themes.css';

@@ -1,0 +1,49 @@
+/* Path: src/lib/styles/global/themes.css */
+
+@import '../base/base.css';
+
+html {
+	/* dark */
+	--brand-dark: var(--orange-3);
+
+	--background-dark: var(--gradient-8);
+	--border-dark: var(--gray-9);
+
+	/* light */
+	--brand-light: var(--orange-10);
+
+	--background-light: none;
+	--border-light: var(--gray-4);
+}
+
+:root {
+	color-scheme: dark;
+
+	--brand: var(--brand-dark);
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		color-scheme: light;
+
+		--brand: var(--brand-light);
+	}
+}
+
+/*
+* Dark Theme Overrides
+*/
+
+[color-scheme='dark'] {
+	color-scheme: dark;
+	--brand: var(--brand-dark);
+}
+
+/*
+* Light Theme Overrides
+*/
+
+[color-scheme='light'] {
+	color-scheme: light;
+	--brand: var(--brand-light);
+}
