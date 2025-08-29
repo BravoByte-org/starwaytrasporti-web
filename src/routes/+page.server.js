@@ -6,8 +6,20 @@ import {
 } from '$lib/server/sanity/content.js';
 import { getLocale } from '$paraglide/runtime';
 import { error } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 
 export async function load({ url, cookies }) {
+	// Environment check
+	if (!dev) {
+		console.log('[Homepage] Production environment detected');
+		console.log('[Homepage] Environment variables check:', {
+			hasProjectId: !!process.env.SANITY_PROJECT_ID,
+			hasDataset: !!process.env.SANITY_DATASET,
+			hasToken: !!process.env.SANITY_TOKEN,
+			nodeEnv: process.env.NODE_ENV
+		});
+	}
+
 	const locale = getLocale();
 	const previewMode = cookies.get('__preview') === 'true' || url.searchParams.has('preview');
 	const previewId = url.searchParams.get('id');

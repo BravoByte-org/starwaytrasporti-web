@@ -13,10 +13,28 @@ import {
 	getImageUrlWithPreview
 } from './sanity-preview.js';
 
+// Validate required environment variables
+const validateSanityConfig = () => {
+	const projectId = SANITY_PROJECT_ID || '2z040zj1';
+	const dataset = SANITY_DATASET || 'production';
+	
+	if (!projectId) {
+		throw new Error('SANITY_PROJECT_ID environment variable is required');
+	}
+	
+	if (!dataset) {
+		throw new Error('SANITY_DATASET environment variable is required');
+	}
+	
+	return { projectId, dataset };
+};
+
 // Configure Sanity client
+const { projectId, dataset } = validateSanityConfig();
+
 export const sanityClient = createClient({
-	projectId: SANITY_PROJECT_ID || '2z040zj1',
-	dataset: SANITY_DATASET || 'production',
+	projectId,
+	dataset,
 	apiVersion: SANITY_API_VERSION || '2024-01-01',
 	useCdn: true, // Enable CDN for better performance
 	token: SANITY_TOKEN // Only needed for write operations or preview

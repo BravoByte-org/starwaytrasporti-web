@@ -1,0 +1,23 @@
+{
+	"build": {
+		"env": {
+			"NODE_ENV": "production"
+		}
+	},
+	"functions": {
+		"src/routes/**/*.js": {
+			"runtime": "nodejs22.x",
+			"maxDuration": 30
+		},
+		"src/app.html": {
+			"runtime": "nodejs22.x"
+		}
+	},
+	"env": {
+		"NODE_ENV": "production"
+	},
+	"regions": [
+		"iad1"
+	],
+	"framework": "sveltekit"
+}
