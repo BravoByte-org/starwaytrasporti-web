@@ -1,10 +1,34 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 import * as schema from './schema';
 import { env } from '$env/dynamic/private';
+import { dev } from '$app/environment';
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+// Database URL with fallback and better error handling
+const getDatabaseUrl = () => {
+	// Check multiple possible environment variable names
+	const url =
+		env.DATABASE_URL || env.POSTGRES_URL || env.POSTGRES_PRISMA_URL || env.POSTGRES_URL_NON_POOLING;
 
-const client = postgres(env.DATABASE_URL);
+	if (!url) {
+		const errorMsg =
+			'Database URL not found. Please set one of: DATABASE_URL, POSTGRES_URL, POSTGRES_PRISMA_URL, or POSTGRES_URL_NON_POOLING';
+		console.error('[Database]', errorMsg);
 
-export const db = drizzle(client, { schema });
+		if (!dev) {
+			console.error(
+				'[Database] Available env vars:',
+				Object.keys(env).filter((k) => k.includes('POSTGRES') || k.includes('DATABASE'))
+			);
+		}
+
+		throw new Error(errorMsg);
+	}
+
+	return url;
+};
+
+const databaseUrl = getDatabaseUrl();
+const sql = neon(databaseUrl);
+
+export const db = drizzle(sql, { schema });

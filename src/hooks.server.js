@@ -13,36 +13,54 @@ const handleParaglide = ({ event, resolve }) =>
 	});
 
 const handleAuth = async ({ event, resolve }) => {
-	const sessionToken = event.cookies.get(auth.sessionCookieName);
+	// Skip auth if database is not available
+	try {
+		const { isDatabaseAvailable } = await import('$lib/server/db/optional.js');
 
-	if (!sessionToken) {
+		if (!isDatabaseAvailable()) {
+			console.warn('[Auth] Database not available - skipping authentication');
+			event.locals.user = null;
+			event.locals.session = null;
+			return resolve(event);
+		}
+
+		const sessionToken = event.cookies.get(auth.sessionCookieName);
+
+		if (!sessionToken) {
+			event.locals.user = null;
+			event.locals.session = null;
+			return resolve(event);
+		}
+
+		const { session, user } = await auth.validateSessionToken(sessionToken);
+
+		if (session) {
+			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+		} else {
+			auth.deleteSessionTokenCookie(event);
+		}
+
+		event.locals.user = user;
+		event.locals.session = session;
+		return resolve(event);
+	} catch (error) {
+		console.error('[Auth] Error in auth middleware:', error.message);
+		// Continue without auth if there's an error
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
 	}
-
-	const { session, user } = await auth.validateSessionToken(sessionToken);
-
-	if (session) {
-		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-	} else {
-		auth.deleteSessionTokenCookie(event);
-	}
-
-	event.locals.user = user;
-	event.locals.session = session;
-	return resolve(event);
 };
 
 const handlePreview = async ({ event, resolve }) => {
 	// Detect preview mode and add to locals
 	const previewMode = isPreviewMode(event.cookies);
 	const previewInfo = getPreviewModeInfo(event.cookies);
-	
+
 	// Add preview information to event locals
 	event.locals.preview = previewMode;
 	event.locals.previewInfo = previewInfo;
-	
+
 	// Add preview headers for debugging
 	if (previewMode) {
 		console.log(`[Preview Middleware] Request in preview mode:`, {
@@ -51,7 +69,7 @@ const handlePreview = async ({ event, resolve }) => {
 			userAgent: event.request.headers.get('user-agent')?.substring(0, 50)
 		});
 	}
-	
+
 	return resolve(event, {
 		transformPageChunk: ({ html }) => {
 			// Add preview meta tags to all pages in preview mode

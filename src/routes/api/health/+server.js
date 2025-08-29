@@ -27,7 +27,7 @@ export async function GET() {
 		try {
 			// Import here to avoid module-level errors
 			const { sanityClient } = await import('$lib/server/sanity.js');
-			
+
 			// Simple query to test connection
 			await sanityClient.fetch('*[_type == "page" && isHomepage == true][0]{ _id }');
 			sanityStatus = 'connected';
@@ -41,17 +41,19 @@ export async function GET() {
 			sanity: sanityStatus,
 			message: 'Health check passed'
 		});
-
 	} catch (error) {
 		console.error('[Health Check] Error:', error);
-		
-		return json({
-			status: 'error',
-			error: error.message,
-			stack: dev ? error.stack : undefined,
-			timestamp: new Date().toISOString()
-		}, { 
-			status: 500 
-		});
+
+		return json(
+			{
+				status: 'error',
+				error: error.message,
+				stack: dev ? error.stack : undefined,
+				timestamp: new Date().toISOString()
+			},
+			{
+				status: 500
+			}
+		);
 	}
 }
