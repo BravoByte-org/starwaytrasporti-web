@@ -4,15 +4,6 @@
 			"NODE_ENV": "production"
 		}
 	},
-	"functions": {
-		"src/routes/**/*.js": {
-			"runtime": "nodejs",
-			"maxDuration": 30
-		},
-		"src/app.html": {
-			"runtime": "nodejs"
-		}
-	},
 	"env": {
 		"NODE_ENV": "production"
 	},
