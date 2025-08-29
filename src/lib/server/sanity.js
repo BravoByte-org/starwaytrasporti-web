@@ -17,15 +17,15 @@ import {
 const validateSanityConfig = () => {
 	const projectId = SANITY_PROJECT_ID || '2z040zj1';
 	const dataset = SANITY_DATASET || 'production';
-	
+
 	if (!projectId) {
 		throw new Error('SANITY_PROJECT_ID environment variable is required');
 	}
-	
+
 	if (!dataset) {
 		throw new Error('SANITY_DATASET environment variable is required');
 	}
-	
+
 	return { projectId, dataset };
 };
 
