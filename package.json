@@ -3,6 +3,13 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"license": "MIT",
+	"keywords": [
+		"svelte",
+		"sveltekit",
+		"sanity",
+		"starwaytrasporti"
+	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -19,7 +26,13 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"sanity:dev": "sanity dev",
+		"sanity:start": "sanity start",
+		"sanity:build": "sanity build",
+		"sanity:deploy": "sanity deploy",
+		"sanity:deploy-graphql": "sanity graphql deploy",
+		"sanity:populate-sample": "node scripts/populate-sample-content.js"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^4.1.0",
@@ -58,7 +71,15 @@
 		"vite": "^7.1.1",
 		"vite-plugin-devtools-json": "^0.2.1",
 		"vitest": "^3.2.4",
-		"vitest-browser-svelte": "^0.1.0"
+		"vitest-browser-svelte": "^0.1.0",
+		"@sanity/client": "^7.10.0",
+		"@sanity/icons": "^3.7.4",
+		"@sanity/image-url": "^1.1.0",
+		"@sanity/vision": "^4.5.0",
+		"react": "^19.1",
+		"react-dom": "^19.1",
+		"sanity": "^4.5.0",
+		"styled-components": "^6.1.18"
 	},
 	"dependencies": {
 		"@fontsource-variable/arimo": "^5.2.6",
@@ -68,10 +89,14 @@
 		"@inlang/paraglide-js": "^2.2.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
+		"@sanity/client": "^7.9.0",
+		"@sanity/image-url": "^1.1.0",
 		"drizzle-orm": "^0.40.1",
 		"postgres": "^3.4.7",
 		"remark-gfm": "^4.0.1",
-		"shiki": "^3.9.2"
+		"shiki": "^3.9.2",
+		"@sanity/eslint-config-studio": "^5.0.2",
+		"@types/react": "^19.1"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

@@ -8,6 +8,7 @@ import svelte from 'eslint-plugin-svelte';
 import globals from 'globals';
 import { fileURLToPath } from 'node:url';
 import svelteConfig from './svelte.config.js';
+import studio from '@sanity/eslint-config-studio';
 
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
@@ -27,5 +28,6 @@ export default [
 		files: ['**/*.svelte', '**/*.svelte.js'],
 		languageOptions: { parserOptions: { svelteConfig } }
 	},
-	...storybook.configs['flat/recommended']
+	...storybook.configs['flat/recommended'],
+	...studio
 ];
