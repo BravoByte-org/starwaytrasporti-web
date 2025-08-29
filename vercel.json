@@ -6,11 +6,11 @@
 	},
 	"functions": {
 		"src/routes/**/*.js": {
-			"runtime": "nodejs",
+			"runtime": "nodejs@20.x",
 			"maxDuration": 30
 		},
 		"src/app.html": {
-			"runtime": "nodejs"
+			"runtime": "nodejs@20.x"
 		}
 	},
 	"env": {
