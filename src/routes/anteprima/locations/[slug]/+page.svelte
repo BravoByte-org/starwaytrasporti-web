@@ -6,9 +6,9 @@
 <script>
 	import { onMount } from 'svelte';
 	
-	export let data;
+	let data = $props();
 	
-	$: ({ location, navigation, previewInfo } = data);
+	let { location, navigation, previewInfo } = data;
 	
 	onMount(() => {
 		console.log('[Anteprima Location IT] Componente montato:', {

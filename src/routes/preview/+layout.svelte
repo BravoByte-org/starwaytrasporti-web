@@ -63,7 +63,7 @@
 			<button 
 				type="button" 
 				class="exit-preview-btn"
-				on:click={exitPreview}
+				onClick={exitPreview}
 			>
 				Exit Preview
 			</button>
@@ -73,7 +73,7 @@
 
 <!-- Main Content -->
 <main class="preview-content">
-	<slot />
+	{@render children()}
 </main>
 
 <style>

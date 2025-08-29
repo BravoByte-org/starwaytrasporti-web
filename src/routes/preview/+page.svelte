@@ -4,12 +4,12 @@
 -->
 
 <script>
-	import { Page } from '$lib/components/index.js';
+	import { Homepage } from '$lib/pages/index.js';
 	import { onMount } from 'svelte';
 	
-	export let data;
+	let data = $props();
 	
-	$: ({ homepage, navigation, testimonials, previewInfo } = data);
+	let { homepage, navigation, testimonials, previewInfo } = data;
 	
 	onMount(() => {
 		console.log('[Preview Homepage EN] Component mounted:', {
@@ -45,12 +45,14 @@
 
 <!-- Main Content -->
 {#if homepage}
-	<Page 
-		{homepage} 
-		{navigation} 
-		{testimonials}
-		isPreview={true}
-		previewLocale="en"
+	<Homepage 
+		data={{
+			homepage,
+			navigation,
+			testimonials,
+			isPreview: true,
+			previewLocale: "en"
+		}}
 	/>
 {:else if previewInfo?.error}
 	<!-- Error State -->
@@ -60,7 +62,7 @@
 			<p>Unable to load preview content:</p>
 			<code>{previewInfo.error}</code>
 			<div class="error-actions">
-				<button onclick="window.location.reload()">Retry</button>
+				<button onclick={() => window.location.reload()}>Retry</button>
 				<a href="/studio" target="_blank">Open Studio</a>
 			</div>
 		</div>

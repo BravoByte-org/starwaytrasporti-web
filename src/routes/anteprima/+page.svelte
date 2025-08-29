@@ -4,7 +4,7 @@
 -->
 
 <script>
-	import { Page } from '$lib/components/index.js';
+	import { Homepage } from '$lib/pages/index.js';
 	import { onMount } from 'svelte';
 	
 	let data = $props();
@@ -45,12 +45,14 @@
 
 <!-- Main Content -->
 {#if homepage}
-	<Page 
-		{homepage} 
-		{navigation} 
-		{testimonials}
-		isPreview={true}
-		previewLocale="it"
+	<Homepage 
+		data={{
+			homepage,
+			navigation,
+			testimonials,
+			isPreview: true,
+			previewLocale: "it"
+		}}
 	/>
 {:else if previewInfo?.error}
 	<!-- Error State -->

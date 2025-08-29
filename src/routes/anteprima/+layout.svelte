@@ -73,7 +73,7 @@
 
 <!-- Main Content -->
 <main class="preview-content">
-	<slot />
+	{@render children()}
 </main>
 
 <style>
