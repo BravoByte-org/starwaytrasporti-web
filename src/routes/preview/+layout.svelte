@@ -7,10 +7,10 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	
-	export let data;
+	let data = $props();
 	
 	// Preview mode data
-	$: ({ preview, locale, documentId, isDraft, previewMode } = data);
+	let { preview, locale, documentId, isDraft, previewMode } = data;
 	
 	// Handle preview mode initialization
 	onMount(() => {
