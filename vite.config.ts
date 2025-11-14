@@ -1,13 +1,11 @@
 /*--------------------------------- Imports ---------------------------------*/
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-/*---------------------------------------------------------------------------*/
-
-/*--------------------------------- Plugins ---------------------------------*/
+import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 /*---------------------------------------------------------------------------*/
 
 /*--------------------------------- Config ---------------------------------*/
+/** @type {import('vite').UserConfig<import('@sveltejs/kit').Config>} */
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	resolve: {
@@ -16,7 +14,7 @@ export default defineConfig({
 			$components: './src/lib/components',
 			$config: './src/lib/config',
 			$styles: './src/lib/styles',
-			$utils: './src/lib/utils'
+			$util: './src/lib/util'
 		}
 	},
 	test: {

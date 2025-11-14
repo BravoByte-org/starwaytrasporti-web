@@ -30,7 +30,7 @@ const config = {
 			$components: './src/lib/components',
 			$layouts: './src/lib/layouts',
 			$styles: './src/lib/styles',
-			$utils: './src/lib/utils'
+			$util: './src/lib/util'
 		}
 	}
 };

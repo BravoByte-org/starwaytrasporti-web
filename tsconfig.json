@@ -1,19 +1,41 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler"
-	}
-	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
-	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
-	//
-	// To make changes to top-level options such as include and exclude, we recommend extending
-	// the generated config; see https://svelte.dev/docs/kit/configuration#typescript
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"lib": [
+			"esnext",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"module": "esnext",
+		"target": "esnext",
+		"moduleResolution": "bundler",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"checkJs": true
+	},
+	"include": [
+		"vite.config.js",
+		"vite.config.ts",
+		"src/**/*.js",
+		"src/**/*.ts",
+		"src/**/*.svelte",
+		"src/**/*.svx",
+		"src/**/__TEST__/**/*.js",
+		"src/**/__TEST__/**/*.ts",
+		"src/**/__TEST__/**/*.svelte",
+		"src/**/__STORIES__/**/*.js",
+		"src/**/__STORIES__/**/*.ts",
+		"src/**/__STORIES__/**/*.svelte",
+		"vitest-setup-client.ts",
+		"playwright.config.ts",
+		"./.svelte-kit/ambient.d.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
 }
