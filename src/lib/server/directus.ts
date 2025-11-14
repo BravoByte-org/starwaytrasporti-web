@@ -1,23 +1,26 @@
 import { createDirectus, graphql, authentication, staticToken } from '@directus/sdk';
-import { PRIVATE_DIRECTUS_URL, PRIVATE_DIRECTUS_TOKEN } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-const DIRECTUS_URL = PRIVATE_DIRECTUS_URL;
-const DIRECTUS_TOKEN = PRIVATE_DIRECTUS_TOKEN;
+// Check if app is running in dev or prod, then use the appropriate environment variables
+const isDev = process.env.NODE_ENV === 'development';
 
-if (!DIRECTUS_TOKEN) {
+const URL = isDev ? env.PRIVATE_DIRECTUS_URL : env.DIRECTUS_URL;
+const TOKEN = isDev ? env.PRIVATE_DIRECTUS_TOKEN : env.DIRECTUS_TOKEN;
+
+if (!TOKEN) {
 	throw new Error('Please include a token for Directus in the environment variables');
 }
 
-if (!DIRECTUS_URL) {
+if (!URL) {
 	throw new Error('Please include a URL for Directus in the environment variables');
 }
 
 const _getDirectusInstance = (fetch?: typeof globalThis.fetch) => {
 	const options = fetch ? { globals: { fetch } } : {};
-	const directus = createDirectus(DIRECTUS_URL, options)
+	const directus = createDirectus(URL, options)
 		.with(authentication('json'))
 		.with(graphql())
-		.with(staticToken(DIRECTUS_TOKEN));
+		.with(staticToken(TOKEN));
 
 	return directus;
 };
