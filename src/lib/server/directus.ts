@@ -1,11 +1,8 @@
 import { createDirectus, graphql, authentication, staticToken } from '@directus/sdk';
 import { env } from '$env/dynamic/private';
 
-// Check if app is running in dev or prod, then use the appropriate environment variables
-const isDev = process.env.NODE_ENV === 'development';
-
-const URL = isDev ? env.PRIVATE_DIRECTUS_URL : env.DIRECTUS_URL;
-const TOKEN = isDev ? env.PRIVATE_DIRECTUS_TOKEN : env.DIRECTUS_TOKEN;
+const URL = env.PRIVATE_DIRECTUS_URL || env.DIRECTUS_URL;
+const TOKEN = env.PRIVATE_DIRECTUS_TOKEN || env.DIRECTUS_TOKEN;
 
 if (!TOKEN) {
 	throw new Error('Please include a token for Directus in the environment variables');
