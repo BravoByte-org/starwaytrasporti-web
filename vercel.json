@@ -1,0 +1,13 @@
+{
+	"alias": "starwaytrasporti.com",
+	"git": {
+		"deploymentEnabled": {
+			"main": true,
+			"next": true,
+			"dev": true
+		}
+	},
+	"github": {
+		"autoAlias": true
+	}
+}
