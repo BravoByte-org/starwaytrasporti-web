@@ -1,38 +1,31 @@
-# sv
+# StarwayTrasporti
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+StarwayTrasporti.com is an international transportation website that serves to highlight an exceptional service, generate new clients, and help existing clients find the information they need. 
 
-## Creating a project
+Keep an eye out for updates on [https://starwaytrasporti.com](https://starwaytrasporti.com).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Tech Stack
 
-```sh
-# create a new project in the current directory
-npx sv create
+- SvelteKit - Frontend Framework
+- TailwindCSS - CSS Styling Library
+- Vite - App Bundler/Compiler
+- Vitest - Unit Testing Library
+- Playwright - E2E Testing Library
+- Mdsvex - Markdown to HTML Converter
+- Directus - CMS
+- PostgreSQL - Database
+- Vercel - Deployment & HostingPlatform
 
-# create a new project in my-app
-npx sv create my-app
+## Development
+
+### Prerequisites
+
+- Node.js >= 22.13.0
+- pnpm >= 9.17.0
+- Vercel CLI >= 48.10.2
+
+### Installation
+
+```bash
+pnpm install
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
