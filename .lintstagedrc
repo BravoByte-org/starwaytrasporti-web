@@ -1,0 +1,9 @@
+{
+	"src/lib/{components, utils, pages, layouts}/**/*.{js,ts,svelte}": "eslint",
+	"src/{lib, docs}/{styles, components, utils, pages, layouts}/**/*.{js,ts,css,scss,postcss,md,mdx,mdsvex,json}": [
+		"prettier --write --plugin-search-dir=.",
+		"prettier --check --plugin-search-dir=.",
+		"stylelint --fix",
+		"git add -A ."
+	]
+}
