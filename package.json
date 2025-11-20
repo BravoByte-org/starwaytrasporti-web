@@ -54,8 +54,8 @@
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/debug": "^4.1.12",
 		"@types/node": "^24.10.1",
-		"@vitest/browser": "^4.0.9",
-		"@vitest/browser-playwright": "^4.0.9",
+		"@vitest/browser": "^4.0.10",
+		"@vitest/browser-playwright": "^4.0.10",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.13.0",
@@ -69,25 +69,25 @@
 		"stylelint-config-standard-scss": "^16.0.0",
 		"stylelint-config-tailwindcss": "^1.0.0",
 		"stylelint-scss": "^6.12.1",
-		"svelte": "^5.43.6",
+		"svelte": "^5.43.12",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.46.4",
+		"typescript-eslint": "^8.47.0",
 		"vite": "^7.2.2",
-		"vitest": "^4.0.9",
+		"vitest": "^4.0.10",
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "20.0.0",
-		"@directus/sdk": "^20.1.1",
-		"@directus/types": "^13.3.1",
-		"lint-staged": "^16.2.6",
+		"@directus/sdk": "^20.2.0",
+		"@directus/types": "^13.4.0",
+		"@release-it/conventional-changelog": "^10.0.2",
+		"lint-staged": "^16.2.7",
 		"mdsvex": "^0.12.6",
 		"release-it": "^19.0.6",
-		"@release-it/conventional-changelog": "^10.0.1",
-		"vercel": "^48.10.2"
+		"vercel": "^48.10.4"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
@@ -97,6 +97,6 @@
 	"release-it": {},
 	"repository": "https://github.com/starwaytrasporti/starwaytrasporti.com",
 	"engines": {
-		"node": ">=22.13.0"
+		"node": "22.x || 24.x"
 	}
 }
