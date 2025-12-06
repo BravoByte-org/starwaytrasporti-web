@@ -1,9 +1,12 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import Hero from '$components/Hero.svelte';
+	// let { data } = $props();
 
-	let { data }: { data: PageData } = $props();
+	// const { id, slug, status, page_name } = data.pages[0];
 
-	const { id, slug, status, page_name } = data.pages[0];
+
 </script>
 
-<h1>{page_name}</h1>
+<!-- <h1>{page_name}</h1> -->
+
+<Hero />
