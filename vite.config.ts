@@ -14,6 +14,8 @@ export default defineConfig({
 			$lib: './src/lib',
 			$components: './src/lib/components',
 			$config: './src/lib/config',
+			$layouts: './src/lib/layouts',
+			$mocks: './src/lib/mocks',
 			$styles: './src/lib/styles',
 			$util: './src/lib/util'
 		}
