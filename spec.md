@@ -2,7 +2,7 @@
 
 > **Milestone:** Baseline MVP  
 > **Due Date:** December 6, 2025  
-> **Last Updated:** December 5, 2025
+> **Last Updated:** December 17, 2025
 
 ---
 
@@ -19,8 +19,8 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 ```
 📦 StarwayTrasporti.com
 ├── 🔷 Page Blocks (Epic #4)
-│   ├── ✅ Hero Block (#11) ............... IN PROGRESS
-│   ├── ⬜ Card + CardGroup Block (#12) ... PLANNED
+│   ├── ✅ Hero Block (#11) ............... DONE (UI only; CMS pending)
+│   ├── ✅ Card + CardGroup Block (#12) ... DONE (UI only; CMS pending)
 │   ├── ⬜ Rich Text Block (#13) .......... PLANNED
 │   ├── ⬜ Markdown Block (#14) ........... PLANNED
 │   └── ⬜ Stat + StatGroup Block (#15) ... PLANNED
@@ -45,7 +45,7 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 ## Feature: Hero Block Component
 
 **Issue:** [#11](https://github.com/BravoByte-org/starwaytrasporti-web/issues/11)  
-**Status:** 🟡 IN PROGRESS  
+**Status:** ✅ DONE (UI complete; CMS integration pending #2)  
 **Assignee:** @LionOnTheWeb  
 **Estimated Effort:** 3
 
@@ -61,7 +61,7 @@ Create a Hero component that serves as the primary landing section for visitors.
 | H2 | As a **visitor**, I want prominent CTAs so that I can quickly request a quote or learn more | ✅ Done |
 | H3 | As a **visitor**, I want to see trust indicators so that I feel confident in the company's reliability | ✅ Done |
 | H4 | As a **visitor on mobile**, I want the hero to be readable and fast-loading so that I can browse on any device | ✅ Done |
-| H5 | As an **editor**, I want to customize the hero content from the CMS so that I can update messaging without code changes | ⬜ Not Started |
+| H5 | As an **editor**, I want to customize the hero content from the CMS so that I can update messaging without code changes | ⬜ Blocked (#2) |
 
 ### Acceptance Criteria
 
@@ -77,57 +77,84 @@ Create a Hero component that serves as the primary landing section for visitors.
 | 8 | **Fast load** with compressed/webp images | ✅ Done | Using `?fm=webp` params |
 | 9 | **Accessibility** - proper alt text, high contrast | ✅ Done | Alt text present, WCAG contrast |
 | 10 | **Build passes** - no linter/compile errors | ✅ Done | Fixed; 20 CSS linter false positives remain (expected) |
-| 11 | **CMS Integration** - content editable via Directus | ⬜ Not Started | Currently hardcoded |
+| 11 | **CMS Integration** - content editable via Directus | ⬜ Blocked (#2) | Currently hardcoded |
 | 12 | **Unit tests** with appropriate coverage | ⬜ Not Started | |
 
-### ✅ Build Errors Fixed (Dec 5, 2025)
-
-**Resolved:**
-- ✅ `@import "@tailwindcss"` → `@reference "../../app.css"` (Tailwind v4 syntax)
-- ✅ Redundant `focus-visible:outline` classes removed
-- ✅ `bg-gradient-to-r` → `bg-linear-to-r` (TW4 naming)
-- ✅ `bg-gradient-to-t` → `bg-linear-to-t` (TW4 naming)
-- ✅ `lg:h-[28rem]` → `lg:h-112` (standard utility)
-- ✅ Self-closing HTML tags → proper open/close tags (Svelte 5)
-
-**Note:** 20 CSS linter warnings for `@reference`/`@apply` are false positives (linter doesn't understand Tailwind)
-
-### Current Implementation Analysis
+### Implementation Notes
 
 **File:** `src/lib/components/Hero.svelte`
 
-**What's Done:**
-- ✅ Clean, semantic HTML structure
-- ✅ All visual elements present (headline, sub-headline, CTAs, stats, media)
-- ✅ Responsive design with Tailwind
-- ✅ Modern dark theme with gradient overlays
-- ✅ Accessibility attributes (`aria-hidden` for decorative elements)
-- ✅ Lazy loading on images
-- ✅ WebP format for optimized loading
+**Completed:**
+- Clean, semantic HTML structure
+- All visual elements present (headline, sub-headline, CTAs, stats, media)
+- Responsive design with Tailwind
+- Modern dark theme with gradient overlays
+- Accessibility attributes (`aria-hidden` for decorative elements)
+- Lazy loading on images
+- WebP format for optimized loading
+- Tailwind v4 `@reference` directive
+- Svelte 5 compatibility
 
-**What's Fixed:**
-- ✅ Tailwind v4 `@reference` directive now used correctly
-- ✅ CSS class conflicts resolved
-- ✅ Svelte 5 self-closing tag warnings resolved
+**Pending (blocked by #2):**
+- Props interface for CMS data injection
+- Fallback/default content handling
+- Unit test coverage
 
-**What's Missing:**
-- ⬜ Props interface for CMS data injection
-- ⬜ Fallback/default content handling
-- ⬜ Unit test coverage
-- ⬜ Replace placeholder images with actual fleet photos
+---
 
-### Proposed Stories to Complete
+## Feature: Card + CardGroup Block Components
 
-#### Story H5: CMS Integration
+**Issue:** [#12](https://github.com/BravoByte-org/starwaytrasporti-web/issues/12)  
+**Status:** ✅ DONE (UI complete; CMS integration pending #2)  
+**Assignee:** @LionOnTheWeb  
+**Estimated Effort:** 3
 
-**Tasks:**
-1. Define TypeScript interface for hero content structure
-2. Add `$props()` to accept content from parent/CMS
-3. Update `+page.server.ts` to fetch hero block data from Directus
-4. Add fallback defaults for missing CMS data
-5. Wire up CMS data to Hero component
+### Description
 
-**Blocked by:** Issue #2 (Create Directus page blocks)
+Provide reusable `Card` and `CardGroup` components to showcase transportation/logistics services. Cards must be generic/reusable (not hard-wired to services), with props flexible enough to swap in CMS data later. Hero layout remains unchanged; services render in a separate section using these cards.
+
+### User Stories
+
+| ID | Story | Status |
+|----|-------|--------|
+| C1 | As a **visitor**, I want to view services in a clear card grid so I can scan offerings quickly | ✅ Done |
+| C2 | As a **mobile visitor**, I want cards to scroll horizontally and stay readable on small screens | ✅ Done |
+| C3 | As an **editor**, I want to feed card data from CMS without code changes | ⬜ Blocked (#2) |
+| C4 | As a **designer**, I want cards to follow brand and match Hero styling without altering Hero UI | ✅ Done |
+
+### Acceptance Criteria
+
+| # | Criterion | Status | Notes |
+|---|-----------|--------|-------|
+| 1 | Card exposes props for icon, title, summary, meta, CTA label+href | ✅ Done | `Card.svelte` with typed props |
+| 2 | CardGroup renders responsive grid (mobile carousel 1.5 cards + fade, tablet 2-col, desktop 3-col) | ✅ Done | CSS transitions, scroll-snap on mobile |
+| 3 | Accessibility: semantic headings, focus/hover states, keyboardable CTAs | ✅ Done | `role="presentation"` on wrappers, link CTAs |
+| 4 | Visual consistency with Hero (radius, shadow, typography, color tokens) without changing Hero UI | ✅ Done | Brand colors; Hero unchanged |
+| 5 | Mock data fixtures provided and swappable with CMS payload | ✅ Done | `src/lib/mocks/services.ts`, `hero.ts` |
+| 6 | Unit tests cover render variants (with/without icon/cta) and basic accessibility | ⬜ Not Started | Future: add Vitest snapshots |
+
+### Implementation Notes
+
+**Files:**
+- `src/lib/components/cards/Card.svelte` - Reusable card with typed props
+- `src/lib/components/cards/CardGroup.svelte` - Responsive grid with animations
+- `src/lib/layouts/ServicesSection.svelte` - Page section wrapper
+- `src/lib/mocks/services.ts` - Mock service data
+- `src/lib/mocks/hero.ts` - Mock hero data
+
+**Responsive Behavior:**
+- Mobile (<768px): Horizontal scroll carousel showing 1.5 cards with right-edge fade
+- Tablet (768px-1023px): 2-column grid (even rows)
+- Desktop (≥1024px): 3-column max grid
+
+---
+
+## Mock Data Policy (Epic #5 Frontend Blocks)
+
+- All blocks (Hero, Card/CardGroup, Rich Text, Markdown, Stats) must ship with mock fixtures to unblock UI while CMS is pending.
+- Fixtures should mirror the planned Directus schema; swapping to live data should be a single adapter change.
+- Pages should gracefully fall back to mocks if CMS fetch fails or returns empty.
+- Store mocks under `src/lib/mocks/*` and document expected shapes next to components.
 
 ---
 
@@ -135,6 +162,7 @@ Create a Hero component that serves as the primary landing section for visitors.
 
 ```
 #11 Hero Block ──depends on──► #2 Directus Page Blocks
+#12 Card/CardGroup ──depends on──► #2 Directus Page Blocks
 #5 Frontend Blocks ──depends on──► #2 Directus Page Blocks
 ```
 
@@ -151,7 +179,7 @@ Create a Hero component that serves as the primary landing section for visitors.
 
 ## Reference
 
-- **Design inspiration:** [bartoliniexpress.com](https://www.bartoliniexpress.com)
+- **Design inspiration:** [bartoliniexpress.com](https://www.bartoliniexpress.com) (services cards), [trasportiromagna.com](https://trasportiromagna.com)
 - **CMS Docs:** [Directus Dynamic Blocks with SvelteKit](https://directus.io/docs/tutorials/getting-started/rendering-dynamic-blocks-using-sveltekit)
 
 ---

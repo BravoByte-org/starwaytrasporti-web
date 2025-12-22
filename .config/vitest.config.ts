@@ -35,6 +35,7 @@ export default defineConfig({
 		alias: {
 			$components: path.resolve(__dirname, '../src/lib/components'),
 			$layouts: path.resolve(__dirname, '../src/lib/layouts'),
+			$mocks: path.resolve(__dirname, '../src/lib/mocks'),
 			$styles: path.resolve(__dirname, '../src/lib/styles'),
 			$util: path.resolve(__dirname, '../src/lib/util'),
 			$lib: path.resolve(__dirname, '../src/lib')
