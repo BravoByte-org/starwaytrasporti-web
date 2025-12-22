@@ -97,6 +97,6 @@
 	"release-it": {},
 	"repository": "https://github.com/starwaytrasporti/starwaytrasporti.com",
 	"engines": {
-		"node": "22.x || 24.x"
+		"node": "22.x"
 	}
 }
