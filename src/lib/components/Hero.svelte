@@ -1,18 +1,18 @@
 <script lang="ts">
+	import type { HeroContent } from '$mocks/hero';
+	import { heroMock } from '$mocks/hero';
+
+	// Accept optional content prop, fall back to mock data
+	let { content = heroMock }: { content?: HeroContent } = $props();
+
+	// Merge with defaults to ensure all fields are present
 	const heroContent = {
-		headline: 'Global goods transport, from Italy to the world.',
-		subHeadline: 'Reliable. Transparent. Delivered on time.',
-		primaryCta: { label: 'Get a Quote', href: '#quote' },
-		secondaryCta: { label: 'View Our Fleet', href: '#fleet' },
-		trustStats: ['25 years experience', '5000+ shipments/year', '100% real-time tracking'],
-		media: {
-			fleetImage:
-				'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=70&fm=webp',
-			fleetAlt: 'Starway Transporti trucks lined up at dusk ready to depart.',
-			mapOverlay:
-				'https://images.unsplash.com/photo-1502920917128-1aa500764b84?auto=format&fit=crop&w=1600&q=60&fm=webp'
-		}
-	} as const;
+		...heroMock,
+		...content,
+		primaryCta: { ...heroMock.primaryCta, ...content?.primaryCta },
+		secondaryCta: { ...heroMock.secondaryCta, ...content?.secondaryCta },
+		media: { ...heroMock.media, ...content?.media }
+	};
 </script>
 
 <section class="hero">
@@ -22,7 +22,7 @@
 		<div class="hero__copy">
 			<p class="hero__eyebrow">
 				<span class="hero__eyebrow-dot"></span>
-				Trusted European freight
+				{heroContent.eyebrow}
 			</p>
 
 			<h1 class="hero__headline">{heroContent.headline}</h1>
