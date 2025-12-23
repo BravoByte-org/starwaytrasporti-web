@@ -35,8 +35,10 @@ export default defineConfig({
 		alias: {
 			$components: path.resolve(__dirname, '../src/lib/components'),
 			$layouts: path.resolve(__dirname, '../src/lib/layouts'),
+			$mocks: path.resolve(__dirname, '../src/lib/mocks'),
 			$styles: path.resolve(__dirname, '../src/lib/styles'),
 			$util: path.resolve(__dirname, '../src/lib/util'),
+			$mocks: path.resolve(__dirname, '../src/lib/mocks'),
 			$lib: path.resolve(__dirname, '../src/lib')
 		},
 		// Tell Vitest to use the `browser` entry points in `package.json` files, even though it's running in Node
