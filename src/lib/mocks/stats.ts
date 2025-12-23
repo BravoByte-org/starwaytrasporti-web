@@ -6,7 +6,7 @@ export type StatDelta = {
 	ariaLabel?: string;
 };
 
-export type Stat = {
+export type StatData = {
 	id: string;
 	icon?: string;
 	iconLabel?: string;
@@ -20,7 +20,7 @@ export type Stat = {
 	ariaLabel?: string;
 };
 
-export const stats: Stat[] = [
+export const stats: StatData[] = [
 	{
 		id: 'delivered-packages',
 		icon: '📦',

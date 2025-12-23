@@ -192,9 +192,9 @@ Create reusable `Stat` and `StatGroup` components to display key metrics in a ca
 - `src/lib/mocks/stats.ts` - Mock stat data with typed exports
 - `src/lib/index.ts` - Barrel exports for Stat, StatGroup, stats mock
 
-**Data Shape (`Stat` type):**
+**Data Shape (`StatData` type):**
 ```ts
-type Stat = {
+type StatData = {
   id: string;
   icon?: string;
   iconLabel?: string;

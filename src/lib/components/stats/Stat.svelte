@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 
-	import type { Stat } from '$lib/mocks/stats';
+	import type { StatData } from '$lib/mocks/stats';
 
-	let { stat }: { stat: Stat } = $props();
+	let { stat }: { stat: StatData } = $props();
 
 	let cardEl: HTMLElement | null = null;
 	let animatedValue: number | null = typeof stat.value === 'number' ? 0 : null;

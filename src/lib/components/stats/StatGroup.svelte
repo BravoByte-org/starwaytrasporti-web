@@ -1,13 +1,13 @@
 <script lang="ts">
 	import StatCard from './Stat.svelte';
-	import type { Stat } from '$lib/mocks/stats';
+	import type { StatData } from '$lib/mocks/stats';
 
 	let {
 		stats = [],
 		heading,
 		description
 	}: {
-		stats?: Stat[];
+		stats?: StatData[];
 		heading?: string;
 		description?: string;
 	} = $props();

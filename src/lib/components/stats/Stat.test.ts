@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mount, unmount } from 'svelte';
 
 import Stat from './Stat.svelte';
 import StatGroup from './StatGroup.svelte';
@@ -9,7 +10,7 @@ const originalMatchMedia = globalThis.matchMedia;
 
 const renderStat = (stat = mockStats[0]) => {
 	const target = document.createElement('div');
-	const component = new Stat({ target, props: { stat } });
+	const component = mount(Stat, { target, props: { stat } });
 	return { container: target, component };
 };
 
@@ -25,7 +26,7 @@ describe('Stat', () => {
 		expect(container.textContent).toContain('Our Impact & Achievements');
 		expect(container.textContent).toContain('Delivered Packages');
 		expect(container.textContent).toContain('Reliable deliveries completed worldwide');
-		component.$destroy();
+		unmount(component);
 	});
 
 	it('respects reduced motion by skipping animation', async () => {
@@ -47,7 +48,7 @@ describe('Stat', () => {
 
 		await Promise.resolve();
 		expect(container.textContent).toContain('5,000+');
-		component.$destroy();
+		unmount(component);
 	});
 
 	it('falls back gracefully when IntersectionObserver is unavailable', async () => {
@@ -62,14 +63,14 @@ describe('Stat', () => {
 
 		await Promise.resolve();
 		expect(container.textContent).toContain('1,234 km');
-		component.$destroy();
+		unmount(component);
 	});
 });
 
 describe('StatGroup', () => {
 	it('renders heading, description, and all stat cards', () => {
 		const target = document.createElement('div');
-		const component = new StatGroup({
+		const component = mount(StatGroup, {
 			target,
 			props: {
 				heading: 'Our Impact & Achievements',
@@ -82,6 +83,6 @@ describe('StatGroup', () => {
 		expect(target.textContent).toContain('Delivering excellence across the globe.');
 		expect(target.querySelectorAll('article').length).toBe(mockStats.length);
 
-		component.$destroy();
+		unmount(component);
 	});
 });
