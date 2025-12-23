@@ -1,13 +1,17 @@
 <script lang="ts">
 	import Hero from '$components/Hero.svelte';
 	import ServicesSection from '$layouts/ServicesSection.svelte';
-	// let { data } = $props();
-	// const { id, slug, status, page_name } = data.pages[0];
+	import { StatGroup, stats } from '$lib';
 </script>
 
 <main class="page">
 	<Hero />
 	<ServicesSection />
+	<StatGroup
+		heading="Our Impact & Achievements"
+		description="Delivering excellence across the globe with industry-leading standards."
+		{stats}
+	/>
 </main>
 
 <style>

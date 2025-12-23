@@ -2,7 +2,7 @@
 
 > **Milestone:** Baseline MVP  
 > **Due Date:** December 6, 2025  
-> **Last Updated:** December 17, 2025
+> **Last Updated:** December 22, 2025
 
 ---
 
@@ -23,7 +23,7 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 │   ├── ✅ Card + CardGroup Block (#12) ... DONE (UI only; CMS pending)
 │   ├── ⬜ Rich Text Block (#13) .......... PLANNED
 │   ├── ⬜ Markdown Block (#14) ........... PLANNED
-│   └── ⬜ Stat + StatGroup Block (#15) ... PLANNED
+│   └── ✅ Stat + StatGroup Block (#15) ... DONE (UI only; CMS pending)
 │
 ├── 🔷 CMS Backend (#2)
 │   └── ⬜ Create Directus page blocks .... PLANNED
@@ -149,6 +149,82 @@ Provide reusable `Card` and `CardGroup` components to showcase transportation/lo
 
 ---
 
+## Feature: Stat + StatGroup Block Components
+
+**Issue:** [#15](https://github.com/BravoByte-org/starwaytrasporti-web/issues/15)  
+**Status:** ✅ DONE (UI complete; CMS integration pending #2)  
+**Assignee:** @LionOnTheWeb  
+**Estimated Effort:** 3  
+**Branch:** `15-feat-stat-statgroup-block-components`
+
+### Description
+
+Create reusable `Stat` and `StatGroup` components to display key metrics in a card-like layout across all breakpoints. Components are accessible, visually aligned with existing blocks, and ready to swap in CMS-driven data once Directus integration is available. Layout inspired by Bartolini "Our Impact & Achievements" section: icon/eyebrow at top, animated stat value in center, helper text at bottom.
+
+### User Stories
+
+| ID | Story | Status |
+|----|-------|--------|
+| S1 | As a **visitor**, I want to see stats in clear cards on all breakpoints so I can quickly understand company performance | ✅ Done |
+| S2 | As a **visitor**, I want stats grouped logically so I can scan multiple metrics without hunting across the page | ✅ Done |
+| S3 | As an **editor**, I want stats to accept CMS or mock data without code changes so content stays fresh | ✅ Done (mocks ready; CMS blocked by #2) |
+
+### Acceptance Criteria
+
+| # | Criterion | Status | Notes |
+|---|-----------|--------|-------|
+| 1 | `Stat` component accepts icon, optional header/eyebrow, value, label, helper/description, optional delta/trend, prefix/suffix | ✅ Done | Typed props with defaults and aria labels |
+| 2 | Three-row layout: top icon/header, middle animated value (on enter viewport), bottom helper text | ✅ Done | Count-up animation with easeOutCubic |
+| 3 | `StatGroup` arranges stats responsively (carousel mobile, 2-col tablet, 4-col desktop) | ✅ Done | Matches CardGroup responsive pattern |
+| 4 | Visual style matches Hero/Card blocks (radius, typography, color tokens) | ✅ Done | Gradient background, consistent spacing |
+| 5 | Accessibility: semantic headings, readable contrast, focus-visible states, aria for helper/tooltips | ✅ Done | aria-label on values, decorative icons hidden |
+| 6 | Respects `prefers-reduced-motion` and graceful no-IntersectionObserver fallback | ✅ Done | Immediate final value when motion reduced or IO unavailable |
+| 7 | Works with mock data fixtures mirroring planned CMS schema | ✅ Done | `src/lib/mocks/stats.ts` |
+| 8 | Unit tests cover render variants (with/without icon/delta) and accessibility | ✅ Done | Vitest tests in `Stat.test.ts` |
+| 9 | Example usage wired into `(app)` page using mocks | ✅ Done | Homepage shows Hero → Services → Stats |
+
+### Implementation Notes
+
+**Files:**
+- `src/lib/components/stats/Stat.svelte` - Individual stat card with animated value
+- `src/lib/components/stats/StatGroup.svelte` - Responsive grid/carousel wrapper
+- `src/lib/components/stats/Stat.test.ts` - Unit tests
+- `src/lib/mocks/stats.ts` - Mock stat data with typed exports
+- `src/lib/index.ts` - Barrel exports for Stat, StatGroup, stats mock
+
+**Data Shape (`StatData` type):**
+```ts
+type StatData = {
+  id: string;
+  icon?: string;
+  iconLabel?: string;
+  header?: string;
+  value: number | string;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+  description: string;
+  delta?: { value: string; trend?: 'up' | 'down' | 'neutral'; ariaLabel?: string };
+  ariaLabel?: string;
+};
+```
+
+**Responsive Behavior:**
+- Mobile (<768px): Horizontal scroll carousel showing ~1.5 cards with snap + fade edge
+- Tablet (768px-1023px): 2-column grid
+- Desktop (≥1024px): Flex-wrap 4-column layout, centered, max-width per card
+
+**Animation:**
+- Count-up animation (1200ms, easeOutCubic) triggered on viewport entry via IntersectionObserver
+- Skips animation if `prefers-reduced-motion: reduce` is set
+- Falls back to immediate final value if IntersectionObserver unavailable (SSR-safe)
+
+**Pending (blocked by #2):**
+- Props interface for CMS data injection
+- Fallback/default content handling when CMS fails
+
+---
+
 ## Mock Data Policy (Epic #5 Frontend Blocks)
 
 - All blocks (Hero, Card/CardGroup, Rich Text, Markdown, Stats) must ship with mock fixtures to unblock UI while CMS is pending.
@@ -163,6 +239,7 @@ Provide reusable `Card` and `CardGroup` components to showcase transportation/lo
 ```
 #11 Hero Block ──depends on──► #2 Directus Page Blocks
 #12 Card/CardGroup ──depends on──► #2 Directus Page Blocks
+#15 Stat/StatGroup ──depends on──► #2 Directus Page Blocks
 #5 Frontend Blocks ──depends on──► #2 Directus Page Blocks
 ```
 
@@ -179,7 +256,7 @@ Provide reusable `Card` and `CardGroup` components to showcase transportation/lo
 
 ## Reference
 
-- **Design inspiration:** [bartoliniexpress.com](https://www.bartoliniexpress.com) (services cards), [trasportiromagna.com](https://trasportiromagna.com)
+- **Design inspiration:** [bartoliniexpress.com](https://www.bartoliniexpress.com) (services cards, stats section), [trasportiromagna.com](https://trasportiromagna.com)
 - **CMS Docs:** [Directus Dynamic Blocks with SvelteKit](https://directus.io/docs/tutorials/getting-started/rendering-dynamic-blocks-using-sveltekit)
 
 ---

@@ -32,7 +32,7 @@ const config = {
 			$mocks: './src/lib/mocks',
 			$styles: './src/lib/styles',
 			$util: './src/lib/util',
-			$lib: './src/lib'
+			$mocks: './src/lib/mocks'
 		}
 	}
 };
