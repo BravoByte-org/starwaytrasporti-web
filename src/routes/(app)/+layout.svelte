@@ -5,7 +5,8 @@
 	import type { LayoutData } from './$types';
 	let { data, children }: { data: LayoutData, children: any } = $props();
 
-	const { title, description } = data.global;
+	const title = data.global?.title ?? 'Starway Trasporti';
+	const description = data.global?.description ?? '';
 </script>
 
 <svelte:head>

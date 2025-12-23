@@ -1,9 +1,22 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	let { data }: { data: PageData } = $props();
-
-	const { id, slug, status, page_name } = data.pages[0];
+	import Hero from '$components/Hero.svelte';
+	import ServicesSection from '$layouts/ServicesSection.svelte';
+	import { StatGroup, stats } from '$lib';
 </script>
 
-<h1>{page_name}</h1>
+<main class="page">
+	<Hero />
+	<ServicesSection />
+	<StatGroup
+		heading="Our Impact & Achievements"
+		description="Delivering excellence across the globe with industry-leading standards."
+		{stats}
+	/>
+</main>
+
+<style>
+	main.page {
+		display: grid;
+		gap: clamp(1.5rem, 4vw, 2.5rem);
+	}
+</style>
