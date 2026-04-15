@@ -16,7 +16,7 @@ export default {
 		releaseNotes: null,
 		preRelease: false,
 		draft: false,
-		tokenRef: '${{ secrets.GITHUB_TOKEN }}'
+		tokenRef: 'RELEASEIT_GITHUB_TOKEN'
 	},
 	npm: {
 		publish: false

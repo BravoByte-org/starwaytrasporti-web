@@ -1,0 +1,40 @@
+---
+description: "Starway Trasporti project context — the first BravoByte delivery repo and extraction source"
+alwaysApply: true
+---
+
+# Starway Trasporti — Project Context
+
+## Project
+
+StarwayTrasporti.com is an international transportation website.
+It is the first BravoByte delivery repo and the first extraction source for shared business-core modules.
+
+- **Status:** pre-production
+- **Repo:** `BravoByte-org/starwaytrasporti-web`
+- **Stack:** SvelteKit 2, Svelte 5 (runes mode), Vite, TypeScript, Tailwind CSS v4, Playwright, Vitest, Directus CMS, PostgreSQL, Vercel
+- **Package manager:** pnpm
+- **Deployment:** Vercel
+- **CMS:** Directus (GraphQL API via `@directus/sdk`)
+
+## Path aliases
+
+```
+$config  → src/lib/config
+$components → src/lib/components
+$layouts → src/lib/layouts
+$styles  → src/lib/styles
+$util   → src/lib/util
+```
+
+## Key architectural notes
+
+- This is a **delivery repo** — it should remain thin
+- Generic utilities, UI primitives, and data access patterns should be flagged for extraction to shared repos
+- Directus integration code in `src/lib/server/directus.ts` is an extraction candidate for `bravobyte-data-core`
+- GraphQL query patterns in `src/lib/util/cms/queries.ts` are extraction candidates
+- Shared types should migrate to `bravobyte-types` once that repo exists
+
+## Bilingual content
+
+The site serves Italian and English-speaking audiences. Content localization decisions should consider future i18n patterns that may be extracted to `bravobyte-frontend-core`.

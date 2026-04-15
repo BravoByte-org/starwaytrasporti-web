@@ -39,13 +39,16 @@
 		"precommit": "lint-staged",
 		"commitlint": "commitlint --config .config/commitlint.config.ts --edit",
 		"RELEASE": "==============================================================",
-		"release": "release-it --config .config/release-it.config.ts --ci"
+		"release": "release-it --config .config/release-it.config.ts"
 	},
 	"devDependencies": {
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "20.0.0",
 		"@eslint/compat": "^2.0.0",
 		"@eslint/js": "^9.39.1",
 		"@opentelemetry/api": "^1.9.0",
 		"@playwright/test": "^1.56.1",
+		"@release-it/conventional-changelog": "^10.0.2",
 		"@sveltejs/adapter-vercel": "^6.1.1",
 		"@sveltejs/kit": "^2.48.5",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -61,10 +64,13 @@
 		"eslint-plugin-svelte": "^3.13.0",
 		"globals": "^16.5.0",
 		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"mdsvex": "^0.12.6",
 		"playwright": "^1.56.1",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"prettier-plugin-tailwindcss": "^0.7.1",
+		"release-it": "^19.0.6",
 		"stylelint": "^16.25.0",
 		"stylelint-config-standard-scss": "^16.0.0",
 		"stylelint-config-tailwindcss": "^1.0.0",
@@ -74,28 +80,21 @@
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.47.0",
+		"vercel": "^48.10.4",
 		"vite": "^7.2.2",
 		"vitest": "^4.0.10",
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
-		"@commitlint/cli": "^20.1.0",
-		"@commitlint/config-conventional": "20.0.0",
 		"@directus/sdk": "^20.2.0",
-		"@directus/types": "^13.4.0",
-		"@release-it/conventional-changelog": "^10.0.2",
-		"lint-staged": "^16.2.7",
-		"mdsvex": "^0.12.6",
-		"release-it": "^19.0.6",
-		"vercel": "^48.10.4"
+		"@directus/types": "^13.4.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
 	},
-	"release-it": {},
-	"repository": "https://github.com/starwaytrasporti/starwaytrasporti.com",
+	"repository": "https://github.com/BravoByte-org/starwaytrasporti-web",
 	"engines": {
 		"node": "22.x || 24.x"
 	}

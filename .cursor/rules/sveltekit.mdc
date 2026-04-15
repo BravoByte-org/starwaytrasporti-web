@@ -1,0 +1,43 @@
+---
+description: "SvelteKit and Svelte 5 conventions for this project"
+globs: ["src/**/*.svelte", "src/**/*.ts", "src/**/*.js", "src/routes/**/*"]
+alwaysApply: false
+---
+
+# SvelteKit Conventions
+
+## Svelte 5
+
+This project uses Svelte 5 with runes mode enabled.
+
+- Use `$state()`, `$derived()`, `$effect()` — not legacy reactive declarations
+- Use `$props()` for component props — not `export let`
+- Use snippet syntax for slot-like patterns
+- Prefer `{#snippet}` over `<slot>`
+
+## SvelteKit patterns
+
+- Server-side data loading uses `+page.server.ts` and `+layout.server.ts`
+- Route groups use the `(group)` directory convention (e.g. `(app)`)
+- Prefer server-side loading over client-side fetching for initial data
+- Use `$env/dynamic/private` for server-only environment variables
+
+## File organization
+
+```
+src/
+  routes/         → pages and layouts
+  lib/
+    components/   → reusable UI components ($components)
+    layouts/      → layout primitives ($layouts)
+    styles/       → global styles ($styles)
+    util/         → utilities ($util)
+    config/       → app configuration ($config)
+    server/       → server-only code
+```
+
+## Testing
+
+- Unit tests: Vitest with browser mode (`.spec.ts`)
+- E2E tests: Playwright
+- Configs live in `.config/` directory

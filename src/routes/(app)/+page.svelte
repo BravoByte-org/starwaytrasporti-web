@@ -3,7 +3,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const { id, slug, status, page_name } = data.pages[0];
+	const { id, slug, status, title } = data.pages[0];
 </script>
 
-<h1>{page_name}</h1>
+<h1>{title}</h1>

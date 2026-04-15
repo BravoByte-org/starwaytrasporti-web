@@ -4,7 +4,14 @@
 		"deploymentEnabled": {
 			"main": true,
 			"next": true,
-			"dev": true
+			"dev": false,
+			"staging": false,
+			"feat/*": false,
+			"feature/*": false,
+			"chore/*": false,
+			"bug/*": false,
+			"hotfix/*": false,
+			"config/*": false
 		}
 	},
 	"github": {
