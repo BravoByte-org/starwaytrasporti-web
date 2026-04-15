@@ -1,7 +1,7 @@
-import type { LoadEvent } from "@sveltejs/kit";
+import type { LoadEvent } from '@sveltejs/kit';
 
-import { getDirectusClient, readItems } from "$lib/server/directus";
-import { fetchNavigation } from "$util/cms/queries";
+import { getDirectusClient, readItems } from '$lib/server/directus';
+import { fetchNavigation } from '$util/cms/queries';
 
 export async function load({ fetch }: LoadEvent) {
 	const client = getDirectusClient(fetch);

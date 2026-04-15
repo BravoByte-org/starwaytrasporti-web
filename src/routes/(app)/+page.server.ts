@@ -1,7 +1,7 @@
-import type { LoadEvent } from "@sveltejs/kit";
+import type { LoadEvent } from '@sveltejs/kit';
 
-import { error } from "@sveltejs/kit";
-import { fetchHomepage } from "$util/cms/queries";
+import { error } from '@sveltejs/kit';
+import { fetchHomepage } from '$util/cms/queries';
 
 export async function load({ fetch }: LoadEvent) {
 	try {
@@ -9,7 +9,6 @@ export async function load({ fetch }: LoadEvent) {
 		return { pages };
 	} catch (err) {
 		console.error(err);
-		throw error(500, "Failed to load homepage data: " + err);
+		throw error(500, 'Failed to load homepage data: ' + err);
 	}
 }
-
