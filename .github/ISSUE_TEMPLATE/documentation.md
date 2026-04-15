@@ -1,7 +1,7 @@
 ---
 name: Documentation
 about: Requests related to additional, missing, or unclear documentation
-title: 'documentation: '
+title: 'docs: '
 labels: documentation
 assignees: ''
 ---

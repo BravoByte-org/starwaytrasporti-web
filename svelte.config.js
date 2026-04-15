@@ -26,11 +26,13 @@ const config = {
 			}
 		}),
 		alias: {
-			$config: './src/lib/config',
 			$components: './src/lib/components',
+			$config: './src/lib/config',
 			$layouts: './src/lib/layouts',
+			$mocks: './src/lib/mocks',
 			$styles: './src/lib/styles',
-			$util: './src/lib/util'
+			$util: './src/lib/util',
+			$mocks: './src/lib/mocks'
 		}
 	}
 };
