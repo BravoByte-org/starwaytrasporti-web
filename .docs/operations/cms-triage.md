@@ -2,6 +2,8 @@
 
 Operational backlog for the shared BravoByte Directus instance as it applies to **Starway Trasporti**. GitHub issues track execution; this file is the index.
 
+**Delivery PR (blocks + nav + docs):** https://github.com/BravoByte-org/starwaytrasporti-web/pull/37 → `next`
+
 | # | Topic | Issue |
 |---|--------|--------|
 | Site renders no block body | REST loaders omitted M2A `blocks`; homepage did not use `BlockRenderer` | https://github.com/BravoByte-org/starwaytrasporti-web/issues/36 |
