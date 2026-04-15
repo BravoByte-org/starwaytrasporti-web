@@ -27,6 +27,12 @@ chore/update-dependencies
 
 ---
 
+## CMS triage index
+
+Open Directus / content-model follow-ups for Starway are tracked in [cms-triage.md](./cms-triage.md) and linked GitHub issues.
+
+---
+
 ## Pull Request Process
 
 1. Create a feature branch from `next`

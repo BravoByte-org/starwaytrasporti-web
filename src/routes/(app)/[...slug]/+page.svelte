@@ -4,16 +4,15 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const page = data.pages[0] as Record<string, unknown>;
-	const title = page.title as string;
-	const blocks =
-		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }>) ?? [];
+	const { page } = data;
+	const title = (page as Record<string, unknown>).title as string;
+	const blocks = ((page as Record<string, unknown>).blocks as Array<{ collection: string; item: Record<string, unknown> }>) ?? [];
 </script>
 
 <svelte:head>
-	<title>{(page.seo_title as string | undefined) ?? title} | Starway Trasporti</title>
-	{#if page.seo_description}
-		<meta name="description" content={page.seo_description as string} />
+	<title>{(page as Record<string, unknown>).seo_title ?? title} | Starway Trasporti</title>
+	{#if (page as Record<string, unknown>).seo_description}
+		<meta name="description" content={(page as Record<string, unknown>).seo_description as string} />
 	{/if}
 </svelte:head>
 
