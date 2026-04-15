@@ -1,0 +1,44 @@
+---
+description: "Directus CMS integration patterns and conventions"
+globs: ["src/lib/server/directus*", "src/lib/util/cms/**/*", "src/routes/**/+page.server.ts", "src/routes/**/+layout.server.ts"]
+alwaysApply: false
+---
+
+# Directus Conventions
+
+## Client setup
+
+The Directus client is configured in `src/lib/server/directus.ts`:
+
+- Uses `@directus/sdk` with GraphQL transport
+- Authenticated via static token from environment variables
+- The `getDirectusData` function accepts a fetch instance and a GraphQL query string
+
+## Environment variables
+
+- `PRIVATE_DIRECTUS_URL` / `DIRECTUS_URL` — Directus instance URL
+- `PRIVATE_DIRECTUS_TOKEN` / `DIRECTUS_TOKEN` — static access token
+
+## Query patterns
+
+- GraphQL queries are defined in `src/lib/util/cms/queries.ts`
+- Queries are string templates, not typed SDK calls
+- This is an extraction candidate — typed query patterns should eventually move to `bravobyte-data-core`
+
+## Extraction notes
+
+The following are candidates for shared extraction:
+
+| Code | Target repo | Timing |
+|------|------------|--------|
+| Directus client factory | `bravobyte-data-core` | extract later (after boundary settles) |
+| GraphQL query helpers | `bravobyte-data-core` | extract later |
+| Content type definitions | `bravobyte-types` | extract soon |
+| Content mapping utilities | `bravobyte-data-core` | extract later |
+
+## Rules
+
+- Keep Directus-related server code in `src/lib/server/`
+- Keep query definitions in `src/lib/util/cms/`
+- Do not expose Directus SDK types directly in UI components — use mapped types
+- All Directus access must go through server-side code (no client-side CMS calls)

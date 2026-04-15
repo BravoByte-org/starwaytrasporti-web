@@ -1,5 +1,18 @@
-import { createDirectus, graphql, authentication, staticToken } from '@directus/sdk';
+import { createDirectus, rest, staticToken, readItems, readSingleton } from '@directus/sdk';
 import { env } from '$env/dynamic/private';
+
+type Schema = {
+	sites: Record<string, unknown>[];
+	site_users: Record<string, unknown>[];
+	pages: Record<string, unknown>[];
+	posts: Record<string, unknown>[];
+	articles: Record<string, unknown>[];
+	taxonomies: Record<string, unknown>[];
+	taxonomy_terms: Record<string, unknown>[];
+	article_terms: Record<string, unknown>[];
+	navigation: Record<string, unknown>[];
+	navigation_items: Record<string, unknown>[];
+};
 
 const URL = env.PRIVATE_DIRECTUS_URL || env.DIRECTUS_URL;
 const TOKEN = env.PRIVATE_DIRECTUS_TOKEN || env.DIRECTUS_TOKEN;
@@ -12,21 +25,10 @@ if (!URL) {
 	throw new Error('Please include a URL for Directus in the environment variables');
 }
 
-const _getDirectusInstance = (fetch?: typeof globalThis.fetch) => {
+const getDirectusClient = (fetch?: typeof globalThis.fetch) => {
 	const options = fetch ? { globals: { fetch } } : {};
-	const directus = createDirectus(URL, options)
-		.with(authentication('json'))
-		.with(graphql())
-		.with(staticToken(TOKEN));
-
-	return directus;
+	return createDirectus<Schema>(URL, options).with(rest()).with(staticToken(TOKEN));
 };
 
-const getDirectusData = async ({ fetch }: { fetch: typeof globalThis.fetch }, query: string) => {
-	const directus = _getDirectusInstance(fetch);
-	const response = await directus.query(query);
-	return response || null;
-};
-
-export { getDirectusData };
+export { getDirectusClient, readItems, readSingleton };
 

@@ -1,16 +1,7 @@
 <script lang="ts">
-	type PageData = {
-		page: {
-			id: number;
-			slug: string;
-			status: string;
-			page_name: string;
-		}
-	}
+	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const { page } = data;
-
-	console.log(page);
 </script>

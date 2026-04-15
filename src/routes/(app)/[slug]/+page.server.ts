@@ -1,27 +1,21 @@
 import type { LoadEvent } from "@sveltejs/kit";
 
 import { error } from "@sveltejs/kit";
-import { getDirectusData } from "$lib/server/directus";
-import { PAGE_QUERY } from "$util/cms/queries";
+import { fetchPage } from "$util/cms/queries";
 
 export async function load({ fetch, params }: LoadEvent) {
-	
-	let response = null;
-
 	try {
-		response = await getDirectusData({fetch}, PAGE_QUERY(params.slug));
+		const pages = await fetchPage(fetch, params.slug!);
+
+		if (!pages || pages.length === 0) {
+			throw error(404, "Page not found: " + params.slug);
+		}
+
+		return { page: pages[0] };
 	} catch (err) {
+		if ((err as { status?: number })?.status === 404) throw err;
 		console.error(err);
 		throw error(500, "Failed to load page data: " + err);
 	}
-
-	if (!response?.data?.page || !response?.page) {
-		console.error("Page not found: ", params.slug);
-		throw error(404, "Page not found: " + params.slug);
-	}
-
-	return {
-		page: response?.data?.page || response?.page || null
-	};
 }
 
