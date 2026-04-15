@@ -41,4 +41,3 @@ const getDirectusClient = (fetch?: typeof globalThis.fetch) => {
 };
 
 export { getDirectusClient, readItems, readSingleton };
-
