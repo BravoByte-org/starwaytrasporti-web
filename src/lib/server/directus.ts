@@ -5,6 +5,7 @@ type Schema = {
 	sites: Record<string, unknown>[];
 	site_users: Record<string, unknown>[];
 	pages: Record<string, unknown>[];
+	page_blocks: Record<string, unknown>[];
 	posts: Record<string, unknown>[];
 	articles: Record<string, unknown>[];
 	taxonomies: Record<string, unknown>[];
@@ -12,6 +13,15 @@ type Schema = {
 	article_terms: Record<string, unknown>[];
 	navigation: Record<string, unknown>[];
 	navigation_items: Record<string, unknown>[];
+	block_hero: Record<string, unknown>[];
+	block_rich_text: Record<string, unknown>[];
+	block_stats: Record<string, unknown>[];
+	block_card_group: Record<string, unknown>[];
+	block_team: Record<string, unknown>[];
+	block_timeline: Record<string, unknown>[];
+	block_cta: Record<string, unknown>[];
+	block_image_gallery: Record<string, unknown>[];
+	starway_team_members: Record<string, unknown>[];
 };
 
 const URL = env.PRIVATE_DIRECTUS_URL || env.DIRECTUS_URL;
@@ -31,4 +41,3 @@ const getDirectusClient = (fetch?: typeof globalThis.fetch) => {
 };
 
 export { getDirectusClient, readItems, readSingleton };
-

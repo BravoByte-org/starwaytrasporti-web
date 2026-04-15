@@ -1,11 +1,13 @@
 <script lang="ts">
 	import '../../app.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import MainNav, { type NavItem } from '$components/navigation/MainNav.svelte';
 
 	import type { LayoutData } from './$types';
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
 	const site = data.site as { title?: string; description?: string } | null;
+	const navigation = (data.navigation ?? []) as NavItem[];
 </script>
 
 <svelte:head>
@@ -23,9 +25,7 @@
 						{site?.title ?? 'Starway Trasporti'}
 					</span>
 				</a>
-				<nav id="main-nav" class="hidden md:flex items-center gap-6">
-					<!-- Navigation will be populated from Directus -->
-				</nav>
+				<MainNav items={navigation} />
 			</div>
 		</div>
 	</header>

@@ -3,12 +3,20 @@ import type { LoadEvent } from "@sveltejs/kit";
 import { error } from "@sveltejs/kit";
 import { fetchPage } from "$util/cms/queries";
 
+function pathParamToCmsSlug(pathParam: string | undefined): string {
+	const p = (pathParam ?? '').trim();
+	if (!p || p === '/') return '/';
+	return p.startsWith('/') ? p : `/${p}`;
+}
+
 export async function load({ fetch, params }: LoadEvent) {
+	const slug = pathParamToCmsSlug(params.slug);
+
 	try {
-		const pages = await fetchPage(fetch, params.slug!);
+		const pages = await fetchPage(fetch, slug);
 
 		if (!pages || pages.length === 0) {
-			throw error(404, "Page not found: " + params.slug);
+			throw error(404, "Page not found: " + slug);
 		}
 
 		return { page: pages[0] };
@@ -18,4 +26,3 @@ export async function load({ fetch, params }: LoadEvent) {
 		throw error(500, "Failed to load page data: " + err);
 	}
 }
-

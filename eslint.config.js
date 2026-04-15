@@ -40,5 +40,13 @@ export default ts.config(
 				svelteConfig
 			}
 		}
+	},
+	{
+		files: ['src/lib/components/blocks/**/*.svelte', 'src/lib/components/navigation/MainNav.svelte'],
+		rules: {
+			// Hrefs come from Directus or helpers that call `resolve()`; the rule expects a literal
+			// `resolve()` call in the template AST.
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 );
