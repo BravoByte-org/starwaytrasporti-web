@@ -16,18 +16,42 @@
 	}
 </script>
 
-<section class="py-16" style="background-color: {bgColor}">
-	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+<section class="cta-block" style="background-color: {bgColor}">
+	<div class="cta-block__inner">
 		{#if headline}
-			<h2 class="text-3xl md:text-4xl font-bold">{headline}</h2>
+			<h2 class="cta-block__headline">{headline}</h2>
 		{/if}
 		{#if description}
-			<p class="mt-4 text-lg text-white/80">{description}</p>
+			<p class="cta-block__description">{description}</p>
 		{/if}
 		{#if buttonText && buttonUrl}
-			<a href={ctaHref(buttonUrl)} class="mt-8 inline-flex items-center px-8 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+			<a href={ctaHref(buttonUrl)} class="cta-block__button">
 				{buttonText}
 			</a>
 		{/if}
 	</div>
 </section>
+
+<style lang="postcss">
+	@reference "../../../app.css";
+
+	.cta-block {
+		@apply py-16;
+	}
+
+	.cta-block__inner {
+		@apply mx-auto max-w-4xl px-4 text-center text-white sm:px-6 lg:px-8;
+	}
+
+	.cta-block__headline {
+		@apply text-3xl font-bold md:text-4xl;
+	}
+
+	.cta-block__description {
+		@apply mt-4 text-lg text-white/80;
+	}
+
+	.cta-block__button {
+		@apply mt-8 inline-flex items-center rounded-lg bg-white px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100;
+	}
+</style>

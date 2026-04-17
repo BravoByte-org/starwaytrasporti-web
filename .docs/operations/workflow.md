@@ -142,6 +142,12 @@ export async function load({ fetch }) {
 }
 ```
 
+### CMS slug convention
+
+- `pages.slug` must use the canonical leading-slash format for Starway routes, for example `/chi-siamo` and `/cosa-facciamo/stoccaggio`.
+- The homepage remains `/`.
+- Taxonomy-driven pages must keep `template_type`, `taxonomy_context`, and `term` aligned with the URL model in the workspace taxonomy architecture doc.
+
 ---
 
 ## Commit Conventions

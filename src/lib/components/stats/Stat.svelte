@@ -95,12 +95,12 @@
 
 <article
 	bind:this={cardEl}
-	class="flex min-h-[180px] flex-col justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:bg-white/10"
+	class="stat-card"
 >
-	<div class="flex items-center gap-3 text-sm font-medium text-white/80">
+	<div class="stat-card__header">
 		{#if stat.icon}
 			<span
-				class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg"
+				class="stat-card__icon"
 				aria-hidden={stat.iconLabel ? undefined : 'true'}
 				aria-label={stat.iconLabel}
 			>
@@ -109,16 +109,16 @@
 		{/if}
 
 		{#if stat.header}
-			<span class="text-xs font-semibold uppercase tracking-wide text-white/70">
+			<span class="stat-card__eyebrow">
 				{stat.header}
 			</span>
 		{/if}
 	</div>
 
-	<div class="flex flex-col gap-2">
-		<div class="flex items-baseline gap-3">
+	<div class="stat-card__body">
+		<div class="stat-card__value-row">
 			<p
-				class="text-4xl font-semibold leading-tight sm:text-5xl"
+				class="stat-card__value"
 				aria-label={stat.ariaLabel ?? `${stat.label}: ${displayedValue()}`}
 			>
 				{displayedValue()}
@@ -126,7 +126,7 @@
 
 			{#if stat.delta}
 				<span
-					class="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs font-semibold uppercase tracking-tight text-white/80"
+					class="stat-card__delta"
 					aria-label={stat.delta.ariaLabel ?? `Delta: ${stat.delta.value}`}
 				>
 					{#if stat.delta.trend === 'up'}
@@ -141,8 +141,52 @@
 			{/if}
 		</div>
 
-		<p class="text-base font-medium text-white/90">{stat.label}</p>
+		<p class="stat-card__label">{stat.label}</p>
 	</div>
 
-	<p class="text-sm leading-relaxed text-white/70">{stat.description}</p>
+	<p class="stat-card__description">{stat.description}</p>
 </article>
+
+<style lang="postcss">
+	@reference "../../../app.css";
+
+	.stat-card {
+		@apply flex min-h-[180px] flex-col justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:bg-white/10;
+	}
+
+	.stat-card__header {
+		@apply flex items-center gap-3 text-sm font-medium text-white/80;
+	}
+
+	.stat-card__icon {
+		@apply inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg;
+	}
+
+	.stat-card__eyebrow {
+		@apply text-xs font-semibold uppercase tracking-wide text-white/70;
+	}
+
+	.stat-card__body {
+		@apply flex flex-col gap-2;
+	}
+
+	.stat-card__value-row {
+		@apply flex items-baseline gap-3;
+	}
+
+	.stat-card__value {
+		@apply text-4xl font-semibold leading-tight sm:text-5xl;
+	}
+
+	.stat-card__delta {
+		@apply inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs font-semibold uppercase tracking-tight text-white/80;
+	}
+
+	.stat-card__label {
+		@apply text-base font-medium text-white/90;
+	}
+
+	.stat-card__description {
+		@apply text-sm leading-relaxed text-white/70;
+	}
+</style>

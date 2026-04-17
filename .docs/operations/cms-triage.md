@@ -25,3 +25,14 @@ Operational backlog for the shared BravoByte Directus instance as it applies to 
 **Rule of thumb for Starway today:** build the visible marketing site in **Pages** + blocks; use **Articles** when content should appear under taxonomy hubs; use **Posts** only if you introduce a dated “news” channel and train editors on that distinction.
 
 Deeper architecture (hierarchy, landing vs term pages, query rules) lives in the BravoByte workspace: `../.docs/architecture/taxonomy-architecture.md` (relative to this repo in the monorepo-style checkout).
+
+## Apr 2026 route fix notes
+
+- Non-homepage `404`s were caused by a slug mismatch: the app normalized route params to leading-slash values like `/chi-siamo`, while most Directus `pages.slug` values were stored without the leading slash.
+- Starway pages have now been standardized to use canonical leading-slash slugs (homepage stays `/`).
+- The Starway `services` taxonomy was seeded and wired to the existing `Cosa Facciamo` landing / term pages:
+  - `/cosa-facciamo` → `taxonomy_landing` + `taxonomy_context = services`
+  - `/cosa-facciamo/la-nostra-flotta` → `taxonomy_term_page` + `term = la-nostra-flotta`
+  - `/cosa-facciamo/magazzino` → `taxonomy_term_page` + `term = magazzino`
+  - `/cosa-facciamo/stoccaggio` → `taxonomy_term_page` + `term = stoccaggio`
+- The frontend query layer also keeps a compatibility fallback for legacy non-leading-slash records while the CMS data stays consistent.

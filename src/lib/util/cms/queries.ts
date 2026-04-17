@@ -20,6 +20,23 @@ const PAGE_BLOCK_FIELDS = [
 	'blocks.item:block_image_gallery.items.*'
 ] as const;
 
+const STARWAY_PAGE_FILTER = {
+	site: { key: { _eq: 'starway' } },
+	status: { _eq: 'published' }
+} as const;
+
+function buildPageSlugFilter(slug: string) {
+	const normalized = slug === '/' ? '/' : slug.startsWith('/') ? slug : `/${slug}`;
+
+	if (normalized === '/') {
+		return { slug: { _eq: '/' } };
+	}
+
+	return {
+		_or: [{ slug: { _eq: normalized } }, { slug: { _eq: normalized.slice(1) } }]
+	};
+}
+
 export async function fetchNavigation(fetch: typeof globalThis.fetch, key: string) {
 	const client = getDirectusClient(fetch);
 	const navs = await client.request(
@@ -60,7 +77,7 @@ export async function fetchHomepage(fetch: typeof globalThis.fetch) {
 	const client = getDirectusClient(fetch);
 	return client.request(
 		readItems('pages', {
-			filter: { slug: { _eq: '/' } },
+			filter: { _and: [STARWAY_PAGE_FILTER, { slug: { _eq: '/' } }] } as any,
 			fields: [
 				'id',
 				'slug',
@@ -80,7 +97,7 @@ export async function fetchPage(fetch: typeof globalThis.fetch, slug: string) {
 	const client = getDirectusClient(fetch);
 	return client.request(
 		readItems('pages', {
-			filter: { slug: { _eq: slug } },
+			filter: { _and: [STARWAY_PAGE_FILTER, buildPageSlugFilter(slug)] } as any,
 			fields: [
 				'id',
 				'slug',

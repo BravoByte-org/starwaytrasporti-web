@@ -12,29 +12,77 @@
 	const members = (data.members as TeamMember[]) ?? [];
 </script>
 
-<section class="py-16 bg-gray-50 dark:bg-gray-900">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="team-block">
+	<div class="team-block__inner">
 		{#if title}
-			<h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">{title}</h2>
+			<h2 class="team-block__title">{title}</h2>
 		{/if}
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+		<div class="team-block__grid">
 			{#each members as member, i (`member-${i}-${member.name}`)}
-				<div class="text-center">
+				<div class="team-block__member">
 					{#if member.photo}
-						<div class="w-24 h-24 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden mb-4">
-							<img src={member.photo} alt={member.name} class="w-full h-full object-cover" />
+						<div class="team-block__avatar">
+							<img src={member.photo} alt={member.name} class="team-block__avatar-image" />
 						</div>
 					{:else}
-						<div class="w-24 h-24 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-4">
-							<span class="text-2xl text-gray-400">{member.name[0]}</span>
+						<div class="team-block__avatar team-block__avatar--placeholder">
+							<span class="team-block__initial">{member.name[0]}</span>
 						</div>
 					{/if}
-					<h3 class="font-semibold text-gray-900 dark:text-white">{member.name}</h3>
+					<h3 class="team-block__name">{member.name}</h3>
 					{#if member.role}
-						<p class="text-sm text-gray-500 dark:text-gray-400">{member.role}</p>
+						<p class="team-block__role">{member.role}</p>
 					{/if}
 				</div>
 			{/each}
 		</div>
 	</div>
 </section>
+
+<style lang="postcss">
+	@reference "../../../app.css";
+
+	.team-block {
+		@apply bg-gray-50 py-16 dark:bg-gray-900;
+	}
+
+	.team-block__inner {
+		@apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+	}
+
+	.team-block__title {
+		@apply mb-12 text-center text-3xl font-bold text-gray-900 dark:text-white;
+	}
+
+	.team-block__grid {
+		@apply grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4;
+	}
+
+	.team-block__member {
+		@apply text-center;
+	}
+
+	.team-block__avatar {
+		@apply mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700;
+	}
+
+	.team-block__avatar--placeholder {
+		@apply flex items-center justify-center;
+	}
+
+	.team-block__avatar-image {
+		@apply h-full w-full object-cover;
+	}
+
+	.team-block__initial {
+		@apply text-2xl text-gray-400;
+	}
+
+	.team-block__name {
+		@apply font-semibold text-gray-900 dark:text-white;
+	}
+
+	.team-block__role {
+		@apply text-sm text-gray-500 dark:text-gray-400;
+	}
+</style>
