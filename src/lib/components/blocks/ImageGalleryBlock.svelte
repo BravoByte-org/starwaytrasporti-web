@@ -7,8 +7,8 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const title = data.title as string | null;
-	const items = (data.items as GalleryItem[]) ?? [];
+	let title = $derived((data.title as string | null | undefined) ?? null);
+	let items = $derived((data.items as GalleryItem[] | undefined) ?? []);
 </script>
 
 <section class="image-gallery-block">
@@ -21,7 +21,12 @@
 				<figure class="image-gallery-block__figure">
 					{#if item.video_url}
 						<div class="image-gallery-block__frame">
-							<iframe src={item.video_url} title={item.caption ?? 'Video'} class="image-gallery-block__media" allowfullscreen></iframe>
+							<iframe
+								src={item.video_url}
+								title={item.caption ?? 'Video'}
+								class="image-gallery-block__media"
+								allowfullscreen
+							></iframe>
 						</div>
 					{:else if item.image}
 						<img src={item.image} alt={item.caption ?? ''} class="image-gallery-block__image" />

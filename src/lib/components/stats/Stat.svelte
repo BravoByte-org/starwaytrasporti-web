@@ -6,16 +6,15 @@
 	let { stat }: { stat: StatData } = $props();
 
 	let cardEl: HTMLElement | null = null;
-	let animatedValue: number | null = typeof stat.value === 'number' ? 0 : null;
+	let animatedValue: number | null = null;
 	let prefersReducedMotion = false;
 	let hasAnimated = false;
 	let observer: IntersectionObserver | null = null;
 
-	const isNumber = typeof stat.value === 'number';
-	const targetValue = isNumber ? (stat.value as number) : null;
+	let isNumber = $derived(typeof stat.value === 'number');
+	let targetValue = $derived(isNumber ? (stat.value as number) : null);
 
-	const withUnits = (value: string | number) =>
-		`${stat.prefix ?? ''}${value}${stat.suffix ?? ''}`;
+	const withUnits = (value: string | number) => `${stat.prefix ?? ''}${value}${stat.suffix ?? ''}`;
 
 	const formatNumber = (value: number) => new Intl.NumberFormat('en-US').format(Math.round(value));
 
@@ -54,13 +53,17 @@
 		requestAnimationFrame(step);
 	};
 
+	$effect(() => {
+		animatedValue = isNumber ? 0 : null;
+		hasAnimated = false;
+	});
+
 	onMount(() => {
 		if (typeof window === 'undefined') {
 			return;
 		}
 
-		prefersReducedMotion =
-			window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+		prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
 		if (!isNumber || targetValue === null) {
 			return;
@@ -93,10 +96,7 @@
 	});
 </script>
 
-<article
-	bind:this={cardEl}
-	class="stat-card"
->
+<article bind:this={cardEl} class="stat-card">
 	<div class="stat-card__header">
 		{#if stat.icon}
 			<span
@@ -163,7 +163,7 @@
 	}
 
 	.stat-card__eyebrow {
-		@apply text-xs font-semibold uppercase tracking-wide text-white/70;
+		@apply text-xs font-semibold tracking-wide text-white/70 uppercase;
 	}
 
 	.stat-card__body {
@@ -175,11 +175,11 @@
 	}
 
 	.stat-card__value {
-		@apply text-4xl font-semibold leading-tight sm:text-5xl;
+		@apply text-4xl leading-tight font-semibold sm:text-5xl;
 	}
 
 	.stat-card__delta {
-		@apply inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs font-semibold uppercase tracking-tight text-white/80;
+		@apply inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 py-1 text-xs font-semibold tracking-tight text-white/80 uppercase;
 	}
 
 	.stat-card__label {

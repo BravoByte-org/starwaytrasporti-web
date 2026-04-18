@@ -3,11 +3,11 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const headline = data.headline as string | null;
-	const description = data.description as string | null;
-	const buttonText = data.button_text as string | null;
-	const buttonUrl = data.button_url as string | null;
-	const bgColor = (data.background_color as string) || '#1e40af';
+	let headline = $derived((data.headline as string | null | undefined) ?? null);
+	let description = $derived((data.description as string | null | undefined) ?? null);
+	let buttonText = $derived((data.button_text as string | null | undefined) ?? null);
+	let buttonUrl = $derived((data.button_url as string | null | undefined) ?? null);
+	let bgColor = $derived((data.background_color as string | undefined) ?? '#1e40af');
 
 	function ctaHref(url: string): string {
 		if (/^https?:\/\//i.test(url) || url.startsWith('//') || url.startsWith('mailto:')) return url;

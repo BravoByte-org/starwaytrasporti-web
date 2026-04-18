@@ -7,8 +7,8 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const title = data.title as string | null;
-	const items = (data.items as TimelineItem[]) ?? [];
+	let title = $derived((data.title as string | null | undefined) ?? null);
+	let items = $derived((data.items as TimelineItem[] | undefined) ?? []);
 </script>
 
 <section class="timeline-block">
@@ -19,15 +19,9 @@
 		<div class="timeline-block__timeline">
 			<div class="timeline-block__line"></div>
 			{#each items as item, i (`tl-${i}-${item.year}`)}
-				<div
-					class="timeline-block__entry"
-					class:timeline-block__entry--reverse={i % 2 === 0}
-				>
+				<div class="timeline-block__entry" class:timeline-block__entry--reverse={i % 2 === 0}>
 					<div class="timeline-block__dot"></div>
-					<div
-						class="timeline-block__content"
-						class:timeline-block__content--reverse={i % 2 === 0}
-					>
+					<div class="timeline-block__content" class:timeline-block__content--reverse={i % 2 === 0}>
 						<span class="timeline-block__year">{item.year}</span>
 						<h3 class="timeline-block__entry-title">{item.title}</h3>
 						{#if item.description}
@@ -60,7 +54,7 @@
 	}
 
 	.timeline-block__line {
-		@apply absolute bottom-0 top-0 left-4 w-0.5 bg-gray-200 dark:bg-gray-700 md:left-1/2;
+		@apply absolute top-0 bottom-0 left-4 w-0.5 bg-gray-200 md:left-1/2 dark:bg-gray-700;
 	}
 
 	.timeline-block__entry {

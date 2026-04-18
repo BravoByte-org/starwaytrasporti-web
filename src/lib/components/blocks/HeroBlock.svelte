@@ -3,14 +3,14 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const headline = data.headline as string;
-	const subheadline = data.subheadline as string | null;
-	const image = data.image as string | null;
-	const videoUrl = data.video_url as string | null;
-	const ctaPrimaryText = data.cta_primary_text as string | null;
-	const ctaPrimaryUrl = data.cta_primary_url as string | null;
-	const ctaSecondaryText = data.cta_secondary_text as string | null;
-	const ctaSecondaryUrl = data.cta_secondary_url as string | null;
+	let headline = $derived((data.headline as string | undefined) ?? '');
+	let subheadline = $derived((data.subheadline as string | null | undefined) ?? null);
+	let image = $derived((data.image as string | null | undefined) ?? null);
+	let videoUrl = $derived((data.video_url as string | null | undefined) ?? null);
+	let ctaPrimaryText = $derived((data.cta_primary_text as string | null | undefined) ?? null);
+	let ctaPrimaryUrl = $derived((data.cta_primary_url as string | null | undefined) ?? null);
+	let ctaSecondaryText = $derived((data.cta_secondary_text as string | null | undefined) ?? null);
+	let ctaSecondaryUrl = $derived((data.cta_secondary_url as string | null | undefined) ?? null);
 
 	function ctaHref(url: string): string {
 		if (/^https?:\/\//i.test(url) || url.startsWith('//') || url.startsWith('mailto:')) return url;
@@ -22,11 +22,7 @@
 <section class="hero-block">
 	{#if videoUrl}
 		<div class="hero-block__media hero-block__media--video">
-			<iframe
-				src={videoUrl}
-				title=""
-				class="hero-block__video-frame"
-			></iframe>
+			<iframe src={videoUrl} title="" class="hero-block__video-frame"></iframe>
 		</div>
 	{:else if image}
 		<div
@@ -52,7 +48,10 @@
 						</a>
 					{/if}
 					{#if ctaSecondaryText && ctaSecondaryUrl}
-						<a href={ctaHref(ctaSecondaryUrl)} class="hero-block__action hero-block__action--secondary">
+						<a
+							href={ctaHref(ctaSecondaryUrl)}
+							class="hero-block__action hero-block__action--secondary"
+						>
 							{ctaSecondaryText}
 						</a>
 					{/if}
@@ -82,7 +81,7 @@
 	}
 
 	.hero-block__video-frame {
-		@apply absolute left-1/2 top-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 scale-150;
+		@apply absolute top-1/2 left-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 scale-150;
 	}
 
 	.hero-block__inner {

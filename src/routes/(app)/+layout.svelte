@@ -6,8 +6,8 @@
 	import type { LayoutData } from './$types';
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
-	const site = data.site as { title?: string; description?: string } | null;
-	const navigation = (data.navigation ?? []) as NavItem[];
+	let site = $derived((data.site as { title?: string; description?: string } | null) ?? null);
+	let navigation = $derived((data.navigation ?? []) as NavItem[]);
 </script>
 
 <svelte:head>
@@ -36,7 +36,10 @@
 
 	<footer class="app-footer">
 		<div class="app-footer__inner">
-			<p>&copy; {new Date().getFullYear()} {site?.title ?? 'Starway Trasporti'}. Tutti i diritti riservati.</p>
+			<p>
+				&copy; {new Date().getFullYear()}
+				{site?.title ?? 'Starway Trasporti'}. Tutti i diritti riservati.
+			</p>
 		</div>
 	</footer>
 </div>
@@ -45,7 +48,7 @@
 	@reference "../../app.css";
 
 	.app-shell {
-		@apply min-h-screen flex flex-col bg-white dark:bg-gray-950;
+		@apply flex min-h-screen flex-col bg-white dark:bg-gray-950;
 	}
 
 	.app-header {

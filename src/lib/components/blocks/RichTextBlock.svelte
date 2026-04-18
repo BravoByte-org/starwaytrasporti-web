@@ -1,7 +1,7 @@
 <script lang="ts">
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const content = data.content as string;
+	let content = $derived((data.content as string | undefined) ?? '');
 </script>
 
 <section class="rich-text-block">
@@ -20,6 +20,6 @@
 	}
 
 	.rich-text-block__content {
-		@apply prose prose-lg mx-auto max-w-4xl px-4 dark:prose-invert sm:px-6 lg:px-8;
+		@apply mx-auto prose prose-lg max-w-4xl px-4 sm:px-6 lg:px-8 dark:prose-invert;
 	}
 </style>

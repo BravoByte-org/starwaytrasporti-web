@@ -4,10 +4,13 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const page = data.pages[0] as Record<string, unknown>;
-	const title = page.title as string;
-	const blocks =
-		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }>) ?? [];
+	let page = $derived(
+		((data.pages?.[0] as Record<string, unknown> | undefined) ?? {}) as Record<string, unknown>
+	);
+	let title = $derived((page.title as string | undefined) ?? 'Starway Trasporti');
+	let blocks = $derived(
+		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }> | undefined) ?? []
+	);
 </script>
 
 <svelte:head>

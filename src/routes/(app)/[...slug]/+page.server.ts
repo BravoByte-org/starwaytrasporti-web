@@ -1,7 +1,17 @@
-import type { LoadEvent } from "@sveltejs/kit";
+import type { LoadEvent } from '@sveltejs/kit';
 
-import { error } from "@sveltejs/kit";
-import { fetchPage } from "$util/cms/queries";
+import { error } from '@sveltejs/kit';
+import { fetchPage } from '$util/cms/queries';
+
+function describeLoadError(error: unknown): string {
+	if (error instanceof Error) return error.message;
+	if (typeof error === 'string') return error;
+	try {
+		return JSON.stringify(error);
+	} catch {
+		return String(error);
+	}
+}
 
 function pathParamToCmsSlug(pathParam: string | undefined): string {
 	const p = (pathParam ?? '').trim();
@@ -16,13 +26,14 @@ export async function load({ fetch, params }: LoadEvent) {
 		const pages = await fetchPage(fetch, slug);
 
 		if (!pages || pages.length === 0) {
-			throw error(404, "Page not found: " + slug);
+			throw error(404, 'Page not found: ' + slug);
 		}
 
 		return { page: pages[0] };
 	} catch (err) {
 		if ((err as { status?: number })?.status === 404) throw err;
-		console.error(err);
-		throw error(500, "Failed to load page data: " + err);
+		const message = describeLoadError(err);
+		console.error(message);
+		throw error(500, `Failed to load page data: ${message}`);
 	}
 }

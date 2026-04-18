@@ -1,4 +1,4 @@
-import { getDirectusClient, readItems } from '$lib/server/directus';
+import { requestDirectus, readItems } from '$lib/server/directus';
 
 /** M2A `pages.blocks` → nested block payloads (Directus many-to-any field syntax). */
 const PAGE_BLOCK_FIELDS = [
@@ -38,18 +38,18 @@ function buildPageSlugFilter(slug: string) {
 }
 
 export async function fetchNavigation(fetch: typeof globalThis.fetch, key: string) {
-	const client = getDirectusClient(fetch);
-	const navs = await client.request(
+	const navs = await requestDirectus<Record<string, unknown>[]>(
 		readItems('navigation', {
 			filter: { key: { _eq: key }, is_active: { _eq: true } },
 			fields: ['id', 'key'],
 			limit: 1
-		})
+		}),
+		fetch
 	);
 
 	if (!navs || navs.length === 0) return [];
 
-	return client.request(
+	return requestDirectus<Record<string, unknown>[]>(
 		readItems('navigation_items', {
 			filter: { navigation: { _eq: navs[0].id }, parent: { _null: true } },
 			fields: [
@@ -69,13 +69,13 @@ export async function fetchNavigation(fetch: typeof globalThis.fetch, key: strin
 				'children.page.title'
 			],
 			sort: ['sort']
-		})
+		}),
+		fetch
 	);
 }
 
 export async function fetchHomepage(fetch: typeof globalThis.fetch) {
-	const client = getDirectusClient(fetch);
-	return client.request(
+	return requestDirectus<Record<string, unknown>[]>(
 		readItems('pages', {
 			filter: { _and: [STARWAY_PAGE_FILTER, { slug: { _eq: '/' } }] } as any,
 			fields: [
@@ -89,13 +89,13 @@ export async function fetchHomepage(fetch: typeof globalThis.fetch) {
 				'seo_description',
 				...PAGE_BLOCK_FIELDS
 			]
-		})
+		}),
+		fetch
 	);
 }
 
 export async function fetchPage(fetch: typeof globalThis.fetch, slug: string) {
-	const client = getDirectusClient(fetch);
-	return client.request(
+	return requestDirectus<Record<string, unknown>[]>(
 		readItems('pages', {
 			filter: { _and: [STARWAY_PAGE_FILTER, buildPageSlugFilter(slug)] } as any,
 			fields: [
@@ -113,6 +113,7 @@ export async function fetchPage(fetch: typeof globalThis.fetch, slug: string) {
 				'site.key',
 				...PAGE_BLOCK_FIELDS
 			]
-		})
+		}),
+		fetch
 	);
 }

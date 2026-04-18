@@ -2,7 +2,7 @@
 
 > **Milestone:** Baseline MVP  
 > **Due Date:** December 6, 2025  
-> **Last Updated:** April 17, 2026
+> **Last Updated:** April 18, 2026
 
 ---
 
@@ -57,7 +57,7 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 
 Link existing Directus CMS data models to the frontend application. Components remain unchanged; only data fetching and transformation logic is added. Pages gracefully fall back to mock data when CMS is unavailable or returns empty.
 
-Recent note: Starway CMS page routing now expects canonical leading-slash `pages.slug` values (for example `/chi-siamo`). In April 2026, the delivery app and Directus data were aligned to remove non-homepage `404`s, and the `Cosa Facciamo` taxonomy landing / term pages were wired to seeded taxonomy records.
+Recent note: Starway CMS page routing now expects canonical leading-slash `pages.slug` values (for example `/chi-siamo`). In April 2026, the delivery app and Directus data were aligned to remove non-homepage `404`s, and the `Cosa Facciamo` taxonomy landing / term pages were wired to seeded taxonomy records. On April 18, 2026, the SSR runtime was hardened to prefer `DIRECTUS_*` env vars over `PRIVATE_DIRECTUS_*`, retry anonymously when a stale token is rejected, and remove Svelte 5 `state_referenced_locally` warnings from route and block components.
 
 ### User Stories
 

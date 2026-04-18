@@ -6,13 +6,13 @@
 	let { content = heroMock }: { content?: HeroContent } = $props();
 
 	// Merge with defaults to ensure all fields are present
-	const heroContent = {
+	let heroContent = $derived({
 		...heroMock,
 		...content,
 		primaryCta: { ...heroMock.primaryCta, ...content?.primaryCta },
 		secondaryCta: { ...heroMock.secondaryCta, ...content?.secondaryCta },
 		media: { ...heroMock.media, ...content?.media }
-	};
+	});
 </script>
 
 <section class="hero">
@@ -29,7 +29,9 @@
 			<p class="hero__sub">{heroContent.subHeadline}</p>
 
 			<div class="hero__actions">
-				<a class="hero__primary" href={heroContent.primaryCta.href}>{heroContent.primaryCta.label}</a>
+				<a class="hero__primary" href={heroContent.primaryCta.href}
+					>{heroContent.primaryCta.label}</a
+				>
 				<a class="hero__secondary" href={heroContent.secondaryCta.href}>
 					{heroContent.secondaryCta.label}
 				</a>
@@ -80,11 +82,11 @@
 	}
 
 	.hero__beam {
-		@apply absolute left-1/2 top-10 h-72 w-[110%] -translate-x-1/2 rounded-[999px] bg-linear-to-r from-sky-500/15 via-cyan-400/10 to-blue-500/15 blur-3xl;
+		@apply absolute top-10 left-1/2 h-72 w-[110%] -translate-x-1/2 rounded-[999px] bg-linear-to-r from-sky-500/15 via-cyan-400/10 to-blue-500/15 blur-3xl;
 	}
 
 	.hero__grid {
-		@apply relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-10 pt-16 sm:px-8 lg:grid lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-12 lg:pb-14 lg:pt-20 xl:px-12;
+		@apply relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pt-16 pb-10 sm:px-8 lg:grid lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-12 lg:pt-20 lg:pb-14 xl:px-12;
 	}
 
 	.hero__copy {
@@ -92,7 +94,7 @@
 	}
 
 	.hero__eyebrow {
-		@apply inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-slate-200 ring-1 ring-white/15;
+		@apply inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-slate-200 uppercase ring-1 ring-white/15;
 	}
 
 	.hero__eyebrow-dot {
@@ -100,11 +102,11 @@
 	}
 
 	.hero__headline {
-		@apply mt-4 text-balance text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl;
+		@apply mt-4 text-3xl leading-tight font-semibold tracking-tight text-balance text-white sm:text-4xl lg:text-5xl;
 	}
 
 	.hero__sub {
-		@apply mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-200 sm:text-lg;
+		@apply mt-4 max-w-2xl text-base leading-relaxed text-pretty text-slate-200 sm:text-lg;
 	}
 
 	.hero__actions {

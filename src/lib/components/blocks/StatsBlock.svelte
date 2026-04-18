@@ -7,8 +7,8 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const title = data.title as string | null;
-	const items = (data.items as StatItem[]) ?? [];
+	let title = $derived((data.title as string | null | undefined) ?? null);
+	let items = $derived((data.items as StatItem[] | undefined) ?? []);
 </script>
 
 <section class="stats-block">

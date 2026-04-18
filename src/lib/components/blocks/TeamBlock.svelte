@@ -8,8 +8,8 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const title = data.title as string | null;
-	const members = (data.members as TeamMember[]) ?? [];
+	let title = $derived((data.title as string | null | undefined) ?? null);
+	let members = $derived((data.members as TeamMember[] | undefined) ?? []);
 </script>
 
 <section class="team-block">

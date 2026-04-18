@@ -9,8 +9,8 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const title = data.title as string | null;
-	const items = (data.items as CardItem[]) ?? [];
+	let title = $derived((data.title as string | null | undefined) ?? null);
+	let items = $derived((data.items as CardItem[] | undefined) ?? []);
 </script>
 
 <section class="card-group-block">
@@ -21,11 +21,7 @@
 		<div class="card-group-block__grid">
 			{#each items as item, i (`card-${i}-${item.title}`)}
 				{@const Tag = item.link_url ? 'a' : 'div'}
-				<svelte:element
-					this={Tag}
-					href={item.link_url || undefined}
-					class="card-group-block__item"
-				>
+				<svelte:element this={Tag} href={item.link_url || undefined} class="card-group-block__item">
 					{#if item.icon}
 						<div class="card-group-block__icon">{item.icon}</div>
 					{/if}
