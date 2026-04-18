@@ -4,10 +4,13 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const page = data.pages[0] as Record<string, unknown>;
-	const title = page.title as string;
-	const blocks =
-		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }>) ?? [];
+	let page = $derived(
+		((data.pages?.[0] as Record<string, unknown> | undefined) ?? {}) as Record<string, unknown>
+	);
+	let title = $derived((page.title as string | undefined) ?? 'Starway Trasporti');
+	let blocks = $derived(
+		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }> | undefined) ?? []
+	);
 </script>
 
 <svelte:head>
@@ -20,9 +23,25 @@
 {#if blocks.length > 0}
 	<BlockRenderer {blocks} />
 {:else}
-	<section class="py-16">
-		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-			<h1 class="text-4xl font-bold text-gray-900 dark:text-white">{title}</h1>
+	<section class="page-fallback">
+		<div class="page-fallback__inner">
+			<h1 class="page-fallback__title">{title}</h1>
 		</div>
 	</section>
 {/if}
+
+<style lang="postcss">
+	@reference "../../app.css";
+
+	.page-fallback {
+		@apply py-16;
+	}
+
+	.page-fallback__inner {
+		@apply mx-auto max-w-4xl px-4 sm:px-6 lg:px-8;
+	}
+
+	.page-fallback__title {
+		@apply text-4xl font-bold text-gray-900 dark:text-white;
+	}
+</style>

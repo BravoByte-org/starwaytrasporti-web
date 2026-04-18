@@ -3,11 +3,11 @@
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
-	const headline = data.headline as string | null;
-	const description = data.description as string | null;
-	const buttonText = data.button_text as string | null;
-	const buttonUrl = data.button_url as string | null;
-	const bgColor = (data.background_color as string) || '#1e40af';
+	let headline = $derived((data.headline as string | null | undefined) ?? null);
+	let description = $derived((data.description as string | null | undefined) ?? null);
+	let buttonText = $derived((data.button_text as string | null | undefined) ?? null);
+	let buttonUrl = $derived((data.button_url as string | null | undefined) ?? null);
+	let bgColor = $derived((data.background_color as string | undefined) ?? '#1e40af');
 
 	function ctaHref(url: string): string {
 		if (/^https?:\/\//i.test(url) || url.startsWith('//') || url.startsWith('mailto:')) return url;
@@ -16,18 +16,42 @@
 	}
 </script>
 
-<section class="py-16" style="background-color: {bgColor}">
-	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+<section class="cta-block" style="background-color: {bgColor}">
+	<div class="cta-block__inner">
 		{#if headline}
-			<h2 class="text-3xl md:text-4xl font-bold">{headline}</h2>
+			<h2 class="cta-block__headline">{headline}</h2>
 		{/if}
 		{#if description}
-			<p class="mt-4 text-lg text-white/80">{description}</p>
+			<p class="cta-block__description">{description}</p>
 		{/if}
 		{#if buttonText && buttonUrl}
-			<a href={ctaHref(buttonUrl)} class="mt-8 inline-flex items-center px-8 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+			<a href={ctaHref(buttonUrl)} class="cta-block__button">
 				{buttonText}
 			</a>
 		{/if}
 	</div>
 </section>
+
+<style lang="postcss">
+	@reference "../../../app.css";
+
+	.cta-block {
+		@apply py-16;
+	}
+
+	.cta-block__inner {
+		@apply mx-auto max-w-4xl px-4 text-center text-white sm:px-6 lg:px-8;
+	}
+
+	.cta-block__headline {
+		@apply text-3xl font-bold md:text-4xl;
+	}
+
+	.cta-block__description {
+		@apply mt-4 text-lg text-white/80;
+	}
+
+	.cta-block__button {
+		@apply mt-8 inline-flex items-center rounded-lg bg-white px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100;
+	}
+</style>

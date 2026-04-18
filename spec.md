@@ -2,7 +2,7 @@
 
 > **Milestone:** Baseline MVP  
 > **Due Date:** December 6, 2025  
-> **Last Updated:** December 22, 2025
+> **Last Updated:** April 19, 2026
 
 ---
 
@@ -56,6 +56,8 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 ### Description
 
 Link existing Directus CMS data models to the frontend application. Components remain unchanged; only data fetching and transformation logic is added. Pages gracefully fall back to mock data when CMS is unavailable or returns empty.
+
+Recent note: Starway CMS page routing now expects canonical leading-slash `pages.slug` values (for example `/chi-siamo`). In April 2026, the delivery app and Directus data were aligned to remove non-homepage `404`s, and the `Cosa Facciamo` taxonomy landing / term pages were wired to seeded taxonomy records. On April 18, 2026, the SSR runtime was hardened to prefer `DIRECTUS_*` env vars over `PRIVATE_DIRECTUS_*`, retry anonymously when a stale token is rejected, and remove Svelte 5 `state_referenced_locally` warnings from route and block components. On April 19, 2026, the **Published Content Reader** policy in Directus was backfilled with read perms for `page_blocks`, every `block_*` collection (parents and child items), and `starway_team_members` — these had never been granted to the App Service role, which combined with a stale Vercel `DIRECTUS_TOKEN` produced the FORBIDDEN 500 chain on the preview. ADR-002 now ships with an operational checklist pointing at the canonical [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) so future collections can't recreate this gap. Full triage notes live in `.docs/operations/cms-triage.md`.
 
 ### User Stories
 

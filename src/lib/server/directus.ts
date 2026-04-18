@@ -24,20 +24,40 @@ type Schema = {
 	starway_team_members: Record<string, unknown>[];
 };
 
-const URL = env.PRIVATE_DIRECTUS_URL || env.DIRECTUS_URL;
-const TOKEN = env.PRIVATE_DIRECTUS_TOKEN || env.DIRECTUS_TOKEN;
-
-if (!TOKEN) {
-	throw new Error('Please include a token for Directus in the environment variables');
-}
+const URL = env.DIRECTUS_URL || env.PRIVATE_DIRECTUS_URL;
+const TOKEN = env.DIRECTUS_TOKEN || env.PRIVATE_DIRECTUS_TOKEN;
 
 if (!URL) {
 	throw new Error('Please include a URL for Directus in the environment variables');
 }
 
-const getDirectusClient = (fetch?: typeof globalThis.fetch) => {
+const createDirectusClient = (fetch?: typeof globalThis.fetch, token?: string) => {
 	const options = fetch ? { globals: { fetch } } : {};
-	return createDirectus<Schema>(URL, options).with(rest()).with(staticToken(TOKEN));
+	const client = createDirectus<Schema>(URL, options).with(rest());
+	return token ? client.with(staticToken(token)) : client;
 };
 
-export { getDirectusClient, readItems, readSingleton };
+const getDirectusClient = (fetch?: typeof globalThis.fetch) => createDirectusClient(fetch, TOKEN);
+
+type DirectusRequest = Parameters<ReturnType<typeof createDirectusClient>['request']>[0];
+
+function isRejectedTokenError(error: unknown): boolean {
+	const message = error instanceof Error ? error.message : JSON.stringify(error);
+	return /invalid user|invalid credentials|invalid token/i.test(message);
+}
+
+async function requestDirectus<T>(
+	request: DirectusRequest,
+	fetch?: typeof globalThis.fetch
+): Promise<T> {
+	try {
+		return (await getDirectusClient(fetch).request(request)) as T;
+	} catch (error) {
+		if (!TOKEN || !isRejectedTokenError(error)) throw error;
+
+		console.warn('Directus token was rejected, retrying request without authentication');
+		return (await createDirectusClient(fetch).request(request)) as T;
+	}
+}
+
+export { getDirectusClient, requestDirectus, readItems, readSingleton };

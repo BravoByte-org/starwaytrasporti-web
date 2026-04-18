@@ -2,16 +2,24 @@
 	import { page } from '$app/state';
 </script>
 
-<div class="error-container flex items-center justify-center h-screen flex-col gap-4">
-	<h1 class="text-4xl font-bold">Oops! Something went wrong</h1>
-	<p class="text-2xl">Error code: {page.status}</p>
-	<p class="text-2xl">{page.error?.message}</p>
+<div class="error-container">
+	<h1 class="error-title">Oops! Something went wrong</h1>
+	<p class="error-copy">Error code: {page.status}</p>
+	<p class="error-copy">{page.error?.message}</p>
 </div>
 
-<style>
+<style lang="postcss">
+	@reference "../../../app.css";
+
 	.error-container {
-		background-color: #f0f0f0;
-		padding: 2rem;
-		border-radius: 0.5rem;
+		@apply flex h-screen flex-col items-center justify-center gap-4 rounded-lg bg-gray-100 p-8;
+	}
+
+	.error-title {
+		@apply text-4xl font-bold;
+	}
+
+	.error-copy {
+		@apply text-2xl;
 	}
 </style>
