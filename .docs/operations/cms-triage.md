@@ -97,3 +97,31 @@ Verification:
 - `bravobyte-ai/rules/directus-collection-permissions.md` — new "M2A relations require both sides" section with the canonical `POST /relations` payload, the M2A junction filter quirk, the orphan-row pre-flight requirement, and an Editor synthetic-probe verification recipe.
 - `bravobyte-ai/playbooks/new-feature.md` — Build step now requires running `GET /relations/<junction>` to confirm both sides exist before claiming any M2A schema migration done.
 - `.docs/adrs/adr-002-directus-access-control-design.md` — operational checklist gains an explicit step 0 for M2A relations and updates the negative-consequences count to four outages.
+
+## Apr 21 2026 — Directus display-metadata + i18n pass (#35)
+
+Every non-system content + block collection shipped with `meta.display_template = null`, so list views and relational pickers across the admin surfaced UUIDs instead of readable labels (e.g. `navigation_items.page` showed a UUID, Pages Blocks M2A panel listed `block_hero | <uuid>`). Issue #35 called out the user-facing consequence; the audit at the start of this pass showed the real scope: **21 collections** (9 content + 12 block) had zero display metadata, and several M2O/O2M FKs had `display_options.template = null` on top.
+
+Fix applied (admin-token, one idempotent script with a 15s socket timeout + retries; canonical recipe now lives in [`bravobyte-ai/rules/directus-collection-display.md`](../../../bravobyte-ai/rules/directus-collection-display.md)):
+
+- **`PATCH /collections/<c>` × 21** — set `meta.display_template` on every content + block collection. Highlights:
+  - `sites` → `{{name}}`, `pages` → `{{title}} — {{slug}}`, `posts`/`articles`/`navigation_items`/`taxonomy_terms` → `{{title}}`, `taxonomies`/`starway_team_members` → `{{name}}`, `navigation` → `{{key}}`.
+  - Block parents: `block_hero` / `block_cta` → `{{headline}}`, `block_rich_text` → `{{content}}`, the rest → `{{title}}`.
+  - Block children: `block_stat_items` → `{{value}} — {{label}}`, `block_timeline_items` → `{{year}} — {{title}}`, `block_gallery_items` → `{{caption}}`, `block_card_items` → `{{title}}`.
+- **`PATCH /fields/<c>/<f>` × 9** — set `display: related-values` + `display_options.template` on FKs whose picker was still null. Most importantly `pages.blocks` (M2A) → `{{collection}}: {{item}}` so the Pages Blocks panel lists readable block types instead of a UUID-only M2A junction row.
+- **`PATCH /fields/<c>/<f>` × 88** — applied `translations: [{ en-US, it-IT }]` on every editor-visible label across `sites`, `pages`, `navigation`, `navigation_items`, `taxonomies`, `taxonomy_terms`, `starway_team_members`, and every block parent + child. Starway editors now see Italian labels (Titolo, Slug (percorso URL), Sito, Blocchi di contenuto, Termine tassonomia, Tappe, Didascalia, …) instead of raw English field names.
+
+Bulk apply took ~6 minutes for 118 operations with occasional 10–15s API stalls; the retry loop recovered them automatically (0 final errors).
+
+Verification:
+
+- **API spot-check:** `GET /collections/<c>` for all 21 targets returns a non-null `{{…}}` template; `GET /fields/pages/blocks` shows `display_options.template = "{{collection}}: {{item}}"` and the en-US/it-IT translations pair; `GET /fields/pages/title` shows the new translations.
+- **Admin UI spot-check (by Lion, Manager session):** Pages list now renders readable titles + slugs, the Blocks M2A panel lists `block_hero: Soluzioni in movimento` etc., Team list renders member names, and the language switcher flips every labeled field to Italian.
+
+Codified into shared docs:
+
+- `bravobyte-ai/rules/directus-collection-display.md` — new rule covering `display_template` canonical patterns per collection type, when to override `display_options.template` at the field level, the M2A template convention, the `en-US + <locale>` translations requirement, apply/verify recipes, and the rate-limit guidance from this pass.
+- `bravobyte-ai/playbooks/new-feature.md` — Build step's Directus bullet now requires applying the display rule in the same change as the permissions rule (not separately).
+- `bravobyte-ai/rules/directus-collection-permissions.md` — "Related" section cross-links to the new display rule so the two rules stay paired.
+
+No app-code change: this pass is 100% Directus metadata. SvelteKit SSR + client rendering are unaffected (`pnpm check` still clean).
