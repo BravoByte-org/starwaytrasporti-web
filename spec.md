@@ -2,7 +2,7 @@
 
 > **Milestone:** Baseline MVP  
 > **Due Date:** December 6, 2025  
-> **Last Updated:** April 20, 2026
+> **Last Updated:** April 21, 2026
 
 ---
 
@@ -57,7 +57,7 @@ StarwayTrasporti.com is an international transportation website for an Italian f
 
 Link existing Directus CMS data models to the frontend application. Components remain unchanged; only data fetching and transformation logic is added. Pages gracefully fall back to mock data when CMS is unavailable or returns empty.
 
-Recent note: Starway CMS page routing now expects canonical leading-slash `pages.slug` values (for example `/chi-siamo`). In April 2026, the delivery app and Directus data were aligned to remove non-homepage `404`s, and the `Cosa Facciamo` taxonomy landing / term pages were wired to seeded taxonomy records. On April 18, 2026, the SSR runtime was hardened to prefer `DIRECTUS_*` env vars over `PRIVATE_DIRECTUS_*`, retry anonymously when a stale token is rejected, and remove Svelte 5 `state_referenced_locally` warnings from route and block components. On April 19, 2026, the **Published Content Reader** policy in Directus was backfilled with read perms for `page_blocks`, every `block_*` collection (parents and child items), and `starway_team_members` — these had never been granted to the App Service role, which combined with a stale Vercel `DIRECTUS_TOKEN` produced the FORBIDDEN 500 chain on the preview. ADR-002 now ships with an operational checklist pointing at the canonical [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) so future collections can't recreate this gap. On April 20, 2026, issue #32 (Pages Blocks panel error in Directus admin) was resolved by repairing the `pages.blocks` M2A schema relation (the polymorphic `field=item` row was missing from `directus_relations`, breaking the authoring panel for every role including admins) and backfilling the **Starway Content** editor policy with `read`/`create`/`update` on `page_blocks`, all `block_*` collections, and `starway_team_members` — this also unblocks #36 once Lion seeds initial block content on the Starway pages. Full triage notes live in `.docs/operations/cms-triage.md`.
+Recent note: Starway CMS page routing now expects canonical leading-slash `pages.slug` values (for example `/chi-siamo`). In April 2026, the delivery app and Directus data were aligned to remove non-homepage `404`s, and the `Cosa Facciamo` taxonomy landing / term pages were wired to seeded taxonomy records. On April 18, 2026, the SSR runtime was hardened to prefer `DIRECTUS_*` env vars over `PRIVATE_DIRECTUS_*`, retry anonymously when a stale token is rejected, and remove Svelte 5 `state_referenced_locally` warnings from route and block components. On April 19, 2026, the **Published Content Reader** policy in Directus was backfilled with read perms for `page_blocks`, every `block_*` collection (parents and child items), and `starway_team_members` — these had never been granted to the App Service role, which combined with a stale Vercel `DIRECTUS_TOKEN` produced the FORBIDDEN 500 chain on the preview. ADR-002 now ships with an operational checklist pointing at the canonical [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) so future collections can't recreate this gap. On April 20, 2026, issue #32 (Pages Blocks panel error in Directus admin) was resolved by repairing the `pages.blocks` M2A schema relation (the polymorphic `field=item` row was missing from `directus_relations`, breaking the authoring panel for every role including admins) and backfilling the **Starway Content** editor policy with `read`/`create`/`update` on `page_blocks`, all `block_*` collections, and `starway_team_members` — this also unblocks #36 once Lion seeds initial block content on the Starway pages. Full triage notes live in `.docs/operations/cms-triage.md`. On April 20, 2026 (evening), the 16 Starway `block_hero.image` fields were populated with `placehold.co` 1600×900 navy/white webp placeholders via `POST /files/import`, a new `PUBLIC_DIRECTUS_URL` env var was added for building `/assets/<uuid>` URLs in the browser, and the `MainNav` was refactored into a responsive desktop + mobile (hamburger → slide-in panel + accordion) view with em-based `@custom-media --sm..--2xl` breakpoints declared in `app.css`. On April 21, 2026, the still-invisible placeholder images were traced to the `Public` policy having no read permission on `directus_files` — the SSR token let the loader fetch UUIDs but the browser's anonymous `GET /assets/<uuid>` returned `403`. Fixed by creating a dedicated `Public Assets` folder in Directus, moving all 16 hero files + 4 new homepage card images into it, and granting the `Public` policy a single folder-scoped `read` permission. `CardGroupBlock.svelte` was extended to render `item.image` as a background layer with a gradient overlay so the homepage's four navigation cards render with imagery. The new pattern is codified in [`bravobyte-ai/rules/directus-collection-permissions.md`](../../bravobyte-ai/rules/directus-collection-permissions.md) ("Public (anonymous) file access") and cross-referenced from [`bravobyte-ai/rules/placeholder-content.md`](../../bravobyte-ai/rules/placeholder-content.md) so every future Directus image placeholder lands in the Public Assets folder by default.
 
 ### User Stories
 
@@ -335,6 +335,22 @@ Reusable `Stat` and `StatGroup` components for displaying key metrics with anima
 | 5 | Accessibility + reduced motion support | ✅ Done |
 | 6 | Mock data fixtures provided | ✅ Done |
 | 7 | Unit tests | ✅ Done |
+
+---
+
+## Shared-Candidate Flags
+
+Pieces built client-local in this repo that should be promoted to
+`bravobyte-frontend-core` once a second client proves the shape (per
+[`bravobyte-ai/rules/reusability.md`](../bravobyte-ai/rules/reusability.md)):
+
+| Artifact | Location | Extract when |
+|----------|----------|--------------|
+| `resolveAssetUrl(file)` helper | `src/lib/util/cms/assets.ts` | A second client consumes Directus Files via `/assets/<uuid>` |
+| `@custom-media --sm..--2xl` breakpoint mixin | `src/app.css` | Any other client app needs a shared breakpoint scale |
+| `HamburgerButton.svelte` primitive | `src/lib/components/navigation/HamburgerButton.svelte` | A second client ships a responsive nav |
+| Responsive `MainNav` pattern (desktop + off-canvas mobile panel + accordion) | `src/lib/components/navigation/MainNav.svelte` | A second client adopts the same IA shape |
+| Image-backed `CardGroupBlock` variant (bg image + gradient overlay, white text fallback) | `src/lib/components/blocks/CardGroupBlock.svelte` | A second client's card-group block surfaces file references |
 
 ---
 

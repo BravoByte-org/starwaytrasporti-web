@@ -1,3 +1,17 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/*
+ * Breakpoints
+ * ---------------------------------------------------------------
+ * em-based custom-media declarations aligned with Tailwind v4
+ * defaults. em (not px) so media queries honor browser zoom and
+ * user font-size preferences. See bravobyte-ai/rules/tailwind-svelte.md
+ * for the usage doctrine.
+ */
+@custom-media --sm (min-width: 40em); /* ~640px */
+@custom-media --md (min-width: 48em); /* ~768px */
+@custom-media --lg (min-width: 64em); /* ~1024px */
+@custom-media --xl (min-width: 80em); /* ~1280px */
+@custom-media --2xl (min-width: 96em); /* ~1536px */

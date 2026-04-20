@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { resolveAssetUrl, type DirectusFileRef } from '$lib/util/cms/assets';
 
 	let { data }: { data: Record<string, unknown> } = $props();
 
 	let headline = $derived((data.headline as string | undefined) ?? '');
 	let subheadline = $derived((data.subheadline as string | null | undefined) ?? null);
-	let image = $derived((data.image as string | null | undefined) ?? null);
+	let image = $derived(resolveAssetUrl(data.image as DirectusFileRef));
 	let videoUrl = $derived((data.video_url as string | null | undefined) ?? null);
 	let ctaPrimaryText = $derived((data.cta_primary_text as string | null | undefined) ?? null);
 	let ctaPrimaryUrl = $derived((data.cta_primary_url as string | null | undefined) ?? null);
