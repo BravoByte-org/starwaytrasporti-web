@@ -4,13 +4,13 @@ Operational backlog for the shared BravoByte Directus instance as it applies to 
 
 **Delivery PR (blocks + nav + docs):** https://github.com/BravoByte-org/starwaytrasporti-web/pull/37 → `next`
 
-| # | Topic | Issue |
-|---|--------|--------|
-| Site renders no block body | REST loaders omitted M2A `blocks`; homepage did not use `BlockRenderer` | https://github.com/BravoByte-org/starwaytrasporti-web/issues/36 |
-| Admin “Blocks” panel broken | M2A relationship or role permissions in Directus | https://github.com/BravoByte-org/starwaytrasporti-web/issues/32 |
-| Empty taxonomies / term pages | Seed data + wire `template_type`, `taxonomy_context`, `term` | https://github.com/BravoByte-org/starwaytrasporti-web/issues/33 |
-| Editor guide: Pages vs Posts vs Articles | Documentation + optional sample records | https://github.com/BravoByte-org/starwaytrasporti-web/issues/34 |
-| UUID-only relation pickers | Display templates / translations on relational fields | https://github.com/BravoByte-org/starwaytrasporti-web/issues/35 |
+| # | Topic | Issue | Status |
+|---|--------|--------|--------|
+| Site renders no block body | REST loaders omitted M2A `blocks`; homepage did not use `BlockRenderer` | https://github.com/BravoByte-org/starwaytrasporti-web/issues/36 | resolved by PR #40 |
+| Admin "Blocks" panel broken | M2A relationship or role permissions in Directus | https://github.com/BravoByte-org/starwaytrasporti-web/issues/32 | resolved by PR #39 |
+| Empty taxonomies / term pages | Seed data + wire `template_type`, `taxonomy_context`, `term` | https://github.com/BravoByte-org/starwaytrasporti-web/issues/33 | resolved by PR-A (this commit); render features deferred to PR-B follow-up |
+| Editor guide: Pages vs Posts vs Articles | Documentation + optional sample records | https://github.com/BravoByte-org/starwaytrasporti-web/issues/34 | open |
+| UUID-only relation pickers | Display templates / translations on relational fields | https://github.com/BravoByte-org/starwaytrasporti-web/issues/35 | resolved by PR #41 |
 
 ---
 
@@ -125,3 +125,38 @@ Codified into shared docs:
 - `bravobyte-ai/rules/directus-collection-permissions.md` — "Related" section cross-links to the new display rule so the two rules stay paired.
 
 No app-code change: this pass is 100% Directus metadata. SvelteKit SSR + client rendering are unaffected (`pnpm check` still clean).
+
+## Apr 21 2026 — Taxonomy + article seed (#33, PR-A)
+
+Issue [#33](https://github.com/BravoByte-org/starwaytrasporti-web/issues/33) called for non-empty taxonomies + populated terms + correctly-templated landing/term pages. The Apr 19 routing fix had already wired the `services` taxonomy and 3 terms for `/cosa-facciamo*`; this pass closes the gap by adding the two remaining production taxonomies, re-templating the news + operating-areas page families, and seeding placeholder articles so the article ↔ taxonomy_term relationship has live data to exercise.
+
+Scope decision: this PR (PR-A) is **CMS data only** and meets both #33 acceptance criteria literally. The follow-up "taxonomy-aware page blocks" feature (4 new Directus block collections + dynamic Svelte rendering) is tracked separately as PR-B in a new GitHub issue, per the BravoByte git policy of one PR per story.
+
+Fix applied (admin-token, idempotent script with 20s socket timeout + retries):
+
+- **2 new taxonomies** seeded site-scoped to Starway:
+  - `regions` ("Aree Operative") — 6 root terms: `friuli-venezia-giulia`, `trentino-alto-adige`, `veneto`, `lombardia`, `emilia-romagna`, `marche`
+  - `news_categories` ("Categorie News") — 2 root terms: `novita-e-sviluppi`, `articoli`
+- **Page re-templates + creates:**
+  - `PATCH /items/pages/<news>` → `template_type=taxonomy_landing`, `taxonomy_context=news_categories`
+  - `POST /items/pages` for `/news/novita-e-sviluppi` and `/news/articoli` → `taxonomy_term_page` with `term=<news_categories term>`
+  - `PATCH /items/pages/<dove-operiamo>` → `taxonomy_landing` + `taxonomy_context=regions`
+- **4 placeholder articles** seeded with rich-text `<p>/<ul>/<ol>/<strong>/<em>` content per [`bravobyte-ai/rules/placeholder-content.md`](../../../bravobyte-ai/rules/placeholder-content.md), tagged via `article_terms` junction:
+  - `nuova-flotta-euro-6` + `ampliamento-magazzino-vicenza` → `novita-e-sviluppi`
+  - `guida-stoccaggio-prodotti-surgelati` + `logistica-nord-est-2026` → `articoli`
+- **Display + i18n backfill** for the article surface that the Apr 21 #35 pass missed: `article_terms.meta.display_template = "{{articles_id.title}} → {{taxonomy_terms_id.title}}"` + en-US/it-IT translations on every editor-visible `articles` field (Titolo, Slug (percorso URL), Sito, Stato, Contenuto, Estratto, Autore, Immagine in evidenza, Data di pubblicazione, Termini associati).
+
+Verification (admin token, mirrors the SSR `fetchPage` query shape):
+
+- `GET /items/taxonomies?fields=key&filter[site][_eq]=<starway>` → **3** rows (`services`, `regions`, `news_categories`).
+- `GET /items/taxonomy_terms` → **11** total (3 services + 6 regions + 2 news_categories), all `status=published`, `parent=null`.
+- `GET /items/pages?filter[template_type][_in]=taxonomy_landing,taxonomy_term_page` returns the **8** correctly-templated pages (3 services term pages + `/cosa-facciamo` landing + `/news` landing + 2 news term pages + `/dove-siamo/dove-operiamo` landing). Each landing has a non-null `taxonomy_context.key`; each term page has a non-null `term.slug`.
+- `GET /items/pages?filter[slug][_eq]=/news/articoli&fields=...,term.*` returns the term object inline including `term.articles=[3,4]` proving the `article_terms` junction resolves both ways.
+- `GET /items/articles` returns the 4 seeded articles, each with `terms[].taxonomy_terms_id.slug` populated.
+- `pnpm check` still clean (no app-code change in this PR).
+
+Out-of-scope for this PR (deferred to PR-B as a feature ticket):
+
+1. App-side rendering switch on `template_type` — today every page renders only its `blocks` array; `/news` and `/news/articoli` resolve with their taxonomy metadata but render visually identically to a `standard` page until PR-B ships.
+2. New Directus block collections from the architecture spec: `block_taxonomy_terms_nav`, `block_taxonomy_swimlanes`, `block_related_articles`, `block_taxonomy_recirc`.
+3. Loader-side dynamic data resolution for those blocks (e.g. fetching root terms for a swimlane block based on the page's `taxonomy_context`).
