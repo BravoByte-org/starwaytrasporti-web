@@ -1,3 +1,45 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/*
+ * Make `@bravobyte-org/frontend-core` source files visible to Tailwind v4 so
+ * utility classes used inside shared primitives compile into the bundle.
+ */
+@source "../node_modules/@bravobyte-org/frontend-core/src";
+
+/*
+ * BravoByte token contract
+ * ---------------------------------------------------------------
+ * `--bb-*` custom properties are the public API consumed by primitives
+ * shipped from `@bravobyte-org/frontend-core`. Map them to Starway's
+ * brand tokens here so primitives inherit the right look without
+ * importing brand-specific values. See:
+ * `bravobyte/.docs/architecture/bravobyte-frontend-core-tokens.md`
+ */
+:root {
+	--bb-color-primary: oklch(0.55 0.2 252); /* tailwind blue-600 */
+	--bb-color-on-primary: #ffffff;
+	--bb-color-fg: oklch(0.21 0.02 256); /* tailwind gray-900 */
+	--bb-color-fg-soft: oklch(0.32 0.02 256); /* tailwind gray-700 */
+	--bb-color-fg-muted: oklch(0.45 0.01 256); /* tailwind gray-500 */
+	--bb-color-surface: #ffffff;
+	--bb-color-border: oklch(0.92 0 0); /* tailwind gray-200 */
+	--bb-color-focus: oklch(0.55 0.2 252);
+
+	--bb-radius-md: 8px;
+	--bb-radius-lg: 12px;
+
+	--bb-text-eyebrow: 0.75rem;
+	--bb-text-h2: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
+	--bb-text-lede: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
+	--bb-tracking-eyebrow: 0.18em;
+
+	--bb-section-padding-x: 1.5rem;
+	--bb-section-padding-y: clamp(3rem, 8vw, 5rem);
+
+	--bb-shadow-soft: 0 12px 32px -16px rgb(15 23 42 / 0.18);
+	--bb-shadow-card: 0 18px 40px -22px rgb(15 23 42 / 0.22);
+
+	--bb-ease-soft: cubic-bezier(0.32, 0.08, 0.24, 1);
+}
