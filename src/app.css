@@ -6,7 +6,7 @@
  * Make `@bravobyte-org/frontend-core` source files visible to Tailwind v4 so
  * utility classes used inside shared primitives compile into the bundle.
  */
-@source "../node_modules/@bravobyte-org/frontend-core/src";
+@source '../node_modules/@bravobyte-org/frontend-core/src';
 
 /*
  * BravoByte token contract
