@@ -29,3 +29,17 @@ Keep an eye out for updates on [https://starwaytrasporti.com](https://starwaytra
 ```bash
 pnpm install
 ```
+
+## Release process
+
+This repo follows the BravoByte org-wide Changesets release loop, which
+replaces the previous `release-it` flow. Every PR that ships a user-visible
+change runs `pnpm changeset` before merging; merging to `main` opens a
+`release/v<version>` PR titled `release: starwaytrasporti.com@<version>`.
+Merging that PR tags the version, creates a GitHub Release, and promotes the
+build to Vercel production.
+
+Full playbook:
+[`bravobyte/.ai/playbooks/release-flow.md`](https://github.com/BravoByte-org/bravobyte/blob/main/.ai/playbooks/release-flow.md).
+Rationale:
+[ADR-006](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-006-org-release-standardization.md).

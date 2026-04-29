@@ -38,10 +38,12 @@
 		"prepare": "husky",
 		"precommit": "lint-staged",
 		"commitlint": "commitlint --config .config/commitlint.config.ts --edit",
-		"RELEASE": "==============================================================",
-		"release": "release-it --config .config/release-it.config.ts --ci"
+		"CHANGESET": "==============================================================",
+		"changeset": "changeset"
 	},
 	"devDependencies": {
+		"@changesets/changelog-github": "^0.6.0",
+		"@changesets/cli": "^2.31.0",
 		"@eslint/compat": "^2.0.0",
 		"@eslint/js": "^9.39.1",
 		"@opentelemetry/api": "^1.9.0",
@@ -83,10 +85,8 @@
 		"@commitlint/config-conventional": "20.0.0",
 		"@directus/sdk": "^20.2.0",
 		"@directus/types": "^13.4.0",
-		"@release-it/conventional-changelog": "^10.0.2",
 		"lint-staged": "^16.2.7",
 		"mdsvex": "^0.12.6",
-		"release-it": "^19.0.6",
 		"vercel": "^48.10.4"
 	},
 	"pnpm": {
@@ -94,7 +94,6 @@
 			"esbuild"
 		]
 	},
-	"release-it": {},
 	"repository": "https://github.com/starwaytrasporti/starwaytrasporti.com",
 	"engines": {
 		"node": "22.x || 24.x"
