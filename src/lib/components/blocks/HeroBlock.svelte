@@ -66,7 +66,7 @@
 	@reference "../../../app.css";
 
 	.hero-block {
-		@apply relative bg-gray-900 py-24 text-white md:py-32;
+		@apply relative bg-surface-inverse py-24 text-fg-inverse md:py-32;
 	}
 
 	.hero-block__media {
@@ -78,7 +78,7 @@
 	}
 
 	.hero-block__media--image {
-		@apply bg-cover bg-center opacity-30;
+		@apply bg-cover bg-center opacity-25;
 	}
 
 	.hero-block__video-frame {
@@ -94,11 +94,11 @@
 	}
 
 	.hero-block__headline {
-		@apply text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl;
+		@apply font-display text-h1 leading-tight tracking-[0.01em] text-fg-inverse uppercase;
 	}
 
 	.hero-block__subheadline {
-		@apply mt-6 text-lg leading-relaxed text-gray-300 md:text-xl;
+		@apply mt-6 max-w-2xl text-lede leading-relaxed text-fg-inverse-muted;
 	}
 
 	.hero-block__actions {
@@ -106,14 +106,14 @@
 	}
 
 	.hero-block__action {
-		@apply inline-flex items-center rounded-lg px-6 py-3 font-semibold transition-colors;
+		@apply inline-flex items-center rounded-md px-6 py-3 font-semibold tracking-wide uppercase transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg-inverse;
 	}
 
 	.hero-block__action--primary {
-		@apply bg-blue-600 text-white hover:bg-blue-700;
+		@apply bg-accent text-accent-fg hover:bg-accent-hover;
 	}
 
 	.hero-block__action--secondary {
-		@apply border-2 border-white/30 text-white hover:border-white/60;
+		@apply border-2 border-fg-inverse/40 text-fg-inverse hover:border-fg-inverse hover:bg-fg-inverse/5;
 	}
 </style>

@@ -1,0 +1,172 @@
+/*
+ * Starway Trasporti — design tokens
+ * --------------------------------------------------------------
+ * Canonical palette reference: SchemeColor «70s Retro»
+ * https://www.schemecolor.com/70s-retro.php
+ *
+ * Token layers (in order):
+ *   1. Raw palette (`--sw-color-bisque`, etc.) — never changes.
+ *   2. Role tokens   (`--sw-color-surface`, `--sw-color-fg`, etc.)
+ *      — mapped per scheme. The `@media (prefers-color-scheme: dark)`
+ *      block at the bottom overrides only the role layer.
+ *
+ * Components should consume role tokens (via Tailwind @theme aliases:
+ * `bg-surface`, `text-fg`, `bg-accent`, …) so dark-mode swaps are
+ * automatic. Raw utilities (`bg-bisque`, `bg-vermilion`) remain
+ * available for deliberately brand-locked surfaces.
+ *
+ * Dark-mode strategy follows Material 3 / Radix conventions:
+ *   - keep palette immutable
+ *   - lift surfaces in tiers (surface → surface-raised → surface-inverse)
+ *   - desaturate saturated accents toward the deepest neutral so they
+ *     don't vibrate against dark surfaces
+ *   - never pure-white text; bisque-on-deep-navy is the dark fg
+ */
+
+:root {
+	/* ------------------------------------------------------------- */
+
+	/* 1. Raw palette — SchemeColor names                              */
+
+	/* ------------------------------------------------------------- */
+	--sw-color-bisque: #ffe7bd;
+	--sw-color-cetacean: #0b0835;
+	--sw-color-sapphire: #0c5679;
+	--sw-color-jelly: #3f8a8c;
+	--sw-color-vermilion: #e5340b;
+	--sw-color-beer: #f28a0f;
+
+	/* ------------------------------------------------------------- */
+
+	/* 2. Role tokens — light scheme                                  */
+
+	/* ------------------------------------------------------------- */
+	--sw-color-surface: var(--sw-color-bisque);
+	--sw-color-surface-raised: color-mix(in srgb, var(--sw-color-bisque) 92%, white 8%);
+	--sw-color-surface-inverse: var(--sw-color-cetacean);
+	--sw-color-fg: var(--sw-color-cetacean);
+	--sw-color-fg-muted: color-mix(in srgb, var(--sw-color-cetacean) 70%, var(--sw-color-bisque) 30%);
+	--sw-color-fg-soft: color-mix(in srgb, var(--sw-color-cetacean) 76%, white);
+	--sw-color-fg-inverse: var(--sw-color-bisque);
+	--sw-color-fg-inverse-muted: color-mix(
+		in srgb,
+		var(--sw-color-bisque) 75%,
+		var(--sw-color-cetacean) 25%
+	);
+	--sw-color-accent: var(--sw-color-vermilion);
+	--sw-color-accent-hover: var(--sw-color-beer);
+	--sw-color-accent-fg: #fff;
+	--sw-color-info: var(--sw-color-sapphire);
+	--sw-color-support: var(--sw-color-jelly);
+	--sw-color-line: color-mix(in srgb, var(--sw-color-cetacean) 12%, transparent);
+	--sw-color-line-strong: color-mix(in srgb, var(--sw-color-cetacean) 28%, transparent);
+	--sw-color-overlay-soft: color-mix(in srgb, var(--sw-color-cetacean) 6%, transparent);
+
+	/* ------------------------------------------------------------- */
+
+	/* Typography                                                     */
+
+	/* ------------------------------------------------------------- */
+	--sw-font-display: 'Bebas Neue', impact, 'Arial Narrow', sans-serif;
+	--sw-font-sans:
+		'Source Sans 3', system-ui, -apple-system, 'Segoe UI', roboto, 'Helvetica Neue', sans-serif;
+	--sw-text-eyebrow: 0.75rem;
+	--sw-text-body: 1.0625rem;
+	--sw-text-lede: clamp(1rem, 0.92rem + 0.55vw, 1.1875rem);
+	--sw-text-h3: clamp(1.375rem, 1.08rem + 1.05vw, 1.875rem);
+	--sw-text-h2: clamp(2rem, 1.35rem + 2.35vw, 3rem);
+	--sw-text-h1: clamp(2.5rem, 1.5rem + 3.5vw, 4rem);
+	--sw-leading-tight: 1.08;
+	--sw-leading-snug: 1.2;
+	--sw-leading-body: 1.62;
+	--sw-tracking-eyebrow: 0.2em;
+
+	/* ------------------------------------------------------------- */
+
+	/* Spacing / radii / shadow                                       */
+
+	/* ------------------------------------------------------------- */
+	--sw-space-section: clamp(3.25rem, 7vw, 7rem);
+	--sw-space-block: clamp(1.5rem, 3vw, 2.75rem);
+	--sw-radius-md: 6px;
+	--sw-radius-lg: 10px;
+
+	/* Shadows are tinted with cetacean in light, with pure black in dark
+	   so they read as actual depth (tinted shadows wash out on dark surfaces). */
+	--sw-shadow-soft: 0 12px 36px -18px rgb(11 8 53 / 22%);
+	--sw-shadow-card: 0 20px 44px -24px rgb(11 8 53 / 26%);
+	--sw-ease-soft: cubic-bezier(0.32, 0.08, 0.24, 1);
+	--sw-duration-fast: 180ms;
+	--sw-duration-base: 260ms;
+	--sw-duration-slow: 480ms;
+}
+
+/* ============================================================= */
+
+/* Role tokens — dark scheme                                       */
+
+/* ------------------------------------------------------------- */
+
+/* Lift hierarchy:                                                 */
+
+/*   surface (deepest, body)                                       */
+
+/*   → surface-raised (cards)                                      */
+
+/*   → surface-inverse (sections that were "dark accent" in light) */
+
+/* Accents desaturate ~15% toward cetacean to tame contrast.       */
+
+/* ============================================================= */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--sw-color-surface: var(--sw-color-cetacean);
+		--sw-color-surface-raised: color-mix(
+			in srgb,
+			var(--sw-color-cetacean) 92%,
+			var(--sw-color-bisque) 8%
+		);
+		--sw-color-surface-inverse: color-mix(
+			in srgb,
+			var(--sw-color-cetacean) 84%,
+			var(--sw-color-bisque) 16%
+		);
+		--sw-color-fg: var(--sw-color-bisque);
+		--sw-color-fg-muted: color-mix(
+			in srgb,
+			var(--sw-color-bisque) 72%,
+			var(--sw-color-cetacean) 28%
+		);
+		--sw-color-fg-soft: color-mix(
+			in srgb,
+			var(--sw-color-bisque) 88%,
+			var(--sw-color-cetacean) 12%
+		);
+		--sw-color-fg-inverse: var(--sw-color-bisque);
+		--sw-color-fg-inverse-muted: color-mix(
+			in srgb,
+			var(--sw-color-bisque) 72%,
+			var(--sw-color-cetacean) 28%
+		);
+		--sw-color-accent: color-mix(
+			in srgb,
+			var(--sw-color-vermilion) 86%,
+			var(--sw-color-cetacean) 14%
+		);
+		--sw-color-accent-hover: color-mix(
+			in srgb,
+			var(--sw-color-beer) 86%,
+			var(--sw-color-cetacean) 14%
+		);
+		--sw-color-accent-fg: var(--sw-color-bisque);
+		--sw-color-info: color-mix(in srgb, var(--sw-color-sapphire) 70%, var(--sw-color-bisque) 30%);
+		--sw-color-support: color-mix(in srgb, var(--sw-color-jelly) 75%, var(--sw-color-bisque) 25%);
+		--sw-color-line: color-mix(in srgb, var(--sw-color-bisque) 12%, transparent);
+		--sw-color-line-strong: color-mix(in srgb, var(--sw-color-bisque) 26%, transparent);
+		--sw-color-overlay-soft: color-mix(in srgb, var(--sw-color-bisque) 6%, transparent);
+
+		/* Pure-black shadows read as depth on dark surfaces; tinted shadows wash out. */
+		--sw-shadow-soft: 0 12px 36px -18px rgb(0 0 0 / 55%);
+		--sw-shadow-card: 0 20px 44px -24px rgb(0 0 0 / 65%);
+	}
+}

@@ -3,7 +3,7 @@
 	"src/{lib, docs}/{styles, components, utils, pages, layouts}/**/*.{js,ts,css,scss,postcss,md,mdx,mdsvex,json}": [
 		"prettier --write --plugin-search-dir=.",
 		"prettier --check --plugin-search-dir=.",
-		"stylelint --fix",
+		"stylelint --fix --config .config/stylelint.config.js --allow-empty-input",
 		"git add -A ."
 	]
 }

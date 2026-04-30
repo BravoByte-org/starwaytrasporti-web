@@ -86,6 +86,7 @@
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
+		"@bravobyte-org/frontend-core": "^1.2.0",
 		"@directus/sdk": "^20.2.0",
 		"@directus/types": "^13.4.0"
 	},

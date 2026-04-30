@@ -2,6 +2,17 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+@import './lib/styles/tokens.css';
+@import './lib/styles/fonts.css';
+@import './lib/styles/motion.css';
+
+/*
+ * Tailwind v4: include utility classes used inside `@bravobyte-org/frontend-core`
+ * Svelte sources so they are not tree-shaken from this app's bundle.
+ * Canonical reference: bravobyte/.docs/architecture/bravobyte-frontend-core-tokens.md
+ */
+@source '../node_modules/@bravobyte-org/frontend-core/src';
+
 /*
  * Breakpoints
  * ---------------------------------------------------------------
@@ -15,3 +26,133 @@
 @custom-media --lg (min-width: 64em); /* ~1024px */
 @custom-media --xl (min-width: 80em); /* ~1280px */
 @custom-media --2xl (min-width: 96em); /* ~1536px */
+
+/*
+ * BravoByte token contract (`--bb-*`)
+ * ----------------------------------------------------------------
+ * Consumed by `@bravobyte-org/frontend-core` primitives. Map Starway's
+ * role tokens onto the contract so frontend-core primitives inherit
+ * dark-mode automatically — see bravobyte-frontend-core-tokens.md and
+ * bravobyte/.docs/adrs/adr-007-starway-design-system-70s-palette.md.
+ */
+:root {
+	--bb-color-primary: var(--sw-color-accent);
+	--bb-color-on-primary: var(--sw-color-accent-fg);
+	--bb-color-fg: var(--sw-color-fg);
+	--bb-color-fg-soft: var(--sw-color-fg-soft);
+	--bb-color-fg-muted: var(--sw-color-fg-muted);
+	--bb-color-surface: var(--sw-color-surface);
+	--bb-color-surface-raised: var(--sw-color-surface-raised);
+	--bb-color-surface-inverse: var(--sw-color-surface-inverse);
+	--bb-color-fg-inverse: var(--sw-color-fg-inverse);
+	--bb-color-fg-inverse-muted: var(--sw-color-fg-inverse-muted);
+	--bb-color-border: var(--sw-color-line);
+	--bb-color-focus: var(--sw-color-accent);
+
+	--bb-radius-md: var(--sw-radius-md);
+	--bb-radius-lg: var(--sw-radius-lg);
+
+	--bb-text-eyebrow: var(--sw-text-eyebrow);
+	--bb-text-h2: var(--sw-text-h2);
+	--bb-text-lede: var(--sw-text-lede);
+	--bb-tracking-eyebrow: var(--sw-tracking-eyebrow);
+
+	--bb-section-padding-x: 1.5rem;
+	--bb-section-padding-y: clamp(3rem, 8vw, 5rem);
+
+	--bb-shadow-soft: var(--sw-shadow-soft);
+	--bb-shadow-card: var(--sw-shadow-card);
+
+	--bb-ease-soft: var(--sw-ease-soft);
+}
+
+/*
+ * Tailwind v4 @theme — exposes Starway tokens as semantic utilities.
+ *
+ *   Role tokens (auto-swap in dark mode):
+ *     bg-surface / bg-surface-raised / bg-surface-inverse
+ *     text-fg / text-fg-muted / text-fg-soft / text-fg-inverse / text-fg-inverse-muted
+ *     bg-accent / bg-accent-hover / text-accent / text-accent-fg
+ *     bg-info / bg-support
+ *     border-line / border-line-strong / divide-line
+ *     bg-overlay-soft
+ *
+ *   Raw palette (brand-locked, never swap):
+ *     bg-bisque / bg-cetacean / bg-sapphire / bg-jelly / bg-vermilion / bg-beer
+ *
+ * Prefer role utilities for new work; reach for raw only when a surface
+ * must remain a specific brand colour regardless of scheme.
+ */
+@theme {
+	--color-bisque: var(--sw-color-bisque);
+	--color-cetacean: var(--sw-color-cetacean);
+	--color-sapphire: var(--sw-color-sapphire);
+	--color-jelly: var(--sw-color-jelly);
+	--color-vermilion: var(--sw-color-vermilion);
+	--color-beer: var(--sw-color-beer);
+
+	--color-surface: var(--sw-color-surface);
+	--color-surface-raised: var(--sw-color-surface-raised);
+	--color-surface-inverse: var(--sw-color-surface-inverse);
+
+	--color-fg: var(--sw-color-fg);
+	--color-fg-muted: var(--sw-color-fg-muted);
+	--color-fg-soft: var(--sw-color-fg-soft);
+	--color-fg-inverse: var(--sw-color-fg-inverse);
+	--color-fg-inverse-muted: var(--sw-color-fg-inverse-muted);
+
+	--color-accent: var(--sw-color-accent);
+	--color-accent-hover: var(--sw-color-accent-hover);
+	--color-accent-fg: var(--sw-color-accent-fg);
+	--color-info: var(--sw-color-info);
+	--color-support: var(--sw-color-support);
+
+	--color-line: var(--sw-color-line);
+	--color-line-strong: var(--sw-color-line-strong);
+	--color-overlay-soft: var(--sw-color-overlay-soft);
+
+	--font-display: var(--sw-font-display);
+	--font-sans: var(--sw-font-sans);
+
+	--text-eyebrow: var(--sw-text-eyebrow);
+	--text-body: var(--sw-text-body);
+	--text-lede: var(--sw-text-lede);
+	--text-h3: var(--sw-text-h3);
+	--text-h2: var(--sw-text-h2);
+	--text-h1: var(--sw-text-h1);
+
+	--radius-md: var(--sw-radius-md);
+	--radius-lg: var(--sw-radius-lg);
+
+	--shadow-soft: var(--sw-shadow-soft);
+	--shadow-card: var(--sw-shadow-card);
+
+	--ease-soft: var(--sw-ease-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+html {
+	scroll-behavior: smooth;
+	color-scheme: light dark;
+	scroll-padding-top: 5rem;
+}
+
+body {
+	font-family: var(--sw-font-sans);
+	font-size: var(--sw-text-body);
+	line-height: var(--sw-leading-body);
+	color: var(--sw-color-fg);
+	background-color: var(--sw-color-surface);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}

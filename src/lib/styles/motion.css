@@ -1,0 +1,4 @@
+/*
+ * Motion primitives — keep subtle. `app.css` applies `prefers-reduced-motion`
+ * overrides so reduced-motion users are not forced to chase per-component guards.
+ */

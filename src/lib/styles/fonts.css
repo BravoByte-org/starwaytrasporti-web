@@ -1,0 +1,7 @@
+/*
+ * Webfont registration
+ * --------------------------------------------------------------
+ * Fonts are loaded via `<link rel="stylesheet">` in src/app.html
+ * (paired with `<link rel="preconnect">` hints so the browser fetches fonts
+ * as soon as HTML parses rather than blocking on Tailwind/CSS bundle parsing).
+ */

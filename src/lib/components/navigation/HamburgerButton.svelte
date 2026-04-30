@@ -28,14 +28,14 @@
 	@reference '../../../app.css';
 
 	.hamburger-button {
-		@apply relative inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-700 transition-colors md:hidden dark:text-gray-200;
+		@apply relative inline-flex h-10 w-10 items-center justify-center rounded-md text-fg-inverse transition-colors md:hidden;
 
 		&:hover {
-			@apply bg-gray-100 dark:bg-gray-800;
+			@apply bg-fg-inverse/10;
 		}
 
 		&:focus-visible {
-			@apply ring-2 ring-blue-500 outline-none;
+			@apply ring-2 ring-accent outline-none;
 		}
 	}
 

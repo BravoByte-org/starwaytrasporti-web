@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@bravobyte-org/frontend-core':
+        specifier: ^1.1.0
+        version: 1.1.0(svelte@5.46.0)(tailwindcss@4.1.18)
       '@directus/sdk':
         specifier: ^20.2.0
         version: 20.3.0
@@ -280,6 +283,12 @@ packages:
   '@babel/helper-validator-identifier@7.28.5':
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
+
+  '@bravobyte-org/frontend-core@1.1.0':
+    resolution: {integrity: sha512-SeCtFf4iyeKF/fY3Z8YP1Uhkc49yVXzv7Thr2gRtjnmYdFl/1BkUOov51RYwClyM7OY69nAbp+Rg5Q5e+9GoEA==, tarball: https://npm.pkg.github.com/download/@bravobyte-org/frontend-core/1.1.0/f6387e834fdb292c97ca320555c626822412af9d}
+    peerDependencies:
+      svelte: ^5.0.0
+      tailwindcss: ^4.0.0
 
   '@cacheable/memory@2.0.6':
     resolution: {integrity: sha512-7e8SScMocHxcAb8YhtkbMhGG+EKLRIficb1F5sjvhSYsWTZGxvg4KIDp8kgxnV2PUJ3ddPe6J9QESjKvBWRDkg==}
@@ -4488,6 +4497,18 @@ packages:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
 
+  tailwind-merge@3.0.2:
+    resolution: {integrity: sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw==}
+
+  tailwind-merge@3.5.0:
+    resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
+
+  tailwind-variants@1.0.0:
+    resolution: {integrity: sha512-2WSbv4ulEEyuBKomOunut65D8UZwxrHoRfYnxGcQNnHqlSCp2+B7Yz2W+yrNDrxRodOXtGD/1oCcKGNBnUqMqA==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwindcss: '*'
+
   tailwindcss@4.1.18:
     resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
 
@@ -5346,6 +5367,14 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/helper-validator-identifier@7.28.5': {}
+
+  '@bravobyte-org/frontend-core@1.1.0(svelte@5.46.0)(tailwindcss@4.1.18)':
+    dependencies:
+      clsx: 2.1.1
+      svelte: 5.46.0
+      tailwind-merge: 3.5.0
+      tailwind-variants: 1.0.0(tailwindcss@4.1.18)
+      tailwindcss: 4.1.18
 
   '@cacheable/memory@2.0.6':
     dependencies:
@@ -9514,6 +9543,15 @@ snapshots:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
+
+  tailwind-merge@3.0.2: {}
+
+  tailwind-merge@3.5.0: {}
+
+  tailwind-variants@1.0.0(tailwindcss@4.1.18):
+    dependencies:
+      tailwind-merge: 3.0.2
+      tailwindcss: 4.1.18
 
   tailwindcss@4.1.18: {}
 
