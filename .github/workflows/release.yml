@@ -1,0 +1,36 @@
+# Release loop for `starwaytrasporti-web`. Delegates to the reusable workflow
+# in the bravobyte monorepo so every BravoByte delivery repo behaves
+# identically. Replaces the previous manual `release-it` flow:
+#
+#   1. PRs land on `main` carrying `.changeset/*.md` fragments.
+#   2. This workflow runs `pnpm changeset version` and opens
+#      `release/v<version>` with title
+#      `release: starwaytrasporti.com@<version>`.
+#   3. Merging that release PR tags `v<version>`, creates a GitHub Release
+#      with the matching CHANGELOG section, and runs
+#      `vercel deploy --prebuilt --prod` to promote the build.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+#
+# See: bravobyte/.docs/architecture/bravobyte-release-automation.md
+
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    uses: BravoByte-org/bravobyte/.github/workflows/release-app.yml@main
+    with:
+      package-name: starwaytrasporti.com
+      vercel-promote: true
+    secrets: inherit

@@ -38,12 +38,12 @@
 		"prepare": "husky",
 		"precommit": "lint-staged",
 		"commitlint": "commitlint --config .config/commitlint.config.ts --edit",
-		"RELEASE": "==============================================================",
-		"release": "release-it --config .config/release-it.config.ts"
+		"CHANGESET": "==============================================================",
+		"changeset": "changeset"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^20.1.0",
-		"@commitlint/config-conventional": "20.0.0",
+		"@changesets/changelog-github": "^0.6.0",
+		"@changesets/cli": "^2.31.0",
 		"@eslint/compat": "^2.0.0",
 		"@eslint/js": "^9.39.1",
 		"@opentelemetry/api": "^1.9.0",
@@ -95,7 +95,7 @@
 			"esbuild"
 		]
 	},
-	"repository": "https://github.com/BravoByte-org/starwaytrasporti-web",
+	"repository": "https://github.com/starwaytrasporti/starwaytrasporti.com",
 	"engines": {
 		"node": "22.x"
 	}
