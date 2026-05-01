@@ -170,11 +170,7 @@
 
 <!-- Mobile panel (< --md). Rendered outside the nav flex so it can cover the viewport. -->
 {#if mobileOpen}
-	<button
-		type="button"
-		class="main-nav__scrim"
-		aria-label="Chiudi menu"
-		onclick={closeMobile}
+	<button type="button" class="main-nav__scrim" aria-label="Chiudi menu" onclick={closeMobile}
 	></button>
 {/if}
 <div
@@ -287,7 +283,7 @@
 
 	.main-nav__trigger,
 	.main-nav__link {
-		@apply rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white;
+		@apply rounded-md px-3 py-2 text-sm font-semibold tracking-wide text-fg-inverse uppercase transition-colors hover:bg-fg-inverse/10 hover:text-fg-inverse focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.main-nav__trigger {
@@ -303,29 +299,29 @@
 	}
 
 	.main-nav__menu {
-		@apply absolute top-full left-0 z-50 mt-1 w-56 rounded-lg border border-gray-100 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800;
+		@apply absolute top-full left-0 z-50 mt-1 w-56 rounded-md border border-line-strong bg-surface py-1 shadow-card;
 	}
 
 	.main-nav__menu-link {
-		@apply block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+		@apply block px-4 py-2 text-sm text-fg-muted transition-colors hover:bg-overlay-soft hover:text-accent;
 	}
 
 	.main-nav__menu-link--primary {
-		@apply font-medium text-gray-700 dark:text-gray-300;
+		@apply font-semibold text-fg uppercase;
 	}
 
 	.main-nav__divider {
-		@apply my-1 border-t border-gray-100 dark:border-gray-700;
+		@apply my-1 border-t border-line;
 	}
 
 	/* ---------- mobile panel ---------- */
 
 	.main-nav__scrim {
-		@apply fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden;
+		@apply fixed inset-0 z-40 bg-cetacean/60 backdrop-blur-sm md:hidden;
 	}
 
 	.main-nav__panel {
-		@apply pointer-events-none fixed inset-x-0 top-16 bottom-0 z-50 translate-x-full overflow-y-auto bg-white shadow-xl transition-transform duration-200 ease-out md:hidden dark:bg-gray-900;
+		@apply pointer-events-none fixed inset-x-0 top-16 bottom-0 z-50 translate-x-full overflow-y-auto bg-surface shadow-card transition-transform duration-200 ease-out md:hidden;
 	}
 
 	.main-nav__panel--open {
@@ -333,7 +329,7 @@
 	}
 
 	.main-nav__panel-list {
-		@apply flex flex-col divide-y divide-gray-100 dark:divide-gray-800;
+		@apply flex flex-col divide-y divide-line;
 	}
 
 	.main-nav__panel-item {
@@ -342,18 +338,18 @@
 
 	.main-nav__panel-link,
 	.main-nav__panel-trigger {
-		@apply flex w-full items-center justify-between px-6 py-4 text-left text-base font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800;
+		@apply flex w-full items-center justify-between px-6 py-4 text-left text-base font-semibold tracking-wide text-fg uppercase transition-colors hover:bg-overlay-soft;
 	}
 
 	.main-nav__panel-sublist {
-		@apply flex flex-col bg-gray-50 dark:bg-gray-800;
+		@apply flex flex-col bg-overlay-soft;
 	}
 
 	.main-nav__panel-sublink {
-		@apply block px-10 py-3 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white;
+		@apply block px-10 py-3 text-sm text-fg-muted transition-colors hover:bg-overlay-soft hover:text-accent;
 	}
 
 	.main-nav__panel-sublink--primary {
-		@apply font-semibold text-gray-800 dark:text-gray-100;
+		@apply font-semibold text-fg uppercase;
 	}
 </style>

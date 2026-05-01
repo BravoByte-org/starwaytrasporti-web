@@ -35,7 +35,7 @@
 	@reference "../../../app.css";
 
 	.page-fallback {
-		@apply py-16;
+		@apply bg-surface py-16;
 	}
 
 	.page-fallback__inner {
@@ -43,6 +43,6 @@
 	}
 
 	.page-fallback__title {
-		@apply text-4xl font-bold text-gray-900 dark:text-white;
+		@apply font-display text-h1 tracking-[0.02em] text-fg uppercase;
 	}
 </style>

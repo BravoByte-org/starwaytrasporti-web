@@ -12,14 +12,14 @@
 	@reference "../../../app.css";
 
 	.error-container {
-		@apply flex h-screen flex-col items-center justify-center gap-4 rounded-lg bg-gray-100 p-8;
+		@apply flex min-h-screen flex-col items-center justify-center gap-4 bg-surface p-8 text-center text-fg;
 	}
 
 	.error-title {
-		@apply text-4xl font-bold;
+		@apply font-display text-h2 tracking-[0.02em] text-accent uppercase;
 	}
 
 	.error-copy {
-		@apply text-2xl;
+		@apply text-lede text-fg-muted;
 	}
 </style>

@@ -1,8 +1,8 @@
 # StarwayTrasporti.com - Product Spec
 
-> **Milestone:** Baseline MVP  
-> **Due Date:** December 6, 2025  
-> **Last Updated:** April 21, 2026
+> **Milestone:** Baseline MVP
+> **Due Date:** December 6, 2025
+> **Last Updated:** April 29, 2026 (design system: SchemeColor 70s Retro tokens, role-token layer with auto dark-mode swap, all blocks + chrome migrated; **Block extraction Path B** — generic blocks now consumed from `@bravobyte-org/frontend-core@^1.2.0` via `BlockRenderer`, `HeroBlock` stays local)
 
 ---
 
@@ -11,6 +11,34 @@
 StarwayTrasporti.com is an international transportation website for an Italian freight company. The goal is to highlight their services, generate new clients, and provide information for existing clients.
 
 **Tech Stack:** SvelteKit, TailwindCSS, Directus CMS, PostgreSQL, Vercel
+
+---
+
+## Design System
+
+Brand colours and typography derive from **[SchemeColor — 70s Retro](https://www.schemecolor.com/70s-retro.php)**. Authoritative rationale, semantic naming, and history are documented in **`bravobyte`** [ADR-007 — Starway design system](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-007-starway-design-system-70s-palette.md). The `--bb-*` shared-primitive contract that bridges these tokens to `@bravobyte-org/frontend-core` is in [ADR-005](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-005-frontend-core-token-contract.md).
+
+| Layer                                                    | Role                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`src/lib/styles/tokens.css`](src/lib/styles/tokens.css) | Two-layer token system — **raw palette** (`--sw-color-bisque`, …) + **role tokens** (`--sw-color-surface`, `--sw-color-fg`, `--sw-color-accent`, `--sw-color-line`, …). Role layer is overridden inside `@media (prefers-color-scheme: dark)`.            |
+| [`src/app.css`](src/app.css)                             | `--bb-*` mapping for `@bravobyte-org/frontend-core` (consumes role tokens, so frontend-core inherits dark-mode); `@theme` aliases for both raw (`bg-bisque`, `bg-vermilion`) and role (`bg-surface`, `text-fg`, `bg-accent`, `border-line`, …) utilities. |
+| [`src/app.html`](src/app.html)                           | Preconnect + Google Fonts (**Bebas Neue** display, **Source Sans 3** body); paired `<meta name="theme-color">` for light/dark; `color-scheme: light dark` on `<html>` so native UI tracks the scheme.                                                     |
+
+**Palette (verify hex on the canonical SchemeColor URL above):** Bisque `#FFE7BD`, Plochere's Vermilion `#E5340B`, Beer `#F28A0F`, Blue Sapphire `#0C5679`, Jelly Bean Blue `#3F8A8C`, Cetacean Blue `#0B0835`. No raw palette hex outside [`tokens.css`](src/lib/styles/tokens.css).
+
+**Typography:** display = **Bebas Neue** (poster-grade, signage-like) for `h1`/`h2`; body = **Source Sans 3** (400/600/700 + italic) for legibility in EN and IT.
+
+**Dark mode (auto, `prefers-color-scheme`).** Strategy follows Material 3 / Radix conventions: keep the palette immutable, lift surfaces in tiers (Cetacean → Cetacean+Bisque mixes), desaturate accents (~14% Cetacean blend) so they don't vibrate against deep navy, and use Bisque (not pure white) as the dark foreground. Full mapping table is in [ADR-007 → "Dark theme"](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-007-starway-design-system-70s-palette.md).
+
+### `@bravobyte-org/frontend-core` wiring
+
+The package is installed at **`^1.2.0`** as a normal dependency. [`src/app.css`](src/app.css) includes `@source '../node_modules/@bravobyte-org/frontend-core/src'` so Tailwind v4 emits utility classes used inside shared Svelte primitives, and the `--bb-*` contract maps onto the **role layer** so frontend-core primitives inherit Starway's dark-mode swap automatically (see canonical [`bravobyte/.docs/architecture/bravobyte-frontend-core-tokens.md`](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/architecture/bravobyte-frontend-core-tokens.md)).
+
+`pnpm install` (local + CI) requires **`NODE_AUTH_TOKEN`** with `read:packages` for `npm.pkg.github.com` (see [`.npmrc`](.npmrc)).
+
+The seven generic page blocks (`RichText`, `Stats`, `CardGroup`, `Team`, `Timeline`, `ImageGallery`, `Cta`) are imported from `@bravobyte-org/frontend-core` via [`BlockRenderer`](src/lib/components/blocks/BlockRenderer.svelte). Each entry in the renderer's `componentMap` carries an optional `surface` (Stats and Cta render with `surface: 'inverse'` to preserve the editorial slab cadence) and an optional `adapt` function that maps Directus item shape onto the canonical `*BlockData` types. `HeroBlock.svelte` stays local (brand-specific media + decoratives — see [extraction-strategy.md](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/architecture/extraction-strategy.md)). Layout chrome (`+layout.svelte`, `MainNav`, `HamburgerButton`, error/fallback routes) keeps consuming role utilities (`bg-surface`, `text-fg`, `bg-accent`, `border-line`, …), so dark-mode remains automatic.
+
+**Known feature deltas (tracked for `frontend-core@1.3.0`):** the shared `CardGroupBlock` does not yet support image-backed cards, and the shared `ImageGalleryBlock` does not yet render embedded video URLs. The `BlockRenderer` adapters drop those fields so existing CMS data renders without errors; both gaps are documented in [extraction-strategy.md](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/architecture/extraction-strategy.md).
 
 ---
 
@@ -61,33 +89,34 @@ Recent note: Starway CMS page routing now expects canonical leading-slash `pages
 
 ### User Stories
 
-| ID | Story | Status |
-|----|-------|--------|
-| D1 | As an **editor**, I want Hero content (headline, CTAs, images) to come from Directus so I can update messaging without deployments | ⬜ Planned |
-| D2 | As an **editor**, I want Services cards to come from Directus so I can add/remove/reorder services | ⬜ Planned |
-| D3 | As an **editor**, I want Stats to come from Directus so I can update metrics quarterly | ⬜ Planned |
-| D4 | As a **visitor**, I want the site to still work if the CMS is down, showing fallback content | ⬜ Planned |
+| ID  | Story                                                                                                                              | Status     |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| D1  | As an **editor**, I want Hero content (headline, CTAs, images) to come from Directus so I can update messaging without deployments | ⬜ Planned |
+| D2  | As an **editor**, I want Services cards to come from Directus so I can add/remove/reorder services                                 | ⬜ Planned |
+| D3  | As an **editor**, I want Stats to come from Directus so I can update metrics quarterly                                             | ⬜ Planned |
+| D4  | As a **visitor**, I want the site to still work if the CMS is down, showing fallback content                                       | ⬜ Planned |
 
 ### Acceptance Criteria
 
-| # | Criterion | Status | Notes |
-|---|-----------|--------|-------|
-| 1 | GraphQL query fetches Hero block data from Directus | ⬜ Planned | `HERO_BLOCK_QUERY` |
-| 2 | GraphQL query fetches Services block data from Directus | ⬜ Planned | `SERVICES_BLOCK_QUERY` |
-| 3 | GraphQL query fetches Stats block data from Directus | ⬜ Planned | `STATS_BLOCK_QUERY` |
-| 4 | Adapter transforms CMS Hero response → `HeroContent` type | ⬜ Planned | Handle nulls/defaults |
-| 5 | Adapter transforms CMS Services response → `Service[]` type | ⬜ Planned | Map CMS fields to component props |
-| 6 | Adapter transforms CMS Stats response → `StatData[]` type | ⬜ Planned | Parse numeric values, handle optionals |
-| 7 | Homepage server loader fetches all 3 block types | ⬜ Planned | Parallel fetches for performance |
-| 8 | Graceful fallback to mock data on CMS error/empty | ⬜ Planned | Try/catch with console warning |
-| 9 | No UI component changes | ⬜ Planned | Props stay identical |
-| 10 | Build passes with CMS integration | ⬜ Planned | No type errors |
+| #   | Criterion                                                   | Status     | Notes                                  |
+| --- | ----------------------------------------------------------- | ---------- | -------------------------------------- |
+| 1   | GraphQL query fetches Hero block data from Directus         | ⬜ Planned | `HERO_BLOCK_QUERY`                     |
+| 2   | GraphQL query fetches Services block data from Directus     | ⬜ Planned | `SERVICES_BLOCK_QUERY`                 |
+| 3   | GraphQL query fetches Stats block data from Directus        | ⬜ Planned | `STATS_BLOCK_QUERY`                    |
+| 4   | Adapter transforms CMS Hero response → `HeroContent` type   | ⬜ Planned | Handle nulls/defaults                  |
+| 5   | Adapter transforms CMS Services response → `Service[]` type | ⬜ Planned | Map CMS fields to component props      |
+| 6   | Adapter transforms CMS Stats response → `StatData[]` type   | ⬜ Planned | Parse numeric values, handle optionals |
+| 7   | Homepage server loader fetches all 3 block types            | ⬜ Planned | Parallel fetches for performance       |
+| 8   | Graceful fallback to mock data on CMS error/empty           | ⬜ Planned | Try/catch with console warning         |
+| 9   | No UI component changes                                     | ⬜ Planned | Props stay identical                   |
+| 10  | Build passes with CMS integration                           | ⬜ Planned | No type errors                         |
 
 ### Implementation Plan
 
 #### 1. GraphQL Queries (`src/lib/util/cms/queries.ts`)
 
 Add queries for each block type. Expected Directus collections:
+
 - `hero_blocks` - Single hero per page
 - `service_cards` - Collection of services
 - `stat_items` - Collection of stats
@@ -95,52 +124,58 @@ Add queries for each block type. Expected Directus collections:
 ```graphql
 # Hero Block
 query {
-  hero_blocks(filter: { page: { slug: { _eq: "/" } } }) {
-    id
-    eyebrow
-    headline
-    sub_headline
-    primary_cta_label
-    primary_cta_href
-    secondary_cta_label
-    secondary_cta_href
-    trust_stats
-    fleet_image { id, filename_disk }
-    fleet_image_alt
-    map_overlay { id, filename_disk }
-  }
+	hero_blocks(filter: { page: { slug: { _eq: "/" } } }) {
+		id
+		eyebrow
+		headline
+		sub_headline
+		primary_cta_label
+		primary_cta_href
+		secondary_cta_label
+		secondary_cta_href
+		trust_stats
+		fleet_image {
+			id
+			filename_disk
+		}
+		fleet_image_alt
+		map_overlay {
+			id
+			filename_disk
+		}
+	}
 }
 
 # Services Block
 query {
-  service_cards(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
-    id
-    title
-    summary
-    icon
-    meta
-    category
-    cta_label
-    cta_href
-    tone
-  }
+	service_cards(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
+		id
+		title
+		summary
+		icon
+		meta
+		category
+		cta_label
+		cta_href
+		tone
+	}
 }
 
 # Stats Block
 query {
-  stat_items(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
-    id
-    icon
-    icon_label
-    header
-    value
-    prefix
-    suffix
-    label
-    description
-    delta_value
-    delta_trend
-  }
+	stat_items(filter: { status: { _eq: "published" } }, sort: ["sort"]) {
+		id
+		icon
+		icon_label
+		header
+		value
+		prefix
+		suffix
+		label
+		description
+		delta_value
+		delta_trend
+	}
 }
 ```
 
@@ -148,13 +183,14 @@ query {
 
 Transform CMS responses to match component prop types:
 
-| CMS Collection | Adapter Function | Output Type |
-|----------------|------------------|-------------|
-| `hero_blocks` | `adaptHero(cms) → HeroContent` | `HeroContent` |
-| `service_cards` | `adaptServices(cms) → Service[]` | `Service[]` |
-| `stat_items` | `adaptStats(cms) → StatData[]` | `StatData[]` |
+| CMS Collection  | Adapter Function                 | Output Type   |
+| --------------- | -------------------------------- | ------------- |
+| `hero_blocks`   | `adaptHero(cms) → HeroContent`   | `HeroContent` |
+| `service_cards` | `adaptServices(cms) → Service[]` | `Service[]`   |
+| `stat_items`    | `adaptStats(cms) → StatData[]`   | `StatData[]`  |
 
 Adapters handle:
+
 - Field name mapping (snake_case → camelCase)
 - Nested object construction (CTAs, media, delta)
 - Image URL building from Directus assets
@@ -165,17 +201,17 @@ Adapters handle:
 
 ```ts
 export async function load({ fetch }) {
-  const [heroData, servicesData, statsData] = await Promise.allSettled([
-    fetchHeroBlock(fetch),
-    fetchServicesBlock(fetch),
-    fetchStatsBlock(fetch)
-  ]);
+	const [heroData, servicesData, statsData] = await Promise.allSettled([
+		fetchHeroBlock(fetch),
+		fetchServicesBlock(fetch),
+		fetchStatsBlock(fetch)
+	]);
 
-  return {
-    hero: heroData.status === 'fulfilled' ? heroData.value : heroMock,
-    services: servicesData.status === 'fulfilled' ? servicesData.value : servicesMock,
-    stats: statsData.status === 'fulfilled' ? statsData.value : stats
-  };
+	return {
+		hero: heroData.status === 'fulfilled' ? heroData.value : heroMock,
+		services: servicesData.status === 'fulfilled' ? servicesData.value : servicesMock,
+		stats: statsData.status === 'fulfilled' ? statsData.value : stats
+	};
 }
 ```
 
@@ -183,7 +219,7 @@ export async function load({ fetch }) {
 
 ```svelte
 <script>
-  let { data } = $props();
+	let { data } = $props();
 </script>
 
 <Hero content={data.hero} />
@@ -193,61 +229,61 @@ export async function load({ fetch }) {
 
 ### Files to Create/Modify
 
-| File | Action | Description |
-|------|--------|-------------|
-| `src/lib/util/cms/queries.ts` | Modify | Add HERO, SERVICES, STATS queries |
-| `src/lib/util/cms/adapters.ts` | Create | CMS → component type transformers |
-| `src/routes/(app)/+page.server.ts` | Modify | Fetch CMS data, fallback to mocks |
-| `src/routes/(app)/+page.svelte` | Modify | Pass CMS data to components via props |
-| `src/lib/components/Hero.svelte` | Modify | Accept `content` prop (optional, keep hardcoded as fallback) |
+| File                               | Action | Description                                                  |
+| ---------------------------------- | ------ | ------------------------------------------------------------ |
+| `src/lib/util/cms/queries.ts`      | Modify | Add HERO, SERVICES, STATS queries                            |
+| `src/lib/util/cms/adapters.ts`     | Create | CMS → component type transformers                            |
+| `src/routes/(app)/+page.server.ts` | Modify | Fetch CMS data, fallback to mocks                            |
+| `src/routes/(app)/+page.svelte`    | Modify | Pass CMS data to components via props                        |
+| `src/lib/components/Hero.svelte`   | Modify | Accept `content` prop (optional, keep hardcoded as fallback) |
 
 ### Data Shape Mapping
 
 #### Hero Block
 
-| CMS Field | Component Prop | Notes |
-|-----------|----------------|-------|
-| `eyebrow` | `content.eyebrow` | |
-| `headline` | `content.headline` | |
-| `sub_headline` | `content.subHeadline` | camelCase |
-| `primary_cta_label` | `content.primaryCta.label` | Nested |
-| `primary_cta_href` | `content.primaryCta.href` | |
-| `secondary_cta_label` | `content.secondaryCta.label` | |
-| `secondary_cta_href` | `content.secondaryCta.href` | |
-| `trust_stats` | `content.trustStats` | JSON array |
-| `fleet_image` | `content.media.fleetImage` | Build URL from asset ID |
-| `fleet_image_alt` | `content.media.fleetAlt` | |
-| `map_overlay` | `content.media.mapOverlay` | Build URL from asset ID |
+| CMS Field             | Component Prop               | Notes                   |
+| --------------------- | ---------------------------- | ----------------------- |
+| `eyebrow`             | `content.eyebrow`            |                         |
+| `headline`            | `content.headline`           |                         |
+| `sub_headline`        | `content.subHeadline`        | camelCase               |
+| `primary_cta_label`   | `content.primaryCta.label`   | Nested                  |
+| `primary_cta_href`    | `content.primaryCta.href`    |                         |
+| `secondary_cta_label` | `content.secondaryCta.label` |                         |
+| `secondary_cta_href`  | `content.secondaryCta.href`  |                         |
+| `trust_stats`         | `content.trustStats`         | JSON array              |
+| `fleet_image`         | `content.media.fleetImage`   | Build URL from asset ID |
+| `fleet_image_alt`     | `content.media.fleetAlt`     |                         |
+| `map_overlay`         | `content.media.mapOverlay`   | Build URL from asset ID |
 
 #### Services Block
 
-| CMS Field | Component Prop | Notes |
-|-----------|----------------|-------|
-| `id` | `id` | |
-| `title` | `title` | |
-| `summary` | `summary` | |
-| `icon` | `icon` | Emoji string |
-| `meta` | `meta` | |
-| `category` | `category` | |
-| `cta_label` | `cta.label` | Nested |
-| `cta_href` | `cta.href` | |
-| `tone` | `tone` | 'sunset' | 'seafoam' | 'violet' |
+| CMS Field   | Component Prop | Notes        |
+| ----------- | -------------- | ------------ | --------- | -------- |
+| `id`        | `id`           |              |
+| `title`     | `title`        |              |
+| `summary`   | `summary`      |              |
+| `icon`      | `icon`         | Emoji string |
+| `meta`      | `meta`         |              |
+| `category`  | `category`     |              |
+| `cta_label` | `cta.label`    | Nested       |
+| `cta_href`  | `cta.href`     |              |
+| `tone`      | `tone`         | 'sunset'     | 'seafoam' | 'violet' |
 
 #### Stats Block
 
-| CMS Field | Component Prop | Notes |
-|-----------|----------------|-------|
-| `id` | `id` | |
-| `icon` | `icon` | Emoji string |
-| `icon_label` | `iconLabel` | camelCase |
-| `header` | `header` | Optional |
-| `value` | `value` | Parse to number if numeric |
-| `prefix` | `prefix` | Optional |
-| `suffix` | `suffix` | Optional |
-| `label` | `label` | |
-| `description` | `description` | |
-| `delta_value` | `delta.value` | Nested, optional |
-| `delta_trend` | `delta.trend` | 'up' | 'down' | 'neutral' |
+| CMS Field     | Component Prop | Notes                      |
+| ------------- | -------------- | -------------------------- | ------ | --------- |
+| `id`          | `id`           |                            |
+| `icon`        | `icon`         | Emoji string               |
+| `icon_label`  | `iconLabel`    | camelCase                  |
+| `header`      | `header`       | Optional                   |
+| `value`       | `value`        | Parse to number if numeric |
+| `prefix`      | `prefix`       | Optional                   |
+| `suffix`      | `suffix`       | Optional                   |
+| `label`       | `label`        |                            |
+| `description` | `description`  |                            |
+| `delta_value` | `delta.value`  | Nested, optional           |
+| `delta_trend` | `delta.trend`  | 'up'                       | 'down' | 'neutral' |
 
 ---
 
@@ -264,29 +300,29 @@ Create a Hero component that serves as the primary landing section for visitors.
 
 ### User Stories
 
-| ID | Story | Status |
-|----|-------|--------|
-| H1 | As a **visitor**, I want to immediately understand what Starway Trasporti offers so that I can decide if their services meet my needs | ✅ Done |
-| H2 | As a **visitor**, I want prominent CTAs so that I can quickly request a quote or learn more | ✅ Done |
-| H3 | As a **visitor**, I want to see trust indicators so that I feel confident in the company's reliability | ✅ Done |
-| H4 | As a **visitor on mobile**, I want the hero to be readable and fast-loading so that I can browse on any device | ✅ Done |
-| H5 | As an **editor**, I want to customize the hero content from the CMS so that I can update messaging without code changes | ⬜ Blocked (CMS Integration) |
+| ID  | Story                                                                                                                                 | Status                       |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| H1  | As a **visitor**, I want to immediately understand what Starway Trasporti offers so that I can decide if their services meet my needs | ✅ Done                      |
+| H2  | As a **visitor**, I want prominent CTAs so that I can quickly request a quote or learn more                                           | ✅ Done                      |
+| H3  | As a **visitor**, I want to see trust indicators so that I feel confident in the company's reliability                                | ✅ Done                      |
+| H4  | As a **visitor on mobile**, I want the hero to be readable and fast-loading so that I can browse on any device                        | ✅ Done                      |
+| H5  | As an **editor**, I want to customize the hero content from the CMS so that I can update messaging without code changes               | ⬜ Blocked (CMS Integration) |
 
 ### Acceptance Criteria
 
-| # | Criterion | Status | Notes |
-|---|-----------|--------|-------|
-| 1 | **Headline** displays benefit-first messaging | ✅ Done | "Global goods transport, from Italy to the world." |
-| 2 | **Sub-headline** reinforces value proposition | ✅ Done | "Reliable. Transparent. Delivered on time." |
-| 3 | **Visual** shows full-width fleet image with map overlay | ✅ Done | Using Unsplash placeholders |
-| 4 | **Primary CTA** "Get a Quote" is prominent | ✅ Done | Sky blue button |
-| 5 | **Secondary CTA** "View Our Fleet" is available | ✅ Done | Ghost button style |
-| 6 | **Trust stats row** displays company metrics | ✅ Done | 3 stats with icons |
-| 7 | **Responsive** layout works on all breakpoints | ✅ Done | Mobile-first with lg: grid |
-| 8 | **Fast load** with compressed/webp images | ✅ Done | Using `?fm=webp` params |
-| 9 | **Accessibility** - proper alt text, high contrast | ✅ Done | Alt text present, WCAG contrast |
-| 10 | **Build passes** - no linter/compile errors | ✅ Done | |
-| 11 | **CMS Integration** - content editable via Directus | ⬜ Blocked | See CMS Integration feature |
+| #   | Criterion                                                | Status     | Notes                                              |
+| --- | -------------------------------------------------------- | ---------- | -------------------------------------------------- |
+| 1   | **Headline** displays benefit-first messaging            | ✅ Done    | "Global goods transport, from Italy to the world." |
+| 2   | **Sub-headline** reinforces value proposition            | ✅ Done    | "Reliable. Transparent. Delivered on time."        |
+| 3   | **Visual** shows full-width fleet image with map overlay | ✅ Done    | Using Unsplash placeholders                        |
+| 4   | **Primary CTA** "Get a Quote" is prominent               | ✅ Done    | Sky blue button                                    |
+| 5   | **Secondary CTA** "View Our Fleet" is available          | ✅ Done    | Ghost button style                                 |
+| 6   | **Trust stats row** displays company metrics             | ✅ Done    | 3 stats with icons                                 |
+| 7   | **Responsive** layout works on all breakpoints           | ✅ Done    | Mobile-first with lg: grid                         |
+| 8   | **Fast load** with compressed/webp images                | ✅ Done    | Using `?fm=webp` params                            |
+| 9   | **Accessibility** - proper alt text, high contrast       | ✅ Done    | Alt text present, WCAG contrast                    |
+| 10  | **Build passes** - no linter/compile errors              | ✅ Done    |                                                    |
+| 11  | **CMS Integration** - content editable via Directus      | ⬜ Blocked | See CMS Integration feature                        |
 
 ---
 
@@ -303,13 +339,13 @@ Provide reusable `Card` and `CardGroup` components to showcase transportation/lo
 
 ### Acceptance Criteria
 
-| # | Criterion | Status |
-|---|-----------|--------|
-| 1 | Card exposes props for icon, title, summary, meta, CTA | ✅ Done |
-| 2 | CardGroup renders responsive grid | ✅ Done |
-| 3 | Accessibility: semantic headings, focus states | ✅ Done |
-| 4 | Visual consistency with Hero | ✅ Done |
-| 5 | Mock data fixtures provided | ✅ Done |
+| #   | Criterion                                              | Status  |
+| --- | ------------------------------------------------------ | ------- |
+| 1   | Card exposes props for icon, title, summary, meta, CTA | ✅ Done |
+| 2   | CardGroup renders responsive grid                      | ✅ Done |
+| 3   | Accessibility: semantic headings, focus states         | ✅ Done |
+| 4   | Visual consistency with Hero                           | ✅ Done |
+| 5   | Mock data fixtures provided                            | ✅ Done |
 
 ---
 
@@ -326,15 +362,15 @@ Reusable `Stat` and `StatGroup` components for displaying key metrics with anima
 
 ### Acceptance Criteria
 
-| # | Criterion | Status |
-|---|-----------|--------|
-| 1 | Stat accepts icon, value, label, description, delta | ✅ Done |
-| 2 | Three-row layout with animated value | ✅ Done |
-| 3 | StatGroup responsive grid | ✅ Done |
-| 4 | Visual consistency with Hero/Card | ✅ Done |
-| 5 | Accessibility + reduced motion support | ✅ Done |
-| 6 | Mock data fixtures provided | ✅ Done |
-| 7 | Unit tests | ✅ Done |
+| #   | Criterion                                           | Status  |
+| --- | --------------------------------------------------- | ------- |
+| 1   | Stat accepts icon, value, label, description, delta | ✅ Done |
+| 2   | Three-row layout with animated value                | ✅ Done |
+| 3   | StatGroup responsive grid                           | ✅ Done |
+| 4   | Visual consistency with Hero/Card                   | ✅ Done |
+| 5   | Accessibility + reduced motion support              | ✅ Done |
+| 6   | Mock data fixtures provided                         | ✅ Done |
+| 7   | Unit tests                                          | ✅ Done |
 
 ---
 
@@ -344,13 +380,13 @@ Pieces built client-local in this repo that should be promoted to
 `bravobyte-frontend-core` once a second client proves the shape (per
 [`bravobyte-ai/rules/reusability.md`](../bravobyte-ai/rules/reusability.md)):
 
-| Artifact | Location | Extract when |
-|----------|----------|--------------|
-| `resolveAssetUrl(file)` helper | `src/lib/util/cms/assets.ts` | A second client consumes Directus Files via `/assets/<uuid>` |
-| `@custom-media --sm..--2xl` breakpoint mixin | `src/app.css` | Any other client app needs a shared breakpoint scale |
-| `HamburgerButton.svelte` primitive | `src/lib/components/navigation/HamburgerButton.svelte` | A second client ships a responsive nav |
-| Responsive `MainNav` pattern (desktop + off-canvas mobile panel + accordion) | `src/lib/components/navigation/MainNav.svelte` | A second client adopts the same IA shape |
-| Image-backed `CardGroupBlock` variant (bg image + gradient overlay, white text fallback) | `src/lib/components/blocks/CardGroupBlock.svelte` | A second client's card-group block surfaces file references |
+| Artifact                                                                                 | Location                                               | Extract when                                                 |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+| `resolveAssetUrl(file)` helper                                                           | `src/lib/util/cms/assets.ts`                           | A second client consumes Directus Files via `/assets/<uuid>` |
+| `@custom-media --sm..--2xl` breakpoint mixin                                             | `src/app.css`                                          | Any other client app needs a shared breakpoint scale         |
+| `HamburgerButton.svelte` primitive                                                       | `src/lib/components/navigation/HamburgerButton.svelte` | A second client ships a responsive nav                       |
+| Responsive `MainNav` pattern (desktop + off-canvas mobile panel + accordion)             | `src/lib/components/navigation/MainNav.svelte`         | A second client adopts the same IA shape                     |
+| Image-backed `CardGroupBlock` variant (bg image + gradient overlay, white text fallback) | `src/lib/components/blocks/CardGroupBlock.svelte`      | A second client's card-group block surfaces file references  |
 
 ---
 
@@ -376,10 +412,10 @@ CMS Integration ──depends on──► Directus data models (now available �
 
 ## Status Legend
 
-| Symbol | Meaning |
-|--------|---------|
-| ✅ | Done |
-| 🟡 | In Progress |
-| ⬜ | Not Started / Planned |
-| 🔴 | Blocked |
-| ❌ | Cancelled |
+| Symbol | Meaning               |
+| ------ | --------------------- |
+| ✅     | Done                  |
+| 🟡     | In Progress           |
+| ⬜     | Not Started / Planned |
+| 🔴     | Blocked               |
+| ❌     | Cancelled             |

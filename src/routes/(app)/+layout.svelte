@@ -48,11 +48,11 @@
 	@reference "../../app.css";
 
 	.app-shell {
-		@apply flex min-h-screen flex-col bg-white dark:bg-gray-950;
+		@apply flex min-h-screen flex-col bg-surface text-fg;
 	}
 
 	.app-header {
-		@apply sticky top-0 z-50 bg-white shadow-sm dark:bg-gray-900;
+		@apply sticky top-0 z-50 border-b border-line-strong bg-surface-inverse shadow-soft;
 	}
 
 	.app-header__inner {
@@ -64,19 +64,19 @@
 	}
 
 	.app-header__brand {
-		@apply flex items-center gap-2;
+		@apply flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent;
 	}
 
 	.app-header__title {
-		@apply text-xl font-bold text-gray-900 dark:text-white;
+		@apply font-display text-2xl tracking-[0.06em] text-fg-inverse uppercase;
 	}
 
 	.app-main {
-		@apply flex-1;
+		@apply flex-1 bg-surface;
 	}
 
 	.app-footer {
-		@apply bg-gray-900 py-12 text-gray-400;
+		@apply bg-surface-inverse py-12 text-fg-inverse-muted;
 	}
 
 	.app-footer__inner {
