@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import './lib/styles/tokens.css';
+@import './lib/styles/fonts.css';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
@@ -13,28 +15,119 @@
  * ---------------------------------------------------------------
  * `--bb-*` custom properties are the public API consumed by primitives
  * shipped from `@bravobyte-org/frontend-core`. Map them to Starway's
- * brand tokens here so primitives inherit the right look without
- * importing brand-specific values. See:
+ * **role** tokens so primitives inherit dark-mode automatically.
+ *
+ * Canonical mapping:
  * `bravobyte/.docs/architecture/bravobyte-frontend-core-tokens.md`
  */
 :root {
-	--bb-color-primary: oklch(55.% 0.2 252deg); /* tailwind blue-600 */
-	--bb-color-on-primary: #fff;
-	--bb-color-fg: oklch(21% 0.02 256deg); /* tailwind gray-900 */
-	--bb-color-fg-soft: oklch(32% 0.02 256deg); /* tailwind gray-700 */
-	--bb-color-fg-muted: oklch(45% 0.01 256deg); /* tailwind gray-500 */
-	--bb-color-surface: #fff;
-	--bb-color-border: oklch(92% 0 0deg); /* tailwind gray-200 */
-	--bb-color-focus: oklch(55.% 0.2 252deg);
-	--bb-radius-md: 8px;
-	--bb-radius-lg: 12px;
-	--bb-text-eyebrow: 0.75rem;
-	--bb-text-h2: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
-	--bb-text-lede: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
-	--bb-tracking-eyebrow: 0.18em;
+	--bb-color-primary: var(--sw-color-accent);
+	--bb-color-on-primary: var(--sw-color-accent-fg);
+	--bb-color-fg: var(--sw-color-fg);
+	--bb-color-fg-soft: var(--sw-color-fg-soft);
+	--bb-color-fg-muted: var(--sw-color-fg-muted);
+	--bb-color-surface: var(--sw-color-surface);
+	--bb-color-surface-raised: var(--sw-color-surface-raised);
+	--bb-color-surface-inverse: var(--sw-color-surface-inverse);
+	--bb-color-fg-inverse: var(--sw-color-fg-inverse);
+	--bb-color-fg-inverse-muted: var(--sw-color-fg-inverse-muted);
+	--bb-color-border: var(--sw-color-line);
+	--bb-color-focus: var(--sw-color-accent);
+
+	--bb-radius-md: var(--sw-radius-md);
+	--bb-radius-lg: var(--sw-radius-lg);
+
+	--bb-text-eyebrow: var(--sw-text-eyebrow);
+	--bb-text-h2: var(--sw-text-h2);
+	--bb-text-lede: var(--sw-text-lede);
+	--bb-tracking-eyebrow: var(--sw-tracking-eyebrow);
+
 	--bb-section-padding-x: 1.5rem;
 	--bb-section-padding-y: clamp(3rem, 8vw, 5rem);
-	--bb-shadow-soft: 0 12px 32px -16px rgb(15 23 42 / 18%);
-	--bb-shadow-card: 0 18px 40px -22px rgb(15 23 42 / 22%);
-	--bb-ease-soft: cubic-bezier(0.32, 0.08, 0.24, 1);
+
+	--bb-shadow-soft: var(--sw-shadow-soft);
+	--bb-shadow-card: var(--sw-shadow-card);
+
+	--bb-ease-soft: var(--sw-ease-soft);
+}
+
+/* Map design tokens into Tailwind v4 theme — role + raw palette utilities.
+ * `@theme inline` is required here because all values are references to
+ * existing CSS custom properties (--sw-*) defined in tokens.css. Using plain
+ * `@theme` would cause Tailwind to try to create redundant --color-* CSS
+ * variables AND fail to register these utilities for @apply via @reference in
+ * component <style> blocks. `@theme inline` tells Tailwind to inline the
+ * var() reference directly into each generated utility, which resolves both
+ * issues while preserving dark-mode swaps via the --sw-* overrides in tokens.css. */
+@theme inline {
+	/* Raw palette (brand-locked surfaces) */
+	--color-bisque: var(--sw-color-bisque);
+	--color-cetacean: var(--sw-color-cetacean);
+	--color-sapphire: var(--sw-color-sapphire);
+	--color-jelly: var(--sw-color-jelly);
+	--color-vermilion: var(--sw-color-vermilion);
+	--color-beer: var(--sw-color-beer);
+
+	/* Role layer (swaps in `tokens.css` dark query) */
+	--color-surface: var(--sw-color-surface);
+	--color-surface-raised: var(--sw-color-surface-raised);
+	--color-surface-inverse: var(--sw-color-surface-inverse);
+	--color-fg: var(--sw-color-fg);
+	--color-fg-muted: var(--sw-color-fg-muted);
+	--color-fg-soft: var(--sw-color-fg-soft);
+	--color-fg-inverse: var(--sw-color-fg-inverse);
+	--color-fg-inverse-muted: var(--sw-color-fg-inverse-muted);
+	--color-accent: var(--sw-color-accent);
+	--color-accent-hover: var(--sw-color-accent-hover);
+	--color-accent-fg: var(--sw-color-accent-fg);
+	--color-info: var(--sw-color-info);
+	--color-support: var(--sw-color-support);
+	--color-line: var(--sw-color-line);
+	--color-line-strong: var(--sw-color-line-strong);
+	--color-overlay-soft: var(--sw-color-overlay-soft);
+
+	--font-display: var(--sw-font-display);
+	--font-sans: var(--sw-font-sans);
+
+	--text-eyebrow: var(--sw-text-eyebrow);
+	--text-body: var(--sw-text-body);
+	--text-lede: var(--sw-text-lede);
+	--text-h3: var(--sw-text-h3);
+	--text-h2: var(--sw-text-h2);
+	--text-h1: var(--sw-text-h1);
+
+	--leading-tight: var(--sw-leading-tight);
+	--leading-snug: var(--sw-leading-snug);
+	--leading-body: var(--sw-leading-body);
+
+	--radius-md: var(--sw-radius-md);
+	--radius-lg: var(--sw-radius-lg);
+
+	--shadow-soft: var(--sw-shadow-soft);
+	--shadow-card: var(--sw-shadow-card);
+
+	--ease-soft: var(--sw-ease-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: var(--sw-font-sans);
+	font-size: var(--sw-text-body);
+	line-height: var(--sw-leading-body);
+	color: var(--sw-color-fg);
+	background-color: var(--sw-color-surface);
 }
