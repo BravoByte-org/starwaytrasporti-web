@@ -9,14 +9,17 @@ importers:
   .:
     dependencies:
       '@bravobyte-org/frontend-core':
-        specifier: ^1.2.0
-        version: 1.2.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))(tailwindcss@4.2.4)
+        specifier: ^1.3.0
+        version: 1.3.0(@directus/visual-editing@2.0.1)(svelte@5.55.5(@typescript-eslint/types@8.59.1))(tailwindcss@4.2.4)
       '@directus/sdk':
         specifier: ^20.2.0
         version: 20.3.0
       '@directus/types':
-        specifier: ^13.4.0
-        version: 13.5.0(knex@3.1.0)
+        specifier: 13.4.0
+        version: 13.4.0(knex@3.1.0)
+      '@directus/visual-editing':
+        specifier: ^2.0.0
+        version: 2.0.1
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.6.0
@@ -287,11 +290,15 @@ packages:
   '@blazediff/core@1.9.1':
     resolution: {integrity: sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA==}
 
-  '@bravobyte-org/frontend-core@1.2.0':
-    resolution: {integrity: sha512-ZdRA10jxBUgX1KQHFkCdGsblM2UDW6/5dXrgwf7kWade7ma7kTUpY/RhlUTpfKHuiZ1AR6/sLElJB/W3GNyuSA==, tarball: https://npm.pkg.github.com/download/@bravobyte-org/frontend-core/1.2.0/f5781d7c6f0adbebd50ac62d51dc6d02c846a673}
+  '@bravobyte-org/frontend-core@1.3.0':
+    resolution: {integrity: sha512-BAXk4rohXoyecYRTEncJrTf4oSVJGBqx/kJEfkqzR3Co+iyFoI2D2MdhWVL+Nk7RcuUd4hlXcjmwVw8OawnJkA==, tarball: https://npm.pkg.github.com/download/@bravobyte-org/frontend-core/1.3.0/72d3208463035606a0cd602d5653fa51de7a48e2}
     peerDependencies:
+      '@directus/visual-editing': ^2.0.0
       svelte: ^5.0.0
       tailwindcss: ^4.0.0
+    peerDependenciesMeta:
+      '@directus/visual-editing':
+        optional: true
 
   '@cacheable/memory@2.0.8':
     resolution: {integrity: sha512-FvEb29x5wVwu/Kf93IWwsOOEuhHh6dYCJF3vcKLzXc0KXIW181AOzv6ceT4ZpBHDvAfG60eqb+ekmrnLHIy+jw==}
@@ -417,8 +424,8 @@ packages:
     resolution: {integrity: sha512-auy59B0A7Ri+4JDy0JcdFHnsHvOkl3ixWMWYciXAbm4oYIE9S4be8xEpIwA5qhlPTOprJ6JHPWo9rEvcrLwNtA==}
     engines: {node: '>=22'}
 
-  '@directus/types@13.5.0':
-    resolution: {integrity: sha512-LDr9n0TXadvuoHCS3kRJ3mZCJhuzQhAcNREI0rdnmHicaO8o5n2Yer8sOaXslDsZ5jgwBrIrimAHTYD5wZxyDQ==}
+  '@directus/types@13.4.0':
+    resolution: {integrity: sha512-/OXBSftChg/g238mB7JvJTv1+SH+TExYHm1+KiKejK2DjK3E1NZWgFpDtVtCDU8dgXI/BLZbdApyuBI9QhpeQQ==}
     peerDependencies:
       deep-diff: 1.0.2
       express: 4.21.2
@@ -454,6 +461,9 @@ packages:
         optional: true
       ws:
         optional: true
+
+  '@directus/visual-editing@2.0.1':
+    resolution: {integrity: sha512-pCVcG3uhqlTInUxw3MrEjgwD6GVPIPGf2KeZDb0DuPBnJG5fGcB+FSDalooAwv0vCz4gT8oUShseR7iSkxLPgw==}
 
   '@dual-bundle/import-meta-resolve@4.2.1':
     resolution: {integrity: sha512-id+7YRUgoUX6CgV0DtuhirQWodeeA7Lf4i2x71JS/vtA5pRb/hIGWlw+G6MeXvsM+MXrz0VAydTGElX1rAfgPg==}
@@ -1297,6 +1307,9 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
+  '@reach/observe-rect@1.2.0':
+    resolution: {integrity: sha512-Ba7HmkFgfQxZqqaeIWWkNK0rEhpxVQHIoVyW1YDSkGsGIXzcaW4deC8B0pZrNSSyLTdIk7y+5olKt5+g0GmFIQ==}
+
   '@release-it/conventional-changelog@10.0.6':
     resolution: {integrity: sha512-aUb0IkcsBTMcOH5PPQ9Jv9lEOOVu2+rSgkE1ny+dzsTziQm2BhDRAtaFK/dw/HflthuXMWrqhhyfJhAV1AOEPQ==}
     engines: {node: ^20.12.0 || >=22.0.0}
@@ -1692,6 +1705,7 @@ packages:
   '@smithy/util-retry@4.3.6':
     resolution: {integrity: sha512-p6/FO1n2KxMeQyna067i0uJ6TSbb165ZhnRtCpWh4Foxqbfc6oW+XITaL8QkFJj3KFnDe2URt4gOhgU06EP9ew==}
     engines: {node: '>=18.0.0'}
+    deprecated: '@smithy/util-retry v4.3.6 contains a bug in Adaptive Retry, see https://github.com/smithy-lang/smithy-typescript/issues/1993. Upgrade to 4.3.7+'
 
   '@smithy/util-stream@4.5.25':
     resolution: {integrity: sha512-/PFpG4k8Ze8Ei+mMKj3oiPICYekthuzePZMgZbCqMiXIHHf4n2aZ4Ps0aSRShycFTGuj/J6XldmC0x0DwednIA==}
@@ -1893,9 +1907,6 @@ packages:
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
-  '@types/archiver@7.0.0':
-    resolution: {integrity: sha512-/3vwGwx9n+mCQdYZ2IKGGHEFL30I96UgBlk8EtRDDFQ9uxM1l4O5Ci6r00EMAkiDaTqD9DQ6nVrWRICnBPtzzg==}
-
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
@@ -1962,9 +1973,6 @@ packages:
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
-
-  '@types/readdir-glob@1.1.5':
-    resolution: {integrity: sha512-raiuEPUYqXu+nvtY2Pe8s8FEmZ3x5yAH4VkLdihcPdalvsHltomrRC9BzuStrJ9yk06470hS0Crw0f1pXqD+Hg==}
 
   '@types/send@1.2.1':
     resolution: {integrity: sha512-arsCikDvlU99zl1g69TcAB3mzZPpxgw0UQnaHeC1Nwb015xp8bknZv5rIfri9xTOcMuaVgvabfIRA7PSZVuZIQ==}
@@ -5393,13 +5401,15 @@ snapshots:
 
   '@blazediff/core@1.9.1': {}
 
-  '@bravobyte-org/frontend-core@1.2.0(svelte@5.55.5(@typescript-eslint/types@8.59.1))(tailwindcss@4.2.4)':
+  '@bravobyte-org/frontend-core@1.3.0(@directus/visual-editing@2.0.1)(svelte@5.55.5(@typescript-eslint/types@8.59.1))(tailwindcss@4.2.4)':
     dependencies:
       clsx: 2.1.1
       svelte: 5.55.5(@typescript-eslint/types@8.59.1)
       tailwind-merge: 3.5.0
       tailwind-variants: 1.0.0(tailwindcss@4.2.4)
       tailwindcss: 4.2.4
+    optionalDependencies:
+      '@directus/visual-editing': 2.0.1
 
   '@cacheable/memory@2.0.8':
     dependencies:
@@ -5620,12 +5630,11 @@ snapshots:
 
   '@directus/sdk@20.3.0': {}
 
-  '@directus/types@13.5.0(knex@3.1.0)':
+  '@directus/types@13.4.0(knex@3.1.0)':
     dependencies:
       '@directus/constants': 14.0.0
       '@directus/schema': 13.0.4
       '@sinclair/typebox': 0.34.41
-      '@types/archiver': 7.0.0
       '@types/express': 4.17.21
       '@types/geojson': 7946.0.16
       '@types/nodemailer': 7.0.3
@@ -5642,6 +5651,10 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
+
+  '@directus/visual-editing@2.0.1':
+    dependencies:
+      '@reach/observe-rect': 1.2.0
 
   '@dual-bundle/import-meta-resolve@4.2.1': {}
 
@@ -6269,6 +6282,8 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@reach/observe-rect@1.2.0': {}
+
   '@release-it/conventional-changelog@10.0.6(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(release-it@19.2.4(@types/node@24.12.2))':
     dependencies:
       '@conventional-changelog/git-client': 2.7.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)
@@ -6857,10 +6872,6 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/archiver@7.0.0':
-    dependencies:
-      '@types/readdir-glob': 1.1.5
-
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
@@ -6935,10 +6946,6 @@ snapshots:
   '@types/qs@6.15.0': {}
 
   '@types/range-parser@1.2.7': {}
-
-  '@types/readdir-glob@1.1.5':
-    dependencies:
-      '@types/node': 24.12.2
 
   '@types/send@1.2.1':
     dependencies:
