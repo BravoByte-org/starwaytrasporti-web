@@ -26,6 +26,7 @@ type Schema = {
 
 const URL = env.DIRECTUS_URL || env.PRIVATE_DIRECTUS_URL;
 const TOKEN = env.DIRECTUS_TOKEN || env.PRIVATE_DIRECTUS_TOKEN;
+const PREVIEW_TOKEN = env.DIRECTUS_PREVIEW_TOKEN;
 
 if (!URL) {
 	throw new Error('Please include a URL for Directus in the environment variables');
@@ -38,6 +39,19 @@ const createDirectusClient = (fetch?: typeof globalThis.fetch, token?: string) =
 };
 
 const getDirectusClient = (fetch?: typeof globalThis.fetch) => createDirectusClient(fetch, TOKEN);
+
+/*
+ * Preview client uses a separate static token bound to a Directus role that
+ * can read drafts. We fail loudly on missing token rather than falling back
+ * to the unauthenticated path (which would silently surface published-only
+ * content) — a misconfigured preview deploy must be obvious.
+ */
+const getPreviewDirectusClient = (fetch?: typeof globalThis.fetch) => {
+	if (!PREVIEW_TOKEN) {
+		throw new Error('DIRECTUS_PREVIEW_TOKEN is not set');
+	}
+	return createDirectusClient(fetch, PREVIEW_TOKEN);
+};
 
 type DirectusRequest = Parameters<ReturnType<typeof createDirectusClient>['request']>[0];
 
@@ -60,4 +74,27 @@ async function requestDirectus<T>(
 	}
 }
 
-export { getDirectusClient, requestDirectus, readItems, readSingleton };
+/*
+ * Preview-aware request helper. Routes through the preview client when
+ * `preview` is true; behaves identically to `requestDirectus` otherwise.
+ * Preview requests intentionally do not retry-without-auth — a rejected
+ * preview token must surface as an error rather than fall back to
+ * published-only data.
+ */
+async function requestDirectusPreview<T>(
+	request: DirectusRequest,
+	fetch?: typeof globalThis.fetch,
+	options: { preview?: boolean } = {}
+): Promise<T> {
+	if (!options.preview) return requestDirectus<T>(request, fetch);
+	return (await getPreviewDirectusClient(fetch).request(request)) as T;
+}
+
+export {
+	getDirectusClient,
+	getPreviewDirectusClient,
+	requestDirectus,
+	requestDirectusPreview,
+	readItems,
+	readSingleton
+};

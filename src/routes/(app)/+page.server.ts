@@ -13,9 +13,10 @@ function describeLoadError(error: unknown): string {
 	}
 }
 
-export async function load({ fetch }: LoadEvent) {
+export async function load({ fetch, url }: LoadEvent) {
+	const preview = url.searchParams.has('preview');
 	try {
-		const pages = await fetchHomepage(fetch);
+		const pages = await fetchHomepage(fetch, { preview });
 		return { pages };
 	} catch (err) {
 		const message = describeLoadError(err);

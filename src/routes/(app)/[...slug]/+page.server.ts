@@ -19,11 +19,12 @@ function pathParamToCmsSlug(pathParam: string | undefined): string {
 	return p.startsWith('/') ? p : `/${p}`;
 }
 
-export async function load({ fetch, params }: LoadEvent) {
+export async function load({ fetch, params, url }: LoadEvent) {
 	const slug = pathParamToCmsSlug(params.slug);
+	const preview = url.searchParams.has('preview');
 
 	try {
-		const pages = await fetchPage(fetch, slug);
+		const pages = await fetchPage(fetch, slug, { preview });
 
 		if (!pages || pages.length === 0) {
 			throw error(404, 'Page not found: ' + slug);

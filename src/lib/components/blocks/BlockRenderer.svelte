@@ -23,6 +23,7 @@
 		CardGroupBlock,
 		CtaBlock,
 		ImageGalleryBlock,
+		PreviewBlockWrapper,
 		RichTextBlock,
 		StatsBlock,
 		TeamBlock,
@@ -52,7 +53,12 @@
 		adapt?: (item: Record<string, unknown>) => Record<string, unknown>;
 	};
 
-	let { blocks = [] }: { blocks: Block[] } = $props();
+	/*
+	 * `preview` flips on `data-directus` attributes so the Directus visual
+	 * editor can hover/click each block. In production it's always false so
+	 * the wrapper degrades to a transparent passthrough — no extra DOM.
+	 */
+	let { blocks = [], preview = false }: { blocks: Block[]; preview?: boolean } = $props();
 
 	const componentMap: Record<string, BlockEntry> = {
 		block_hero: { component: HeroBlock },
@@ -125,6 +131,13 @@
 	{@const entry = componentMap[block.collection]}
 	{#if entry}
 		{@const data = entry.adapt ? entry.adapt(block.item) : block.item}
-		<entry.component {data} surface={entry.surface} />
+		{@const itemId = (block.item as { id?: string | number }).id}
+		{#if preview && itemId !== undefined}
+			<PreviewBlockWrapper collection={block.collection} id={itemId} {preview}>
+				<entry.component {data} surface={entry.surface} />
+			</PreviewBlockWrapper>
+		{:else}
+			<entry.component {data} surface={entry.surface} />
+		{/if}
 	{/if}
 {/each}

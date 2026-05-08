@@ -11,6 +11,7 @@
 	let blocks = $derived(
 		(page.blocks as Array<{ collection: string; item: Record<string, unknown> }> | undefined) ?? []
 	);
+	let preview = $derived(((data as { preview?: boolean }).preview ?? false) === true);
 </script>
 
 <svelte:head>
@@ -21,7 +22,7 @@
 </svelte:head>
 
 {#if blocks.length > 0}
-	<BlockRenderer {blocks} />
+	<BlockRenderer {blocks} {preview} />
 {:else}
 	<section class="page-fallback">
 		<div class="page-fallback__inner">

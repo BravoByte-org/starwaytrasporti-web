@@ -1,4 +1,4 @@
-import { requestDirectus, readItems } from '$lib/server/directus';
+import { requestDirectus, requestDirectusPreview, readItems } from '$lib/server/directus';
 
 /** M2A `pages.blocks` → nested block payloads (Directus many-to-any field syntax). */
 const PAGE_BLOCK_FIELDS = [
@@ -20,10 +20,20 @@ const PAGE_BLOCK_FIELDS = [
 	'blocks.item:block_image_gallery.items.*'
 ] as const;
 
-const STARWAY_PAGE_FILTER = {
-	site: { key: { _eq: 'starway' } },
-	status: { _eq: 'published' }
-} as const;
+/*
+ * Site scoping (`site.key === 'starway'`) stays in both modes — preview only
+ * loosens the publication filter so editors can render `draft` pages, never
+ * the cross-site filter.
+ */
+const STARWAY_SITE_FILTER = { site: { key: { _eq: 'starway' } } } as const;
+
+function buildStatusFilter(preview: boolean) {
+	return preview ? { status: { _in: ['draft', 'published'] } } : { status: { _eq: 'published' } };
+}
+
+function buildStarwayPageFilter(preview: boolean) {
+	return { ...STARWAY_SITE_FILTER, ...buildStatusFilter(preview) };
+}
 
 function buildPageSlugFilter(slug: string) {
 	const normalized = slug === '/' ? '/' : slug.startsWith('/') ? slug : `/${slug}`;
@@ -36,6 +46,8 @@ function buildPageSlugFilter(slug: string) {
 		_or: [{ slug: { _eq: normalized } }, { slug: { _eq: normalized.slice(1) } }]
 	};
 }
+
+export type PreviewOptions = { preview?: boolean };
 
 export async function fetchNavigation(fetch: typeof globalThis.fetch, key: string) {
 	const navs = await requestDirectus<Record<string, unknown>[]>(
@@ -74,10 +86,14 @@ export async function fetchNavigation(fetch: typeof globalThis.fetch, key: strin
 	);
 }
 
-export async function fetchHomepage(fetch: typeof globalThis.fetch) {
-	return requestDirectus<Record<string, unknown>[]>(
+export async function fetchHomepage(
+	fetch: typeof globalThis.fetch,
+	options: PreviewOptions = {}
+) {
+	const preview = options.preview ?? false;
+	return requestDirectusPreview<Record<string, unknown>[]>(
 		readItems('pages', {
-			filter: { _and: [STARWAY_PAGE_FILTER, { slug: { _eq: '/' } }] } as any,
+			filter: { _and: [buildStarwayPageFilter(preview), { slug: { _eq: '/' } }] } as any,
 			fields: [
 				'id',
 				'slug',
@@ -90,14 +106,20 @@ export async function fetchHomepage(fetch: typeof globalThis.fetch) {
 				...PAGE_BLOCK_FIELDS
 			]
 		}),
-		fetch
+		fetch,
+		{ preview }
 	);
 }
 
-export async function fetchPage(fetch: typeof globalThis.fetch, slug: string) {
-	return requestDirectus<Record<string, unknown>[]>(
+export async function fetchPage(
+	fetch: typeof globalThis.fetch,
+	slug: string,
+	options: PreviewOptions = {}
+) {
+	const preview = options.preview ?? false;
+	return requestDirectusPreview<Record<string, unknown>[]>(
 		readItems('pages', {
-			filter: { _and: [STARWAY_PAGE_FILTER, buildPageSlugFilter(slug)] } as any,
+			filter: { _and: [buildStarwayPageFilter(preview), buildPageSlugFilter(slug)] } as any,
 			fields: [
 				'id',
 				'slug',
@@ -114,6 +136,7 @@ export async function fetchPage(fetch: typeof globalThis.fetch, slug: string) {
 				...PAGE_BLOCK_FIELDS
 			]
 		}),
-		fetch
+		fetch,
+		{ preview }
 	);
 }
