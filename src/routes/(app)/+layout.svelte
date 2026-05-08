@@ -2,12 +2,17 @@
 	import '../../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import MainNav, { type NavItem } from '$components/navigation/MainNav.svelte';
+	import { PreviewVisualEditing } from '@bravobyte-org/frontend-core';
+	import { invalidateAll } from '$app/navigation';
+	import { env } from '$env/dynamic/public';
 
 	import type { LayoutData } from './$types';
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
 	let site = $derived((data.site as { title?: string; description?: string } | null) ?? null);
 	let navigation = $derived((data.navigation ?? []) as NavItem[]);
+	let preview = $derived(((data as { preview?: boolean }).preview ?? false) === true);
+	let directusUrl = $derived(env.PUBLIC_DIRECTUS_URL ?? '');
 </script>
 
 <svelte:head>
@@ -43,6 +48,10 @@
 		</div>
 	</footer>
 </div>
+
+{#if preview && directusUrl}
+	<PreviewVisualEditing {directusUrl} onSaved={() => invalidateAll()} />
+{/if}
 
 <style lang="postcss">
 	@reference "../../app.css";

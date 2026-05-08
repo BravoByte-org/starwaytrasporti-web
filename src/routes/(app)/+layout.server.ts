@@ -13,7 +13,8 @@ function describeLoadError(error: unknown): string {
 	}
 }
 
-export async function load({ fetch }: LoadEvent) {
+export async function load({ fetch, url }: LoadEvent) {
+	const preview = url.searchParams.has('preview');
 	try {
 		const [sites, navigation] = await Promise.all([
 			requestDirectus<Record<string, unknown>[]>(
@@ -26,9 +27,9 @@ export async function load({ fetch }: LoadEvent) {
 			),
 			fetchNavigation(fetch, 'header')
 		]);
-		return { site: sites[0] ?? null, navigation };
+		return { site: sites[0] ?? null, navigation, preview };
 	} catch (error) {
 		console.warn(`Failed to load layout CMS data: ${describeLoadError(error)}`);
-		return { site: null, navigation: [] };
+		return { site: null, navigation: [], preview };
 	}
 }
