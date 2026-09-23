@@ -5,8 +5,8 @@ points at the canonical copies in `bravobyte-ai`:
 
 ```json
 {
-  "skills": ["../../bravobyte-ai/.pi/skills"],
-  "extensions": ["../../bravobyte-ai/.pi/extensions"]
+  "skills": ["../../../core/bravobyte-ai/.pi/skills"],
+  "extensions": ["../../../core/bravobyte-ai/.pi/extensions"]
 }
 ```
 
