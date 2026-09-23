@@ -8,6 +8,7 @@
 	"scripts": {
 		"START": "==============================================================",
 		"dev": "vite dev",
+		"directus:seed-preview": "node scripts/directus/seed-preview-permissions.mjs",
 		"BUILD": "==============================================================",
 		"build:dev": "vite build --mode development",
 		"build:staging": "vite build --mode staging",
