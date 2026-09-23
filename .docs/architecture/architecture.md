@@ -40,4 +40,4 @@ Once BravoByte core repos are populated, Starway will consume:
 
 ## Extraction candidates
 
-See `.cursor/rules/directus.mdc` for the current extraction analysis.
+See `.ai/rules/directus.md` for the current extraction analysis.

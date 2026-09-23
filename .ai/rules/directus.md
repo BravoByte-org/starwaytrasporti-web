@@ -1,8 +1,4 @@
----
-description: "Directus CMS integration patterns and conventions"
-globs: ["src/lib/server/directus*", "src/lib/util/cms/**/*", "src/routes/**/+page.server.ts", "src/routes/**/+layout.server.ts"]
-alwaysApply: false
----
+<!-- Migrated from .cursor/rules/directus.mdc (Cursor rule, retired 2026-09-23). Applies to the whole repo. Original description: Directus CMS integration patterns and conventions -->
 
 # Directus Conventions
 

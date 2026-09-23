@@ -1,7 +1,4 @@
----
-description: "Starway Trasporti project context — the first BravoByte delivery repo and extraction source"
-alwaysApply: true
----
+<!-- Migrated from .cursor/rules/starway-project.mdc (Cursor rule, retired 2026-09-23). Applies to the whole repo. Original description: Starway Trasporti project context — the first BravoByte delivery repo and extraction source -->
 
 # Starway Trasporti — Project Context
 

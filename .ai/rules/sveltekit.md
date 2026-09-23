@@ -1,8 +1,4 @@
----
-description: "SvelteKit and Svelte 5 conventions for this project"
-globs: ["src/**/*.svelte", "src/**/*.ts", "src/**/*.js", "src/routes/**/*"]
-alwaysApply: false
----
+<!-- Migrated from .cursor/rules/sveltekit.mdc (Cursor rule, retired 2026-09-23). Applies to the whole repo. Original description: SvelteKit and Svelte 5 conventions for this project -->
 
 # SvelteKit Conventions
 

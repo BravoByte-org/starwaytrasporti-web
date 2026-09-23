@@ -6,7 +6,7 @@
 |-------------|--------|---------------------|
 | Directus CMS (REST) | Active | `src/lib/server/directus.ts` |
 | Directus queries (SDK) | Active | `src/lib/util/cms/queries.ts` |
-| Directus MCP (AI-assisted) | Active | `~/.cursor/mcp.json` (user-level) |
+| Directus MCP (AI-assisted) | Configured under Cursor (retired); not yet wired for pi | user-level MCP client config, never committed (pi: `~/.pi/agent/mcp.json` via pi-mcp-adapter) |
 | Directus multi-site CMS | Active | `sites` collection (key: `starway`), `site_users` junction |
 | Vercel deployment | Active | `vercel.json`, `svelte.config.js` |
 
