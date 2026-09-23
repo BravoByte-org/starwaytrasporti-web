@@ -39,7 +39,7 @@ Open Directus / content-model follow-ups for Starway are tracked in [cms-triage.
 2. Develop and commit using conventional commit messages (WIP commits on the branch are fine)
 3. Open a PR targeting `next` — **one PR per story/issue** when possible; **PR title** should read like the eventual squash commit (conventional format)
 4. Keep the branch current with `git fetch origin && git rebase origin/next` (or merge `next`) before final review
-5. Merge using **Squash and merge** so `next` stays **one commit per PR** with a clean message (org default; see [BravoByte git history playbook](https://github.com/BravoByte-org/bravobyte-ai/blob/main/playbooks/git-history-and-merge-policy.md))
+5. Merge using **Squash and merge** so `next` stays **one commit per PR** with a clean message (org default; see the BravoByte git history playbook — `playbooks/git-history-and-merge-policy.md` in the `bravobyte-ai` repo, hosted on the org's self-hosted Gitea, not GitHub)
 6. After merge, **delete the branch** or branch fresh from `next` for the next story (avoids duplicate conflicts after squash)
 7. Vercel does NOT deploy feature branches (disabled in `vercel.json`)
 8. Once merged to `next`, Vercel deploys a preview automatically
@@ -48,7 +48,7 @@ Open Directus / content-model follow-ups for Starway are tracked in [cms-triage.
 
 ### Optional: squash locally before merge
 
-If you prefer one commit on the remote branch before review (instead of relying on GitHub squash only), use `git rebase -i origin/next` or `git reset --soft origin/next` then a single commit; push with `git push --force-with-lease`. Full guidance: [git-history-and-merge-policy](https://github.com/BravoByte-org/bravobyte-ai/blob/main/playbooks/git-history-and-merge-policy.md).
+If you prefer one commit on the remote branch before review (instead of relying on GitHub squash only), use `git rebase -i origin/next` or `git reset --soft origin/next` then a single commit; push with `git push --force-with-lease`. Full guidance: `playbooks/git-history-and-merge-policy.md` in the `bravobyte-ai` repo (Gitea).
 
 ---
 
