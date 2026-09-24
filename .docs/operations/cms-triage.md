@@ -44,7 +44,7 @@ The Vercel preview started returning SSR `500`s with a `FORBIDDEN — You don't 
 1. The Vercel `DIRECTUS_TOKEN` env var was a stale token that Directus rejected as "Invalid user". The app's anonymous-retry fallback then issued an unauthenticated request, which surfaced as the `FORBIDDEN` payload because the **Public** role has no read on `pages`.
 2. Even with a valid Starway App Service token, the **Published Content Reader** policy had never been granted read on `page_blocks` or any `block_*` collection (or on `starway_team_members`). Pages would resolve, but `blocks` deep queries returned empty, leaving the page body blank.
 
-Fix applied (Cursor MCP admin token, see [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) for the canonical recipe):
+Fix applied (MCP admin token, see [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) for the canonical recipe):
 
 - Added `read` perms on the Published Content Reader policy (`28c1faaf-d786-4dc6-9899-41afc11f50c6`) for: `page_blocks`, `block_hero`, `block_rich_text`, `block_stats`, `block_stat_items`, `block_card_group`, `block_card_items`, `block_team`, `block_timeline`, `block_timeline_items`, `block_cta`, `block_image_gallery`, `block_gallery_items`, `starway_team_members`.
 - Block parents and child items use `permissions: null` (no filter) — they have no `site` FK and are only ever reached via the site-scoped `pages` query, so tenancy is enforced at the parent level.
