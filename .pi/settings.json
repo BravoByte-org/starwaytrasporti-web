@@ -1,0 +1,4 @@
+{
+  "skills": ["../../../core/bravobyte-ai/.pi/skills"],
+  "extensions": ["../../../core/bravobyte-ai/.pi/extensions"]
+}
