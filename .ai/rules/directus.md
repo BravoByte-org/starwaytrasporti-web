@@ -25,12 +25,12 @@ The Directus client is configured in `src/lib/server/directus.ts`:
 
 The following are candidates for shared extraction:
 
-| Code | Target repo | Timing |
-|------|------------|--------|
-| Directus client factory | `bravobyte-data-core` | extract later (after boundary settles) |
-| GraphQL query helpers | `bravobyte-data-core` | extract later |
-| Content type definitions | `bravobyte-types` | extract soon |
-| Content mapping utilities | `bravobyte-data-core` | extract later |
+| Code                      | Target repo           | Timing                                 |
+| ------------------------- | --------------------- | -------------------------------------- |
+| Directus client factory   | `bravobyte-data-core` | extract later (after boundary settles) |
+| GraphQL query helpers     | `bravobyte-data-core` | extract later                          |
+| Content type definitions  | `bravobyte-types`     | extract soon                           |
+| Content mapping utilities | `bravobyte-data-core` | extract later                          |
 
 ## Rules
 
