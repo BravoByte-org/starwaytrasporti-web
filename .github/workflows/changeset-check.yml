@@ -11,7 +11,14 @@ on:
 
 permissions:
   contents: read
+  packages: read
   pull-requests: read
+
+env:
+  # Read access to private @bravobyte-org packages on GitHub Packages (see .npmrc).
+  # The job token works once the package grants this repo read access
+  # (package settings -> Manage Actions access).
+  GH_BRAVOBYTE_PACKAGE: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   changeset:

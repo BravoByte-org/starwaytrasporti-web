@@ -33,7 +33,7 @@ decision record: [`bravobyte`](https://github.com/BravoByte-org/bravobyte) [ADR-
 
 ### Installation
 
-[`@bravobyte-org/frontend-core`](https://github.com/BravoByte-org/bravobyte/tree/main/packages/frontend-core) is installed from **GitHub Packages**. Set **`NODE_AUTH_TOKEN`** locally and in CI to a PAT with **`read:packages`** (see [`.npmrc`](./.npmrc)).
+[`@bravobyte-org/frontend-core`](https://github.com/BravoByte-org/bravobyte/tree/main/packages/frontend-core) is installed from **GitHub Packages**. The token is read from **`GH_BRAVOBYTE_PACKAGE`** (see [`.npmrc`](./.npmrc)): locally it comes from Infisical, so run `infisical run -- pnpm install`; in CI the workflow maps the job token to it.
 
 ```bash
 pnpm install
