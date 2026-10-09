@@ -25,6 +25,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
+  packages: read
   pull-requests: write
 
 jobs:
