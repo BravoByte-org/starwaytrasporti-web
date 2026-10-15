@@ -40,7 +40,7 @@ Verify code (Iris) → Capture and catalog (Atlas) → Update status.
 - **npm scope:** shared package dependencies use `@bravobyte-org/*` (matches the `BravoByte-org` GitHub org).
 - **Placeholder content:** AI-generated text in the target language, HTML for Directus rich-text, placehold.co for images, placeholdervideo.dev for video — never ship real client content as a placeholder.
 - **Directus collections:** every new collection ships permissions + `meta.display_template` + field-level `display_options.template` + locale translations together.
-- **Documentation locations:** ADRs → `.docs/adrs/`, architecture → `.docs/architecture/`, delivery notes → `.docs/delivery/`, AI rules/playbooks → canonical in `bravobyte-ai`.
+- **Documentation locations:** ADRs → `docs/adrs/`, architecture → `docs/architecture/`, delivery notes → `docs/delivery/`, AI rules/playbooks → canonical in `bravobyte-ai`.
 
 ## Where to read more
 
