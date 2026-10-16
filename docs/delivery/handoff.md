@@ -17,4 +17,4 @@ This document captures handoff information for the Starway Trasporti project.
 
 ## Ongoing maintenance
 
-See `.docs/operations/maintenance.md` for maintenance procedures.
+See `docs/operations/maintenance.md` for maintenance procedures.

@@ -24,7 +24,7 @@ Operational backlog for the shared BravoByte Directus instance as it applies to 
 
 **Rule of thumb for Starway today:** build the visible marketing site in **Pages** + blocks; use **Articles** when content should appear under taxonomy hubs; use **Posts** only if you introduce a dated “news” channel and train editors on that distinction.
 
-Deeper architecture (hierarchy, landing vs term pages, query rules) lives in the BravoByte workspace: `../.docs/architecture/taxonomy-architecture.md` (relative to this repo in the monorepo-style checkout).
+Deeper architecture (hierarchy, landing vs term pages, query rules) lives in the BravoByte workspace: `../docs/architecture/taxonomy-architecture.md` (relative to this repo in the monorepo-style checkout).
 
 ## Apr 2026 route fix notes
 
@@ -96,7 +96,7 @@ Verification:
 
 - `bravobyte-ai/rules/directus-collection-permissions.md` — new "M2A relations require both sides" section with the canonical `POST /relations` payload, the M2A junction filter quirk, the orphan-row pre-flight requirement, and an Editor synthetic-probe verification recipe.
 - `bravobyte-ai/playbooks/new-feature.md` — Build step now requires running `GET /relations/<junction>` to confirm both sides exist before claiming any M2A schema migration done.
-- `.docs/adrs/adr-002-directus-access-control-design.md` — operational checklist gains an explicit step 0 for M2A relations and updates the negative-consequences count to four outages.
+- `docs/adrs/adr-002-directus-access-control-design.md` — operational checklist gains an explicit step 0 for M2A relations and updates the negative-consequences count to four outages.
 
 ## Apr 21 2026 — Directus display-metadata + i18n pass (#35)
 

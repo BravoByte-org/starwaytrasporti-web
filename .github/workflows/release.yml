@@ -13,7 +13,7 @@
 # Required repo secrets (Settings -> Secrets and variables -> Actions):
 #   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
 #
-# See: bravobyte/.docs/architecture/bravobyte-release-automation.md
+# See: bravobyte/docs/architecture/bravobyte-release-automation.md
 
 name: Release
 

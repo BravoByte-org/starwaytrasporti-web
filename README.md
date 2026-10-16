@@ -21,7 +21,7 @@ Keep an eye out for updates on [https://starwaytrasporti.com](https://starwaytra
 The **1970s retro** brand palette ([SchemeColor — 70s Retro](https://www.schemecolor.com/70s-retro.php)),
 `--sw-*` design tokens, typography (**Bebas Neue** + **Source Sans 3**), and the BravoByte **`--bb-*`**
 bridge for `@bravobyte-org/frontend-core` are documented in [`spec.md`](./spec.md). Authoritative
-decision record: [`bravobyte`](https://github.com/BravoByte-org/bravobyte) [ADR-007 — Starway design system](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-007-starway-design-system-70s-palette.md).
+decision record: [`bravobyte`](https://github.com/BravoByte-org/bravobyte) [ADR-007 — Starway design system](https://github.com/BravoByte-org/bravobyte/blob/main/docs/adrs/adr-007-starway-design-system-70s-palette.md).
 
 ## Development
 
@@ -51,4 +51,4 @@ build to Vercel production.
 Full playbook:
 [`bravobyte/.ai/playbooks/release-flow.md`](https://github.com/BravoByte-org/bravobyte/blob/main/.ai/playbooks/release-flow.md).
 Rationale:
-[ADR-006](https://github.com/BravoByte-org/bravobyte/blob/main/.docs/adrs/adr-006-org-release-standardization.md).
+[ADR-006](https://github.com/BravoByte-org/bravobyte/blob/main/docs/adrs/adr-006-org-release-standardization.md).
