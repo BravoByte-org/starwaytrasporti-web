@@ -1,12 +1,16 @@
 # Block PRs that change shipped behavior without an accompanying
 # `.changeset/*.md`. Skip with PR label `skip-changeset` when a change is
 # intentionally release-irrelevant.
+#
+# Runs on PRs into `next` (where feature work lands) as well as `main`, and
+# compares against the PR's own base branch, so a missing fragment is caught
+# on the feature PR rather than at the next -> main promotion.
 
 name: Changeset check
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, next]
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
 permissions:
