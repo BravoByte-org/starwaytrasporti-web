@@ -2,9 +2,9 @@
 
 ## How releases work
 
-This repo follows the BravoByte org-wide release loop (see
-[**release flow playbook**](https://github.com/BravoByte-org/bravobyte/blob/main/.ai/playbooks/release-flow.md)
-in the monorepo). It supersedes the previous `release-it` flow.
+This repo follows the BravoByte org-wide release loop (see skill
+`stack-release`, `plugins/stack/skills/stack-release/` in the `bravobyte-ai`
+repo). It supersedes the previous `release-it` flow.
 
 1. Run **`pnpm changeset`** as part of any PR that ships a user-visible change.
 2. Commit the generated **`.changeset/<slug>.md`** alongside the code.
