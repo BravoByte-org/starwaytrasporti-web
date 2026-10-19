@@ -44,12 +44,16 @@ Verify code (Iris) → Capture and catalog (Atlas) → Update status.
 
 ## Where to read more
 
-| Topic                    | Local copy (if present)                                                                                                                                                                                       | Canonical                          |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Full persona definitions | none locally — uses workspace defaults                                                                                                                                                                        | `bravobyte-ai/commands/<name>.md`  |
-| Full rule text           | `.ai/rules/` — `starway-project`, `coding-standards`, plus `starway-context`, `directus`, `sveltekit`, `dependency-versions` (the last four arrive when `chore/remove-cursor` merges; they were Cursor rules) | `bravobyte-ai/rules/<name>.md`     |
-| Playbooks                | none locally yet                                                                                                                                                                                              | `bravobyte-ai/playbooks/<name>.md` |
-| Glossary                 | none locally                                                                                                                                                                                                  | `bravobyte-ai/glossary.md`         |
+The canonical text is in `bravobyte-ai`, packaged as pi plugins (ADR-014 in the
+`bravobyte` repo). Paths below are inside `bravobyte-ai`. The old `commands/`, `rules/`,
+`playbooks/` and `glossary.md` copies there are being retired; use the skills.
+
+| Topic                    | Local copy (if present)                                                                                                 | Canonical                                                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Full persona definitions | none locally — uses workspace defaults                                                                                  | Skills `workflow-persona-<name>` (`lina`, `orion`, `forge`, `iris`, `atlas`) in `plugins/workflow/skills/`                                                               |
+| Full rule text           | `.ai/rules/` — `starway-project`, `starway-context`, `coding-standards`, `directus`, `sveltekit`, `dependency-versions` | Stack rules: skills `stack-<name>` in `plugins/stack/skills/`. Rule Zero, reusability and git history: the `workflow-persona-*` skills                                   |
+| Playbooks                | none locally yet                                                                                                        | Skills in `plugins/workflow/skills/` and `plugins/stack/skills/` (e.g. `workflow-git-merge`, `stack-release`); `/new-feature` is a prompt in `plugins/workflow/prompts/` |
+| Glossary                 | none locally                                                                                                            | Skill `workflow-glossary` in `plugins/workflow/skills/`                                                                                                                  |
 
 ## This repo
 
