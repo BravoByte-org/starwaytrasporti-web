@@ -48,7 +48,7 @@ change runs `pnpm changeset` before merging; merging to `main` opens a
 Merging that PR tags the version, creates a GitHub Release, and promotes the
 build to Vercel production.
 
-Full playbook:
-[`bravobyte/.ai/playbooks/release-flow.md`](https://github.com/BravoByte-org/bravobyte/blob/main/.ai/playbooks/release-flow.md).
-Rationale:
-[ADR-006](https://github.com/BravoByte-org/bravobyte/blob/main/docs/adrs/adr-006-org-release-standardization.md).
+Full playbook: skill `stack-release`
+(`plugins/stack/skills/stack-release/` in the `bravobyte-ai` repo).
+Rationale: ADR-006,
+`docs/adrs/adr-006-org-release-standardization.md` in the `bravobyte` repo.

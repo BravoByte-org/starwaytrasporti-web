@@ -44,7 +44,7 @@ The Vercel preview started returning SSR `500`s with a `FORBIDDEN — You don't 
 1. The Vercel `DIRECTUS_TOKEN` env var was a stale token that Directus rejected as "Invalid user". The app's anonymous-retry fallback then issued an unauthenticated request, which surfaced as the `FORBIDDEN` payload because the **Public** role has no read on `pages`.
 2. Even with a valid Starway App Service token, the **Published Content Reader** policy had never been granted read on `page_blocks` or any `block_*` collection (or on `starway_team_members`). Pages would resolve, but `blocks` deep queries returned empty, leaving the page body blank.
 
-Fix applied (MCP admin token, see [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md) for the canonical recipe):
+Fix applied (MCP admin token, see skill `stack-directus-permissions` (`plugins/stack/skills/stack-directus-permissions/` in the `bravobyte-ai` repo) for the canonical recipe):
 
 - Added `read` perms on the Published Content Reader policy (`28c1faaf-d786-4dc6-9899-41afc11f50c6`) for: `page_blocks`, `block_hero`, `block_rich_text`, `block_stats`, `block_stat_items`, `block_card_group`, `block_card_items`, `block_team`, `block_timeline`, `block_timeline_items`, `block_cta`, `block_image_gallery`, `block_gallery_items`, `starway_team_members`.
 - Block parents and child items use `permissions: null` (no filter) — they have no `site` FK and are only ever reached via the site-scoped `pages` query, so tenancy is enforced at the parent level.
@@ -62,7 +62,7 @@ Admin-token audit identified two compounding issues:
 1. **M2A schema metadata was incomplete on `page_blocks`.** The junction had only one row in `directus_relations` (`page_blocks.pages_id` → `pages`). The polymorphic side that ties `page_blocks.collection` + `page_blocks.item` to the 8 allowed block collections was missing entirely. Directus renders the "relationship not configured" error any time it can't resolve the polymorphic side — even for admins, which is exactly the symptom Lion saw.
 2. **Starway Content (Editor) policy had no write perms on the block layer.** It had `create/read/update` on `pages`, but zero entries for `page_blocks`, any `block_*` collection (parents or child items), or `starway_team_members`. So even after fix 1, the first real Editor user we provision (Martina) would re-hit a similar UX bug.
 
-Fix applied (admin-token, two batched migrations; canonical recipes live in [`bravobyte-ai/rules/directus-collection-permissions.md`](../../../bravobyte-ai/rules/directus-collection-permissions.md)):
+Fix applied (admin-token, two batched migrations; canonical recipes live in skill `stack-directus-permissions` in the `bravobyte-ai` repo):
 
 - **`POST /relations`** — seeded the missing polymorphic row: `collection=page_blocks`, `field=item`, `related_collection=null`, `meta.one_collection_field=collection`, `meta.one_allowed_collections=[block_hero, block_rich_text, block_stats, block_card_group, block_team, block_timeline, block_cta, block_image_gallery]`, `meta.junction_field=pages_id`, `meta.sort_field=sort` (relation id `23`).
 - **`POST /permissions` (×42 rows)** — backfilled `Starway Content` policy (`17670798-5098-4f9b-9069-4bf3b5046a23`) with `read`/`create`/`update` (no `delete`, per ADR-002) on:
@@ -94,7 +94,7 @@ Verification:
 
 **Codified into shared docs (see this PR + the `bravobyte-ai` PR):**
 
-- `bravobyte-ai/rules/directus-collection-permissions.md` — new "M2A relations require both sides" section with the canonical `POST /relations` payload, the M2A junction filter quirk, the orphan-row pre-flight requirement, and an Editor synthetic-probe verification recipe.
+- `bravobyte-ai/rules/directus-collection-permissions.md` (now skill `stack-directus-permissions`) — new "M2A relations require both sides" section with the canonical `POST /relations` payload, the M2A junction filter quirk, the orphan-row pre-flight requirement, and an Editor synthetic-probe verification recipe.
 - `bravobyte-ai/playbooks/new-feature.md` — Build step now requires running `GET /relations/<junction>` to confirm both sides exist before claiming any M2A schema migration done.
 - `docs/adrs/adr-002-directus-access-control-design.md` — operational checklist gains an explicit step 0 for M2A relations and updates the negative-consequences count to four outages.
 
@@ -102,7 +102,7 @@ Verification:
 
 Every non-system content + block collection shipped with `meta.display_template = null`, so list views and relational pickers across the admin surfaced UUIDs instead of readable labels (e.g. `navigation_items.page` showed a UUID, Pages Blocks M2A panel listed `block_hero | <uuid>`). Issue #35 called out the user-facing consequence; the audit at the start of this pass showed the real scope: **21 collections** (9 content + 12 block) had zero display metadata, and several M2O/O2M FKs had `display_options.template = null` on top.
 
-Fix applied (admin-token, one idempotent script with a 15s socket timeout + retries; canonical recipe now lives in [`bravobyte-ai/rules/directus-collection-display.md`](../../../bravobyte-ai/rules/directus-collection-display.md)):
+Fix applied (admin-token, one idempotent script with a 15s socket timeout + retries; canonical recipe now lives in skill `stack-directus-display` (`plugins/stack/skills/stack-directus-display/` in the `bravobyte-ai` repo)):
 
 - **`PATCH /collections/<c>` × 21** — set `meta.display_template` on every content + block collection. Highlights:
   - `sites` → `{{name}}`, `pages` → `{{title}} — {{slug}}`, `posts`/`articles`/`navigation_items`/`taxonomy_terms` → `{{title}}`, `taxonomies`/`starway_team_members` → `{{name}}`, `navigation` → `{{key}}`.
@@ -120,9 +120,9 @@ Verification:
 
 Codified into shared docs:
 
-- `bravobyte-ai/rules/directus-collection-display.md` — new rule covering `display_template` canonical patterns per collection type, when to override `display_options.template` at the field level, the M2A template convention, the `en-US + <locale>` translations requirement, apply/verify recipes, and the rate-limit guidance from this pass.
+- `bravobyte-ai/rules/directus-collection-display.md` (now skill `stack-directus-display`) — new rule covering `display_template` canonical patterns per collection type, when to override `display_options.template` at the field level, the M2A template convention, the `en-US + <locale>` translations requirement, apply/verify recipes, and the rate-limit guidance from this pass.
 - `bravobyte-ai/playbooks/new-feature.md` — Build step's Directus bullet now requires applying the display rule in the same change as the permissions rule (not separately).
-- `bravobyte-ai/rules/directus-collection-permissions.md` — "Related" section cross-links to the new display rule so the two rules stay paired.
+- `bravobyte-ai/rules/directus-collection-permissions.md` (now skill `stack-directus-permissions`) — "Related" section cross-links to the new display rule so the two rules stay paired.
 
 No app-code change: this pass is 100% Directus metadata. SvelteKit SSR + client rendering are unaffected (`pnpm check` still clean).
 
@@ -141,7 +141,7 @@ Fix applied (admin-token, idempotent script with 20s socket timeout + retries):
   - `PATCH /items/pages/<news>` → `template_type=taxonomy_landing`, `taxonomy_context=news_categories`
   - `POST /items/pages` for `/news/novita-e-sviluppi` and `/news/articoli` → `taxonomy_term_page` with `term=<news_categories term>`
   - `PATCH /items/pages/<dove-operiamo>` → `taxonomy_landing` + `taxonomy_context=regions`
-- **4 placeholder articles** seeded with rich-text `<p>/<ul>/<ol>/<strong>/<em>` content per [`bravobyte-ai/rules/placeholder-content.md`](../../../bravobyte-ai/rules/placeholder-content.md), tagged via `article_terms` junction:
+- **4 placeholder articles** seeded with rich-text `<p>/<ul>/<ol>/<strong>/<em>` content per skill `stack-placeholder-content` in the `bravobyte-ai` repo, tagged via `article_terms` junction:
   - `nuova-flotta-euro-6` + `ampliamento-magazzino-vicenza` → `novita-e-sviluppi`
   - `guida-stoccaggio-prodotti-surgelati` + `logistica-nord-est-2026` → `articoli`
 - **Display + i18n backfill** for the article surface that the Apr 21 #35 pass missed: `article_terms.meta.display_template = "{{articles_id.title}} → {{taxonomy_terms_id.title}}"` + en-US/it-IT translations on every editor-visible `articles` field (Titolo, Slug (percorso URL), Sito, Stato, Contenuto, Estratto, Autore, Immagine in evidenza, Data di pubblicazione, Termini associati).
